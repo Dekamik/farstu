@@ -14,6 +14,7 @@ import (
 func main() {
 	// Config
 	appConfigPath := "app.toml"
+
 	appConfig, err := config.ReadAppConfig(appConfigPath)
 	if err != nil {
 		slog.Error("An error ocurred while reading "+appConfigPath,
@@ -27,6 +28,6 @@ func main() {
 
 	// Run
 	port := ":" + strconv.Itoa(appConfig.App.Port)
-	slog.Info("App started", "port", port)
+	slog.Info("Farstu started", "port", port)
 	http.ListenAndServe(port, nil)
 }
