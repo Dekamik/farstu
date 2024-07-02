@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type Time struct {
+type TimeData struct {
 	Time string
 	Date string
 }
@@ -51,11 +51,11 @@ func GetDateStr(date time.Time) string {
 	return fmt.Sprintf("%s %s %s", dayNames[date.Weekday()], numStr, monthNames[date.Month()])
 }
 
-func GetTime() Time {
+func GetTime() TimeData {
 	now := time.Now().Local()
 	timeStr := now.Format("15:04")
 	dateStr := GetDateStr(now)
-	return Time{
+	return TimeData{
 		Time: timeStr,
 		Date: dateStr,
 	}

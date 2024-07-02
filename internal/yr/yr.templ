@@ -1,11 +1,11 @@
-package views
+package yr
 
 import (
-	"farstu/internal/models"
+	"farstu/internal/shared"
 	"strconv"
 )
 
-templ YRNow(model models.YRNowModel) {
+templ YRNow(model YRNowModel) {
 	<div hx-get="/htmx/yr_now.html" hx-trigger="every 6m" hx-swap="outerHTML">
 		<div class="row">
 			<div class="col text-right">
@@ -19,7 +19,7 @@ templ YRNow(model models.YRNowModel) {
 			<div class="col">
 				<div class="row">
 					<div class="col">
-						<p class={ "temperature text-end" , color(model.TemperatureColor) }>
+						<p class={ "temperature text-end" , shared.Color(model.TemperatureColor) }>
 							{ strconv.FormatFloat(model.Temperature, 'E', -1, 64) }°
 						</p>
 					</div>

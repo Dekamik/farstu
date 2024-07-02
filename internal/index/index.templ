@@ -1,13 +1,16 @@
-package views
+package index
 
-import "farstu/internal/models"
+import (
+	"farstu/internal/clock"
+	"farstu/internal/shared"
+)
 
-templ Index(model models.IndexModel) {
-	@page() {
+templ View(model Model) {
+	@shared.Page() {
 		<div class="mx-3 my-3" style="padding-top:70px">
 			<div class="row row-upper">
 				<div class="col">
-					@Time(model.Time)
+					@clock.View(model.Time)
 				</div>
 				<div class="col">
 					<!-- @YRNow(model.YRNow) -->
