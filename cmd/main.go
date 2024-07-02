@@ -1,46 +1,18 @@
 package main
 
 import (
+	"farstu/internal/config"
 	"farstu/internal/views"
 	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/BurntSushi/toml"
 	"github.com/a-h/templ"
 )
 
-type Config struct {
-	App struct {
-		Port int
-	}
-	GTFS struct {
-		Enabled               bool
-		RegionalRealtimeKey   string
-		RegionalStaticDataKey string
-	}
-	Weather struct {
-		Enabled bool
-		Lat     float64
-		Lon     float64
-
-		Colors struct {
-			TempColorCoolCoolest string
-			TempColorCoolHottest string
-			TempColorMid         string
-			TempColorHotCoolest  string
-			TempColorHotHottest  string
-
-			ClassPrecip   string
-			ClassNoPrecip string
-		}
-	}
-}
-
 func main() {
 	// Config
-	var config Config
-	_, err := toml.DecodeFile("app.toml", &config)
+	appConfig, err := config.ReadAppConfig("app.toml")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,6 +21,7 @@ func main() {
 	http.Handle("/", templ.Handler(views.Hello("World")))
 
 	// Run
-	port := ":" + strconv.Itoa(config.App.Port)
+	port := ":" + strconv.Itoa(appConfig.App.Port)
+	log.Printf("App listening at %s", port)
 	http.ListenAndServe(port, nil)
 }
