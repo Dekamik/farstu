@@ -1,14 +1,13 @@
 package main
 
 import (
-	"context"
-	"farstu/internal/templates"
+	"farstu/internal/views"
 	"log"
+	"net/http"
 	"strconv"
 
 	"github.com/BurntSushi/toml"
 	"github.com/a-h/templ"
-	"github.com/labstack/echo/v4"
 )
 
 type Config struct {
@@ -38,13 +37,6 @@ type Config struct {
 	}
 }
 
-func helloHandler(c echo.Context) error {
-	return templ.Handler(
-		templates.Hello("World")).Component.Render(context.Background(),
-		c.Response().Writer,
-	)
-}
-
 func main() {
 	// Config
 	var config Config
@@ -53,12 +45,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	e := echo.New()
-
 	// Routes
-	e.GET("/", helloHandler)
+	http.Handle("/", templ.Handler(views.Hello("World")))
 
 	// Run
 	port := ":" + strconv.Itoa(config.App.Port)
-	e.Logger.Fatal(e.Start(port))
+	http.ListenAndServe(port, nil)
 }
