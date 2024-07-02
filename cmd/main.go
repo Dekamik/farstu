@@ -16,7 +16,7 @@ func main() {
 	appConfigPath := "app.toml"
 	appConfig, err := config.ReadAppConfig(appConfigPath)
 	if err != nil {
-		slog.Error("An error ocurred while reading " + appConfigPath, 
+		slog.Error("An error ocurred while reading "+appConfigPath,
 			"err", err,
 		)
 		os.Exit(1)
