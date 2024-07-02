@@ -1,9 +1,9 @@
 package main
 
 import (
+	"farstu/internal/clock"
 	"farstu/internal/config"
-	"farstu/internal/models"
-	"farstu/internal/views"
+	"farstu/internal/index"
 	"log/slog"
 	"net/http"
 	"os"
@@ -31,11 +31,11 @@ func main() {
 	}
 
 	// Routes
-	handleTempl("/", func() templ.Component { 
-		return views.Index(models.NewIndexModel())
+	handleTempl("/", func() templ.Component {
+		return index.View(index.NewModel())
 	})
-	handleTempl("/htmx/time", func() templ.Component { 
-		return views.Time(models.NewTimeModel()) 
+	handleTempl("/htmx/time", func() templ.Component {
+		return clock.View(clock.NewModel())
 	})
 
 	// Static files
