@@ -1,17 +1,24 @@
 package main
 
 import (
-	"net/http"
+	"context"
+	"farstu/internal/templates"
 
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 )
+
+func helloHandler(c echo.Context) error {
+	return templ.Handler(
+		templates.Hello("World")).Component.Render(context.Background(),
+		c.Response().Writer,
+	)
+}
 
 func main() {
 	e := echo.New()
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.GET("/", helloHandler)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

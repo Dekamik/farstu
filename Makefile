@@ -1,4 +1,7 @@
-all: tidy templ build
+all: templ tidy build
+
+deps:
+	go install github.com/a-h/templ/cmd/templ@latest
 
 tidy:
 	go mod tidy

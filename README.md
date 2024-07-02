@@ -9,4 +9,8 @@ forecast and upcoming public transport departures.
 
 ## Install dependencies
 
-- `go install github.com/a-h/templ/cmd/templ@latest`
+Run `make deps`
+
+## Build project
+
+Run `make`
