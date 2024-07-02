@@ -11,3 +11,6 @@ templ:
 
 build:
 	go build -o bin/farstu cmd/main.go
+
+install:
+	cp bin/farstu /usr/local/bin

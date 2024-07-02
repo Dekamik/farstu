@@ -16,3 +16,7 @@ Run `make deps`
 ## Generate templ, install modules and build binary
 
 Run `make`
+
+## Install application on your system
+
+Run `make install`
