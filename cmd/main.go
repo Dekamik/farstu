@@ -3,8 +3,9 @@ package main
 import (
 	"farstu/internal/config"
 	"farstu/internal/views"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/a-h/templ"
@@ -12,9 +13,13 @@ import (
 
 func main() {
 	// Config
-	appConfig, err := config.ReadAppConfig("app.toml")
+	appConfigPath := "app.toml"
+	appConfig, err := config.ReadAppConfig(appConfigPath)
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("An error ocurred while reading " + appConfigPath, 
+			"err", err,
+		)
+		os.Exit(1)
 	}
 
 	// Routes
@@ -22,6 +27,6 @@ func main() {
 
 	// Run
 	port := ":" + strconv.Itoa(appConfig.App.Port)
-	log.Printf("App listening at %s", port)
+	slog.Info("App started", "port", port)
 	http.ListenAndServe(port, nil)
 }
