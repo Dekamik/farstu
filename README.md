@@ -7,10 +7,12 @@ forecast and upcoming public transport departures.
 
 ## Install go
 
-## Install dependencies
+Follow the instructions for your OS at [go.dev](https://go.dev/doc/install)
+
+## Install dev dependencies
 
 Run `make deps`
 
-## Build project
+## Generate templ, install modules and build binary
 
 Run `make`
