@@ -1,4 +1,4 @@
-package views
+package models
 
 import "farstu/internal/clock"
 
@@ -7,7 +7,7 @@ type TimeModel struct {
 	Time string
 }
 
-func GetTimeModel() TimeModel {
+func NewTimeModel() TimeModel {
 	t := clock.GetTime()
 	return TimeModel{
 		Date: t.Date,

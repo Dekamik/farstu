@@ -1,8 +1,11 @@
 package views
 
-import "strconv"
+import (
+	"farstu/internal/models"
+	"strconv"
+)
 
-templ YRNow(model YRNowModel) {
+templ YRNow(model models.YRNowModel) {
 	<div hx-get="/htmx/yr_now.html" hx-trigger="every 6m" hx-swap="outerHTML">
 		<div class="row">
 			<div class="col text-right">

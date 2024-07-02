@@ -1,6 +1,8 @@
 package views
 
-templ Time(model TimeModel) {
+import "farstu/internal/models"
+
+templ Time(model models.TimeModel) {
 	<div hx-get="/htmx/time"
 		 hx-trigger="every 5s"
 		 hx-swap="outerHTML">

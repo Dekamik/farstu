@@ -1,12 +1,12 @@
-package views
+package models
 
 type IndexModel struct {
 	Time TimeModel
 	YRNow YRNowModel
 }
 
-func GetIndexModel() IndexModel {
+func NewIndexModel() IndexModel {
 	return IndexModel{
-		Time: GetTimeModel(),
+		Time: NewTimeModel(),
 	}
 }

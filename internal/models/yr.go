@@ -1,4 +1,4 @@
-package views
+package models
 
 type YRNowModel struct {
 	Precipitation      float64

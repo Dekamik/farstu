@@ -2,6 +2,7 @@ package main
 
 import (
 	"farstu/internal/config"
+	"farstu/internal/models"
 	"farstu/internal/views"
 	"log/slog"
 	"net/http"
@@ -31,10 +32,10 @@ func main() {
 
 	// Routes
 	handleTempl("/", func() templ.Component { 
-		return views.Index(views.GetIndexModel())
+		return views.Index(models.NewIndexModel())
 	})
 	handleTempl("/htmx/time", func() templ.Component { 
-		return views.Time(views.GetTimeModel()) 
+		return views.Time(models.NewTimeModel()) 
 	})
 
 	// Static files

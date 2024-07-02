@@ -27,3 +27,5 @@ go.work.sum
 bin/
 
 app.toml
+
+__debug*
