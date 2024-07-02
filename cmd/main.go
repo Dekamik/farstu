@@ -24,7 +24,8 @@ type Config struct {
 		Enabled bool
 		Lat     float64
 		Lon     float64
-		Colors  struct {
+
+		Colors struct {
 			TempColorCoolCoolest string
 			TempColorCoolHottest string
 			TempColorMid         string
@@ -45,6 +46,7 @@ func helloHandler(c echo.Context) error {
 }
 
 func main() {
+	// Config
 	var config Config
 	_, err := toml.DecodeFile("app.toml", &config)
 	if err != nil {
@@ -56,6 +58,7 @@ func main() {
 	// Routes
 	e.GET("/", helloHandler)
 
+	// Run
 	port := ":" + strconv.Itoa(config.App.Port)
 	e.Logger.Fatal(e.Start(port))
 }

@@ -5,7 +5,7 @@ forecast and upcoming public transport departures.
 
 # Getting started
 
-## Building application
+## Building the application
 
 1. Install Go by following the instructions for your OS at
    [go.dev](https://go.dev/doc/install)
@@ -13,7 +13,7 @@ forecast and upcoming public transport departures.
 3. Run `make` to generate templates, install modules and build binary
 4. Run `make install` to install the app on your system
 
-## Configuring application
+## Configuring the application
 
 Copy `example.app.toml` to `app.toml` and configure GTFS keys and weather
 lat/lon inside `app.toml`.
@@ -21,8 +21,6 @@ lat/lon inside `app.toml`.
 You can get the GTFS keys at [Trafiklab](https://www.trafiklab.se/api).
 
 ## Running the application
-
-### Production
 
 Stand in the directory where you put your `app.toml` and run `farstu`. The app
 should now be running at the configured port (default `http://localhost:8080`).
