@@ -1,0 +1,26 @@
+[App]
+Port = 8080
+
+[GTFS]
+Enabled = true
+RegionalRealtimeKey = ""
+RegionalStaticDataKey = ""
+
+[Weather]
+Enabled = true
+Lat = 0
+Lon = 0
+
+[Weather.Colors]
+TempMin = -30
+TempMid = 0
+TempMax = 30
+
+TempColorCoolCoolest = "#0033cc"
+TempColorCoolHottest = "#ccd9ff"
+TempColorMid = "#dee2e6"
+TempColorHotCoolest = "#ffcccc"
+TempColorHotHottest = "#990000"
+
+ClassPrecip = "primary"
+ClassNoPrecip = "light"
