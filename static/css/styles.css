@@ -1,0 +1,39 @@
+.clock {
+    font-size: 4rem;
+    font-weight: 500;
+}
+
+.date {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.icon {
+    height: 1.65rem;
+}
+
+.nav-spacing {
+    margin-right: 1.5rem;
+}
+
+.navbar-icon {
+    font-size: 2rem;
+}
+
+.precipitation {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.row-upper {
+    line-height: 0.7;
+}
+
+.temperature {
+    font-size: 4rem;
+    font-weight: 500;
+}
+
+.white {
+    filter: invert(75%) sepia(2%) saturate(1443%) hue-rotate(157deg) brightness(98%) contrast(87%);
+}

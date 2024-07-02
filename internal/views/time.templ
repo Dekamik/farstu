@@ -1,0 +1,14 @@
+package views
+
+templ Time(model TimeModel) {
+	<div hx-get="/htmx/time"
+		 hx-trigger="every 5s"
+		 hx-swap="outerHTML">
+		<p class="clock">
+			{ model.Time }
+		</p>
+		<p class="date">
+			{ model.Date }
+		</p>
+	</div>
+}

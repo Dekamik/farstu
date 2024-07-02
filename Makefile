@@ -14,3 +14,7 @@ build:
 
 install:
 	cp bin/farstu /usr/local/bin
+
+clean:
+	rm bin/farstu
+	rm internal/views/*_templ.go

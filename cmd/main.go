@@ -11,6 +11,12 @@ import (
 	"github.com/a-h/templ"
 )
 
+func handleTempl(path string, componentFunc func() templ.Component) {
+	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+		componentFunc().Render(r.Context(), w)
+	})
+}
+
 func main() {
 	// Config
 	appConfigPath := "app.toml"
@@ -24,7 +30,16 @@ func main() {
 	}
 
 	// Routes
-	http.Handle("/", templ.Handler(views.Hello("World")))
+	handleTempl("/", func() templ.Component { 
+		return views.Index(views.GetIndexModel())
+	})
+	handleTempl("/htmx/time", func() templ.Component { 
+		return views.Time(views.GetTimeModel()) 
+	})
+
+	// Static files
+	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
+	http.Handle("/static/", fs)
 
 	// Run
 	port := ":" + strconv.Itoa(appConfig.App.Port)

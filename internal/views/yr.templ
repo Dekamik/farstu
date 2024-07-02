@@ -1,0 +1,34 @@
+package views
+
+import "strconv"
+
+templ YRNow(model YRNowModel) {
+	<div hx-get="/htmx/yr_now.html" hx-trigger="every 6m" hx-swap="outerHTML">
+		<div class="row">
+			<div class="col text-right">
+				<p class="weather-symbol text-center">
+					<img
+						src={ "../images/weather/dist/light-mode/default/svg/" + model.SymbolID + ".svg" }
+						alt={ model.SymbolCode }
+					/>
+				</p>
+			</div>
+			<div class="col">
+				<div class="row">
+					<div class="col">
+						<p class={ "temperature text-end" , color(model.TemperatureColor) }>
+							{ strconv.FormatFloat(model.Temperature, 'E', -1, 64) }°
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<p class={ "precipitation text-end text-" + model.PrecipitationColor }>
+							{ strconv.FormatFloat(model.Precipitation, 'E', -1, 64) } mm
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
