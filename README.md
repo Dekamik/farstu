@@ -7,21 +7,10 @@ forecast and upcoming public transport departures.
 
 ## Building application
 
-### Install go
-
-Follow the instructions for your OS at [go.dev](https://go.dev/doc/install).
-
-### Install dev dependencies
-
-Run `make deps`
-
-### Generate templ, install modules and build binary
-
-Run `make`
-
-### Install application on your system
-
-Run `make install`
+1. Install go by following the instructions for your OS at [go.dev](https://go.dev/doc/install).
+2. Run `make deps` to install dev dependencies
+3. Run `make` to generate templ, install modules and build binary
+4. Run `make install` to install the app on your system
 
 ## Configuring application
 
