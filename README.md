@@ -7,7 +7,8 @@ forecast and upcoming public transport departures.
 
 ## Building application
 
-1. Install go by following the instructions for your OS at [go.dev](https://go.dev/doc/install).
+1. Install go by following the instructions for your OS at
+   [go.dev](https://go.dev/doc/install)
 2. Run `make deps` to install dev dependencies
 3. Run `make` to generate templ, install modules and build binary
 4. Run `make install` to install the app on your system
@@ -15,7 +16,7 @@ forecast and upcoming public transport departures.
 ## Configuring application
 
 Copy `example.app.toml` to `app.toml` and configure GTFS keys and weather
-lat/lon.
+lat/lon inside `app.toml`.
 
 You can get the GTFS keys at [Trafiklab](https://www.trafiklab.se/api).
 
@@ -28,4 +29,4 @@ should now be running at the configured port (default `http://localhost:8080`).
 
 ### Development
 
-You can run the application directly by running `go run cmd/main.go`
+You can run the application directly by running `go run cmd/main.go`.
