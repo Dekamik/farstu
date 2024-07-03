@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"farstu/internal/clock"
 	"farstu/internal/shared"
+	"farstu/internal/yr"
 )
 
 func View(model Model) templ.Component {
@@ -51,7 +52,23 @@ func View(model Model) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"col\"><!-- @YRNow(model.YRNow) --></div></div><div class=\"row\"><div class=\"col\"><!--\n\t\t\t\t\t\t{{ template \"htmx_sl.html\" .}}\n\t\t\t\t\t--></div><div class=\"col\"><!--\n\t\t\t\t\t\t{{ template \"htmx_yr_forecast.html\" .}}\n\t\t\t\t\t--></div></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"col\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = yr.YRNowView(model.YRNow).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"row\"><div class=\"col\"><!--\n\t\t\t\t\t\t{{ template \"htmx_sl.html\" .}}\n\t\t\t\t\t--></div><div class=\"col\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = yr.YRForecastView(model.YRForecast).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

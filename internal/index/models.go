@@ -2,16 +2,13 @@ package index
 
 import (
 	"farstu/internal/clock"
+	"farstu/internal/config"
 	"farstu/internal/yr"
 )
 
 type Model struct {
-	Time clock.Model
-	YRNow yr.YRNowModel
-}
-
-func NewModel() Model {
-	return Model{
-		Time: clock.NewModel(),
-	}
+	Config     config.AppConfig
+	Time       clock.Model
+	YRNow      yr.YRForecastItemModel
+	YRForecast yr.YRForecastModel
 }

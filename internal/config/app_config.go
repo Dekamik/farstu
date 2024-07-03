@@ -17,8 +17,13 @@ type AppConfig struct {
 		Enabled bool
 		Lat     float64
 		Lon     float64
+		MaxRows int
 
 		Colors struct {
+			TempMin float64
+			TempMid float64
+			TempMax float64
+
 			TempColorCoolCoolest string
 			TempColorCoolHottest string
 			TempColorMid         string

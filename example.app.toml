@@ -5,11 +5,13 @@ Port = 8080
 Enabled = true
 RegionalRealtimeKey = ""
 RegionalStaticDataKey = ""
+MaxRows = 4
 
 [Weather]
 Enabled = true
 Lat = 0
 Lon = 0
+MaxRows = 4
 
 [Weather.Colors]
 TempMin = -30

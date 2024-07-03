@@ -4,6 +4,7 @@ import (
 	"farstu/internal/clock"
 	"farstu/internal/config"
 	"farstu/internal/index"
+	"farstu/internal/yr"
 	"log/slog"
 	"net/http"
 	"os"
@@ -24,7 +25,7 @@ func main() {
 
 	appConfig, err := config.ReadAppConfig(appConfigPath)
 	if err != nil {
-		slog.Error("An error ocurred while reading "+appConfigPath,
+		slog.Error("An error occurred while reading "+appConfigPath,
 			"err", err,
 		)
 		os.Exit(1)
@@ -32,10 +33,44 @@ func main() {
 
 	// Routes
 	handleTempl("/", func() templ.Component {
-		return index.View(index.NewModel())
+		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
+		if err != nil {
+			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
+				"err", err)
+			// TODO: UI representation of errors
+		}
+
+		model := index.Model{
+			Config: *appConfig,
+			YRNow: yr.NewYRNowModel(*appConfig, *forecast),
+			YRForecast: yr.NewYRForecastModel(*appConfig, *forecast),
+		}
+
+		return index.View(model)
 	})
+
 	handleTempl("/htmx/time", func() templ.Component {
 		return clock.View(clock.NewModel())
+	})
+
+	handleTempl("/htmx/yrnow", func() templ.Component {
+		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
+		if err != nil {
+			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
+				"err", err)
+			// TODO: UI representation of errors
+		}
+		return yr.YRNowView(yr.NewYRNowModel(*appConfig, *forecast))
+	})
+
+	handleTempl("/htmx/yrforecast", func() templ.Component {
+		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
+		if err != nil {
+			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
+				"err", err)
+			// TODO: UI representation of errors
+		}
+		return yr.YRForecastView(yr.NewYRForecastModel(*appConfig, *forecast))
 	})
 
 	// Static files

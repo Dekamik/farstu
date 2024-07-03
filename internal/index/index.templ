@@ -3,6 +3,7 @@ package index
 import (
 	"farstu/internal/clock"
 	"farstu/internal/shared"
+	"farstu/internal/yr"
 )
 
 templ View(model Model) {
@@ -13,7 +14,7 @@ templ View(model Model) {
 					@clock.View(model.Time)
 				</div>
 				<div class="col">
-					<!-- @YRNow(model.YRNow) -->
+					@yr.YRNowView(model.YRNow)
 				</div>
 			</div>
 			<div class="row">
@@ -23,9 +24,7 @@ templ View(model Model) {
 					-->
 				</div>
 				<div class="col">
-					<!--
-						{{ template "htmx_yr_forecast.html" .}}
-					-->
+					@yr.YRForecastView(model.YRForecast)
 				</div>
 			</div>
 		</div>
