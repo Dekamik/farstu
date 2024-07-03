@@ -2,6 +2,7 @@ package yr
 
 import (
 	"farstu/internal/config"
+	"fmt"
 	"time"
 )
 
@@ -52,7 +53,7 @@ func NewYRForecastModel(config config.AppConfig, forecast YRLocationForecast) YR
 		precipitation := item.Data.Next6Hours.Details.PrecipitationAmount
 
 		forecastItem := YRForecastItemModel{
-			Time:               timeStr + item.Time.Local().Add(time.Hour*6).Format("15"),
+			Time:               fmt.Sprintf("%s-%s", timeStr, item.Time.Local().Add(time.Hour*6).Format("15")),
 			Temperature:        temperature,
 			TemperatureColor:   getTemperatureColor(config, temperature),
 			SymbolCode:         symbolCode,
