@@ -43,7 +43,8 @@ func main() {
 	opts := slog.HandlerOptions{
 		Level: logLevel,
 	}
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &opts))
+	handler := slog.NewTextHandler(os.Stdout, &opts)
+	logger := slog.New(handler)
 	slog.SetDefault(logger)
 
 	// Routes
