@@ -27,6 +27,12 @@ func call[T any](req *http.Request) (*T, error) {
 	}
 	defer res.Body.Close()
 
+	msg := fmt.Sprintf("%s %s %s %s", req.Proto, req.Method, res.Status, req.URL.String())
+	slog.Debug(msg,
+		"status", res.Status,
+		"method", req.Method,
+		"url", req.URL.String())
+
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
@@ -35,10 +41,6 @@ func call[T any](req *http.Request) (*T, error) {
 	if res.StatusCode >= 400 {
 		return nil, fmt.Errorf("%s - %s %s returned the following error:\n%s\n", res.Status, req.Method, req.URL.String(), string(bodyBytes))
 	}
-	slog.Debug("HTTP request",
-		"status", res.Status,
-		"method", req.Method,
-		"url", req.URL.String())
 
 	var response T
 	err = json.Unmarshal(bodyBytes, &response)
