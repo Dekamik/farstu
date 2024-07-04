@@ -6,7 +6,8 @@ import (
 
 type AppConfig struct {
 	App struct {
-		Port int
+		LogLevel string
+		Port     int
 	}
 	GTFS struct {
 		Enabled               bool

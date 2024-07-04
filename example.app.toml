@@ -1,17 +1,19 @@
 [App]
+# One of: debug, info, warn, error. Default: info
+LogLevel = "info"
 Port = 8080
 
 [GTFS]
 Enabled = true
+MaxRows = 4
 RegionalRealtimeKey = ""
 RegionalStaticDataKey = ""
-MaxRows = 4
 
 [Weather]
 Enabled = true
+MaxRows = 4
 Lat = 0
 Lon = 0
-MaxRows = 4
 
 [Weather.Colors]
 TempMin = -30

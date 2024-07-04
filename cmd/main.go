@@ -13,6 +13,13 @@ import (
 	"github.com/a-h/templ"
 )
 
+var logLevelMap = map[string]slog.Level{
+	"debug": slog.LevelDebug,
+	"info":  slog.LevelInfo,
+	"warn":  slog.LevelWarn,
+	"error": slog.LevelError,
+}
+
 func handleTempl(path string, componentFunc func() templ.Component) {
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		componentFunc().Render(r.Context(), w)
@@ -31,6 +38,14 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Logging
+	logLevel := logLevelMap[appConfig.App.LogLevel]
+	opts := slog.HandlerOptions{
+		Level: logLevel,
+	}
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &opts))
+	slog.SetDefault(logger)
+
 	// Routes
 	handleTempl("/", func() templ.Component {
 		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
@@ -41,9 +56,9 @@ func main() {
 		}
 
 		model := index.Model{
-			Config: *appConfig,
-			Time: clock.NewModel(),
-			YRNow: yr.NewYRNowModel(*appConfig, *forecast),
+			Config:     *appConfig,
+			Time:       clock.NewModel(),
+			YRNow:      yr.NewYRNowModel(*appConfig, *forecast),
 			YRForecast: yr.NewYRForecastModel(*appConfig, *forecast),
 		}
 
