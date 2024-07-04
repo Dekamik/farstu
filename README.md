@@ -9,16 +9,24 @@ forecast and upcoming public transport departures.
 
 1. Install Go by following the instructions for your OS at
    [go.dev](https://go.dev/doc/install)
-2. Run `make deps` to install dev dependencies
-3. Run `make` to generate templates, install modules and build binary
+2. Run `make deps` to install dev dependencies 
+3. Run `make` to generate templates, install modules and build binary (note: if
+   you cannot run the dependencies (e.g. templ), you're probably missing
+   `~/go/bin` in your PATH variable)
 4. Run `make install` to install the app on your system
 
 ## Configuring the application
 
-Copy `example.app.toml` to `app.toml` and configure GTFS keys and weather
-lat/lon inside `app.toml`.
+1. Copy `example.app.toml` to `app.toml`
+2. To configure the weather forecasts, go to [latlong.net](https://latlong.net)
+   and lookup your address
+3. Paste the lat lon coordinates to the `Lat` and `Lon` variables in `app.toml`
+4. To configure the public transport departures, go to
+   [trafiklab.se](https://www.trafiklab.se/api) and create your API keys
+5. When you've got your API keys, paste them into the variables under the
+   `[GTFS]` section in `app.toml`
 
-You can get the GTFS keys at [Trafiklab](https://www.trafiklab.se/api).
+If you've followed the steps above, you should be able to run Farstu.
 
 ## Running the application
 

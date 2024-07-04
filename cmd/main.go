@@ -42,6 +42,7 @@ func main() {
 
 		model := index.Model{
 			Config: *appConfig,
+			Time: clock.NewModel(),
 			YRNow: yr.NewYRNowModel(*appConfig, *forecast),
 			YRForecast: yr.NewYRForecastModel(*appConfig, *forecast),
 		}

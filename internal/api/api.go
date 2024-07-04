@@ -35,7 +35,7 @@ func call[T any](req *http.Request) (*T, error) {
 	if res.StatusCode >= 400 {
 		return nil, fmt.Errorf("%s - %s %s returned the following error:\n%s\n", res.Status, req.Method, req.URL.String(), string(bodyBytes))
 	}
-	slog.Info("HTTP request",
+	slog.Debug("HTTP request",
 		"status", res.Status,
 		"method", req.Method,
 		"url", req.URL.String())
