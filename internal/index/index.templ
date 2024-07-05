@@ -6,8 +6,8 @@ import (
 	"farstu/internal/yr"
 )
 
-templ View(model Model) {
-	@shared.Page() {
+templ View(model Model, pageModel shared.PageModel) {
+	@shared.Page(pageModel) {
 		<div class="mx-3 my-3" style="padding-top:70px">
 			<div class="row row-upper">
 				<div class="col">
