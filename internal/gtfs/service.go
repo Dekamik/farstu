@@ -7,5 +7,5 @@ type gtfsServiceImpl struct{}
 var _ GTFSService = gtfsServiceImpl{}
 
 func NewGTFSService() GTFSService {
-	
+	return &gtfsServiceImpl{}
 }
