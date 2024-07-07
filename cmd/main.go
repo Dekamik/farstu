@@ -3,9 +3,9 @@ package main
 import (
 	"farstu/internal/clock"
 	"farstu/internal/config"
-	"farstu/internal/gtfs"
 	"farstu/internal/index"
 	"farstu/internal/shared"
+	"farstu/internal/sl"
 	"farstu/internal/yr"
 	"log/slog"
 	"net/http"
@@ -22,6 +22,7 @@ var logLevelMap = map[string]slog.Level{
 	"error": slog.LevelError,
 }
 
+var slService sl.SLService
 var yrService yr.YRService
 
 func handleTempl(path string, componentFunc func() templ.Component) {
@@ -30,14 +31,30 @@ func handleTempl(path string, componentFunc func() templ.Component) {
 	})
 }
 
+func getDeparturesViewModel(appConfig config.AppConfig) sl.DeparturesViewModel {
+	var slDeparturesViewModel sl.DeparturesViewModel
+
+	departures, err := slService.GetDepartures()
+	if err != nil {
+		slog.Warn("an error occurred when fetching departures from SL", "err", err)
+		slDeparturesViewModel = sl.DeparturesViewModel{
+			Enabled: appConfig.SL.Enabled,
+			Message: "Fel vid avgångsdatahämtning",
+		}
+	} else {
+		slDeparturesViewModel = sl.NewDeparturesViewModel(appConfig, *departures)
+	}
+
+	return slDeparturesViewModel
+}
+
 func getWeatherViewModels(appConfig config.AppConfig) (yr.YRNowViewModel, yr.YRForecastViewModel) {
 	var yrNowViewModel yr.YRNowViewModel
 	var yrForecastViewModel yr.YRForecastViewModel
-	
+
 	forecast, err := yrService.GetForecast()
 	if err != nil {
-		slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
-			"err", err)
+		slog.Warn("an error occurred when fetching weather forcasts from YR.no", "err", err)
 		yrNowViewModel = yr.YRNowViewModel{
 			Enabled: appConfig.Weather.Enabled,
 			Message: "Fel vid väderdatahämtning",
@@ -55,13 +72,13 @@ func getWeatherViewModels(appConfig config.AppConfig) (yr.YRNowViewModel, yr.YRF
 }
 
 func main() {
+	var err error
+
 	// Config
 	appConfigPath := "app.toml"
 	appConfig, err := config.ReadAppConfig(appConfigPath)
 	if err != nil {
-		slog.Error("An error occurred while reading "+appConfigPath,
-			"err", err,
-		)
+		slog.Error("An error occurred while reading "+appConfigPath, "err", err)
 		os.Exit(1)
 	}
 
@@ -75,10 +92,25 @@ func main() {
 	slog.SetDefault(logger)
 
 	// Services
+	slServiceArgs := sl.SLServiceArgs{
+		DeparturesTTL: 300,
+		SiteName:      appConfig.SL.SiteName,
+	}
+	slService, err = sl.NewSLService(slServiceArgs)
+	if err != nil {
+		if err == sl.ErrSiteIDNotFound {
+			slog.Error("SL site ID not found", "site_name", appConfig.SL.SiteName)
+			os.Exit(1)
+		} else {
+			slog.Error("an unhandled error occurred", "err", err)
+			os.Exit(1)
+		}
+	}
+
 	yrServiceArgs := yr.YRServiceArgs{
 		ForecastTTL: 300,
-		Lat: appConfig.Weather.Lat,
-		Lon: appConfig.Weather.Lon,
+		Lat:         appConfig.Weather.Lat,
+		Lon:         appConfig.Weather.Lon,
 	}
 	yrService = yr.NewYRService(yrServiceArgs)
 
@@ -88,7 +120,7 @@ func main() {
 
 		model := index.ViewModel{
 			Config:     *appConfig,
-			Departures: gtfs.NewDeparturesViewModel(),
+			Departures: getDeparturesViewModel(*appConfig),
 			Time:       clock.NewViewModel(),
 			YRNow:      yrNowViewModel,
 			YRForecast: yrForecastViewModel,
@@ -98,7 +130,7 @@ func main() {
 	})
 
 	handleTempl("/htmx/departures", func() templ.Component {
-		return gtfs.DeparturesView(gtfs.NewDeparturesViewModel())
+		return sl.DeparturesView(getDeparturesViewModel(*appConfig))
 	})
 
 	handleTempl("/htmx/time", func() templ.Component {

@@ -9,10 +9,10 @@ type AppConfig struct {
 		LogLevel string
 		Port     int
 	}
-	GTFS struct {
-		Enabled               bool
-		RegionalRealtimeKey   string
-		RegionalStaticDataKey string
+	SL struct {
+		Enabled  bool
+		MaxRows  int
+		SiteName string
 	}
 	Weather struct {
 		Enabled bool

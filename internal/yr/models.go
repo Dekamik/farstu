@@ -50,7 +50,7 @@ type YRForecastViewModel struct {
 }
 
 func NewYRForecastViewModel(config config.AppConfig, forecast YRLocationForecast) YRForecastViewModel {
-	items := make([]YRForecastItem, 0)
+	forecasts := make([]YRForecastItem, 0)
 
 	for _, item := range forecast.Properties.Timeseries {
 		timeStr := item.Time.Local().Format("15")
@@ -72,11 +72,11 @@ func NewYRForecastViewModel(config config.AppConfig, forecast YRLocationForecast
 			PrecipitationColor: getPrecipitationColorClass(config, precipitation),
 		}
 
-		items = append(items, forecastItem)
+		forecasts = append(forecasts, forecastItem)
 	}
 
 	return YRForecastViewModel{
 		Enabled: config.Weather.Enabled,
-		Items:   items[0:config.Weather.MaxRows],
+		Items:   forecasts[0:config.Weather.MaxRows],
 	}
 }

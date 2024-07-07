@@ -178,7 +178,7 @@ func YRForecastView(model YRForecastViewModel) templ.Component {
 			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\" hx-get=\"/htmx/yrforecast\" hx-trigger=\"every 15m\" hx-swap=\"outerHTML\"><thead><tr><th class=\"text-end\" scope=\"col\" colspan=\"4\">Väderleksrapport</th></tr></thead> <tbody>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\" hx-get=\"/htmx/yrforecast\" hx-trigger=\"every 16m\" hx-swap=\"outerHTML\"><thead><tr><th class=\"text-end\" scope=\"col\" colspan=\"4\">Väderleksrapport</th></tr></thead> <tbody>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

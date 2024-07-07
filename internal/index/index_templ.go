@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"farstu/internal/clock"
-	"farstu/internal/gtfs"
 	"farstu/internal/shared"
+	"farstu/internal/sl"
 	"farstu/internal/yr"
 )
 
@@ -65,11 +65,11 @@ func View(model ViewModel, pageModel shared.PageViewModel) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = gtfs.DeparturesView(model.Departures).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = sl.DeparturesView(model.Departures).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!--\n\t\t\t\t\t\t{{ template \"htmx_sl.html\" .}}\n\t\t\t\t\t--></div><div class=\"col\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"col\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

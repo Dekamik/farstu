@@ -3,11 +3,10 @@
 LogLevel = "info"
 Port = 8080
 
-[GTFS]
+[SL]
 Enabled = true
 MaxRows = 4
-RegionalRealtimeKey = ""
-RegionalStaticDataKey = ""
+SiteName = "T-Centralen"
 
 [Weather]
 Enabled = true
