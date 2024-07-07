@@ -19,7 +19,8 @@ type YRForecastItem struct {
 
 type YRNowViewModel struct {
 	Enabled  bool
-	Forecast YRForecastItem
+	Forecast *YRForecastItem
+	Message  string
 }
 
 func NewYRNowViewModel(config config.AppConfig, forecast YRLocationForecast) YRNowViewModel {
@@ -30,7 +31,7 @@ func NewYRNowViewModel(config config.AppConfig, forecast YRLocationForecast) YRN
 
 	return YRNowViewModel{
 		Enabled: config.Weather.Enabled,
-		Forecast: YRForecastItem{
+		Forecast: &YRForecastItem{
 			Enabled:            config.Weather.Enabled,
 			Precipitation:      precipitation,
 			PrecipitationColor: getPrecipitationColorClass(config, precipitation),
@@ -45,6 +46,7 @@ func NewYRNowViewModel(config config.AppConfig, forecast YRLocationForecast) YRN
 type YRForecastViewModel struct {
 	Enabled bool
 	Items   []YRForecastItem
+	Message string
 }
 
 func NewYRForecastViewModel(config config.AppConfig, forecast YRLocationForecast) YRForecastViewModel {

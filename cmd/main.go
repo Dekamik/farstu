@@ -28,6 +28,30 @@ func handleTempl(path string, componentFunc func() templ.Component) {
 	})
 }
 
+func getWeatherViewModels(appConfig config.AppConfig) (yr.YRNowViewModel, yr.YRForecastViewModel) {
+	var yrNowViewModel yr.YRNowViewModel
+	var yrForecastViewModel yr.YRForecastViewModel
+	
+	forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
+	if err != nil {
+		slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
+			"err", err)
+		yrNowViewModel = yr.YRNowViewModel{
+			Enabled: appConfig.Weather.Enabled,
+			Message: "Fel vid väderdatahämtning",
+		}
+		yrForecastViewModel = yr.YRForecastViewModel{
+			Enabled: appConfig.Weather.Enabled,
+			Message: "Fel vid väderdatahämtning",
+		}
+	} else {
+		yrNowViewModel = yr.NewYRNowViewModel(appConfig, *forecast)
+		yrForecastViewModel = yr.NewYRForecastViewModel(appConfig, *forecast)
+	}
+
+	return yrNowViewModel, yrForecastViewModel
+}
+
 func main() {
 	// Config
 	appConfigPath := "app.toml"
@@ -50,24 +74,19 @@ func main() {
 
 	// Routes
 	handleTempl("/", func() templ.Component {
-		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
-		if err != nil {
-			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
-				"err", err)
-			// TODO: UI representation of errors
-		}
+		yrNowViewModel, yrForecastViewModel := getWeatherViewModels(*appConfig)
 
 		model := index.ViewModel{
 			Config:     *appConfig,
 			Departures: gtfs.NewDeparturesViewModel(),
 			Time:       clock.NewViewModel(),
-			YRNow:      yr.NewYRNowViewModel(*appConfig, *forecast),
-			YRForecast: yr.NewYRForecastViewModel(*appConfig, *forecast),
+			YRNow:      yrNowViewModel,
+			YRForecast: yrForecastViewModel,
 		}
 
 		return index.View(model, shared.NewPageViewModel("/"))
 	})
-	
+
 	handleTempl("/htmx/departures", func() templ.Component {
 		return gtfs.DeparturesView(gtfs.NewDeparturesViewModel())
 	})
@@ -77,23 +96,13 @@ func main() {
 	})
 
 	handleTempl("/htmx/yrnow", func() templ.Component {
-		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
-		if err != nil {
-			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
-				"err", err)
-			// TODO: UI representation of errors
-		}
-		return yr.YRNowView(yr.NewYRNowViewModel(*appConfig, *forecast))
+		yrNowViewModel, _ := getWeatherViewModels(*appConfig)
+		return yr.YRNowView(yrNowViewModel)
 	})
 
 	handleTempl("/htmx/yrforecast", func() templ.Component {
-		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
-		if err != nil {
-			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
-				"err", err)
-			// TODO: UI representation of errors
-		}
-		return yr.YRForecastView(yr.NewYRForecastViewModel(*appConfig, *forecast))
+		_, yrForecastViewModel := getWeatherViewModels(*appConfig)
+		return yr.YRForecastView(yrForecastViewModel)
 	})
 
 	// Static files

@@ -2,6 +2,7 @@ package gtfs
 
 type DeparturesViewModel struct {
 	Departures []Departure
+	Enabled    bool
 	Message    string
 }
 
@@ -15,6 +16,6 @@ type Departure struct {
 func NewDeparturesViewModel() DeparturesViewModel {
 	return DeparturesViewModel{
 		Departures: make([]Departure, 0),
-		Message: "No data",
+		Message:    "No data",
 	}
 }

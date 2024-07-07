@@ -8,7 +8,11 @@ templ DeparturesView(model DeparturesViewModel) {
 			</tr>
 		</thead>
 		<tbody>
-			if len(model.Departures) > 0 {
+			if !model.Enabled {
+				<tr class="fs-5" stype="height: 2em">
+					<td colspan="4">Avaktiverad</td>
+				</tr>
+			} else if len(model.Departures) > 0 {
 				for _, item := range model.Departures {
 					<tr class="fs-5" stype="height: 2em">
 						<td>

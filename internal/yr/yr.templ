@@ -6,34 +6,52 @@ import (
 )
 
 templ YRNowView(model YRNowViewModel) {
-	<div hx-get="/htmx/yrnow" hx-trigger="every 6m" hx-swap="outerHTML">
-		<div class="row">
-			<div class="col text-right">
-				<p class="weather-symbol text-center">
-					<img
-						src={ "/static/images/weather/dist/light-mode/default/svg/" + model.Forecast.SymbolID + ".svg" }
-						alt={ model.Forecast.SymbolCode }
-					/>
-				</p>
-			</div>
-			<div class="col">
-				<div class="row">
-					<div class="col">
-						<p class={ "temperature text-end" , shared.CSSColor(model.Forecast.TemperatureColor) }>
-							{ strconv.FormatFloat(model.Forecast.Temperature, 'f', 0, 64) }°
-						</p>
-					</div>
+	if !model.Enabled {
+		<div>
+			<div class="row">
+				<div class="col text-right">
+					Väder avaktiverad
 				</div>
-				<div class="row">
-					<div class="col">
-						<p class={ "precipitation text-end text-" + model.Forecast.PrecipitationColor }>
-							{ strconv.FormatFloat(model.Forecast.Precipitation, 'f', 0, 64) } mm
-						</p>
+			</div>
+		</div>
+	} else if model.Forecast != nil {
+		<div hx-get="/htmx/yrnow" hx-trigger="every 6m" hx-swap="outerHTML">
+			<div class="row">
+				<div class="col text-right">
+					<p class="weather-symbol text-center">
+						<img
+							src={ "/static/images/weather/dist/light-mode/default/svg/" + model.Forecast.SymbolID + ".svg" }
+							alt={ model.Forecast.SymbolCode }
+						/>
+					</p>
+				</div>
+				<div class="col">
+					<div class="row">
+						<div class="col">
+							<p class={ "temperature text-end" , shared.CSSColor(model.Forecast.TemperatureColor) }>
+								{ strconv.FormatFloat(model.Forecast.Temperature, 'f', 0, 64) }°
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<p class={ "precipitation text-end text-" + model.Forecast.PrecipitationColor }>
+								{ strconv.FormatFloat(model.Forecast.Precipitation, 'f', 0, 64) } mm
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	} else {
+		<div>
+			<div class="row">
+				<div class="col text-right">
+					{ model.Message }
+				</div>
+			</div>
+		</div>
+	}
 }
 
 templ YRForecastView(model YRForecastViewModel) {
@@ -44,7 +62,13 @@ templ YRForecastView(model YRForecastViewModel) {
 			</tr>
 		</thead>
 		<tbody>
-			if len(model.Items) > 0 {
+			if !model.Enabled {
+				<tr class="fs-5" stype="height: 2em">
+					<td colspan="4">
+						Avaktiverad
+					</td>
+				</tr>
+			} else if len(model.Items) > 0 {
 				for _, item := range model.Items {
 					<tr class="fs-5" style="height: 2em">
 						<th scope="row">{ item.Time }</th>
@@ -65,7 +89,7 @@ templ YRForecastView(model YRForecastViewModel) {
 				}
 			} else {
 				<tr class="fs-5" stype="height: 2em">
-					<td colspan="4">No data</td>
+					<td colspan="4">{ model.Message }</td>
 				</tr>
 			}
 		</tbody>

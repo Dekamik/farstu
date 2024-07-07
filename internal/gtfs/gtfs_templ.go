@@ -30,7 +30,12 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if len(model.Departures) > 0 {
+		if !model.Enabled {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" stype=\"height: 2em\"><td colspan=\"4\">Avaktiverad</td></tr>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else if len(model.Departures) > 0 {
 			for _, item := range model.Departures {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" stype=\"height: 2em\"><td><img class=\"icon white\" src=\"")
 				if templ_7745c5c3_Err != nil {
@@ -39,7 +44,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 				var templ_7745c5c3_Var2 string
 				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("../images/directions/" + item.TransportMode + ".png")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 17, Col: 67}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 21, Col: 67}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {
@@ -52,7 +57,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(item.TransportMode)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 18, Col: 32}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 22, Col: 32}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -65,7 +70,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(item.Line)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 23, Col: 19}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 27, Col: 19}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -78,7 +83,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.Destination)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 26, Col: 28}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 30, Col: 28}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -91,7 +96,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(item.DisplayTime)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 27, Col: 40}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 31, Col: 40}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -110,7 +115,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(model.Message)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 32, Col: 36}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/gtfs/gtfs.templ`, Line: 36, Col: 36}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
