@@ -2,25 +2,24 @@ package cache
 
 import "time"
 
-type Cache[TObject any, TRefreshArgs any] interface {
+type Cache[TObject any] interface {
 	GetOrRefresh() (*TObject, error)
 }
 
-type cacheImpl[TObject any, TRefreshArgs any] struct {
+type cacheImpl[TObject any] struct {
 	expiresAt   time.Time
 	object      *TObject
-	refresh     func(TRefreshArgs) (*TObject, error)
-	refreshArgs TRefreshArgs
+	refresh     func() (*TObject, error)
 	ttl         int
 }
 
-var _ Cache[any, any] = cacheImpl[any, any]{}
+var _ Cache[any] = cacheImpl[any]{}
 
-func (c cacheImpl[TObject, TRefreshArgs]) GetOrRefresh() (*TObject, error) {
+func (c cacheImpl[TObject]) GetOrRefresh() (*TObject, error) {
 	now := time.Now()
 
 	if c.object == nil || c.expiresAt.Before(now) {
-		newObject, err := c.refresh(c.refreshArgs)
+		newObject, err := c.refresh()
 		if err != nil {
 			return nil, err
 		}
@@ -32,10 +31,9 @@ func (c cacheImpl[TObject, TRefreshArgs]) GetOrRefresh() (*TObject, error) {
 	return c.object, nil
 }
 
-func New[TObject any, TRefreshArgs any](ttl int, refresh func(TRefreshArgs) (*TObject, error), args TRefreshArgs) Cache[TObject, TRefreshArgs] {
-	return cacheImpl[TObject, TRefreshArgs]{
+func New[TObject any](ttl int, refresh func() (*TObject, error)) Cache[TObject] {
+	return cacheImpl[TObject]{
 		ttl:         ttl,
 		refresh:     refresh,
-		refreshArgs: args,
 	}
 }

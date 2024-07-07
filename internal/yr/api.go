@@ -105,7 +105,7 @@ type YRLocationForecast struct {
 	} `json:"properties"`
 }
 
-func NewYRLocationForecast(lat float64, lon float64) (*YRLocationForecast, error) {
+func newYRLocationForecast(lat float64, lon float64) (*YRLocationForecast, error) {
 	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%f&lon=%f", lat, lon)
 	return api.GET[YRLocationForecast](url)
 }

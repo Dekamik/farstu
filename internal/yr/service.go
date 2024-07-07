@@ -7,22 +7,13 @@ type YRService interface {
 }
 
 type yrServiceImpl struct {
-	cachedForecast cache.Cache[YRLocationForecast, refreshForecastArgs]
+	cachedForecast cache.Cache[YRLocationForecast]
 }
 
 var _ YRService = yrServiceImpl{}
 
 func (y yrServiceImpl) GetForecast() (*YRLocationForecast, error) {
 	return y.cachedForecast.GetOrRefresh()
-}
-
-type refreshForecastArgs struct {
-	Lat float64
-	Lon float64
-}
-
-func refreshForecast(args refreshForecastArgs) (*YRLocationForecast, error) {
-	return NewYRLocationForecast(args.Lat, args.Lon)
 }
 
 type YRServiceArgs struct {
@@ -32,11 +23,11 @@ type YRServiceArgs struct {
 }
 
 func NewYRService(args YRServiceArgs) YRService {
-	refreshForecastArgs := refreshForecastArgs{
-		Lat: args.Lat,
-		Lon: args.Lon,
+	refreshForecast := func () (*YRLocationForecast, error) {
+		return newYRLocationForecast(args.Lat, args.Lon)
 	}
+
 	return &yrServiceImpl{
-		cachedForecast: cache.New(args.ForecastTTL, refreshForecast, refreshForecastArgs),
+		cachedForecast: cache.New(args.ForecastTTL, refreshForecast),
 	}
 }
