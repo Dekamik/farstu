@@ -34,6 +34,7 @@
     font-weight: 500;
 }
 
+/* Magical style to turn any image white */
 .white {
     filter: invert(75%) sepia(2%) saturate(1443%) hue-rotate(157deg) brightness(98%) contrast(87%);
 }

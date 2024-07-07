@@ -4,7 +4,7 @@ css CSSColor(rgb string) {
 	color: { rgb + " !important" };
 }
 
-templ Page(model PageModel) {
+templ Page(model PageViewModel) {
 	<!DOCTYPE html>
 	<html lang="sv" data-bs-theme="dark">
 		<head>
@@ -38,7 +38,7 @@ templ Page(model PageModel) {
 	</html>
 }
 
-templ NavItem(model NavItemModel) {
+templ NavItem(model NavItemViewModel) {
 	if model.IsActive {
 		<a class="nav-link nav-spacing active" aria-current="page" href={ model.Href }>
 			<i class={ "bi " + model.Icon + " navbar-icon" }></i>

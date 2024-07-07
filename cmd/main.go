@@ -3,6 +3,7 @@ package main
 import (
 	"farstu/internal/clock"
 	"farstu/internal/config"
+	"farstu/internal/gtfs"
 	"farstu/internal/index"
 	"farstu/internal/shared"
 	"farstu/internal/yr"
@@ -21,42 +22,36 @@ var logLevelMap = map[string]slog.Level{
 	"error": slog.LevelError,
 }
 
-var navItems = []shared.NavItemModel{
-	{
-		Href: "/",
-		Icon: "bi-house-door-fill",
-	},
-	{
-		Href: "/weather",
-		Icon: "bi-cloud-sun-fill",
-	},
-	{
-		Href: "/disruptions",
-		Icon: "bi-exclamation-triangle-fill",
-	},
-}
-
-func getPageModel(activeHref string) shared.PageModel {
-	navModels := make([]shared.NavItemModel, 0)
-
-	for _, item := range navItems {
-		model := shared.NavItemModel{
-			Href: item.Href,
-			Icon: item.Icon,
-			IsActive: string(item.Href) == activeHref,
-		}
-		navModels = append(navModels, model)
-	}
-
-	return shared.PageModel{
-		NavItems: navModels,
-	}
-}
+var yrService yr.YRService
 
 func handleTempl(path string, componentFunc func() templ.Component) {
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		componentFunc().Render(r.Context(), w)
 	})
+}
+
+func getWeatherViewModels(appConfig config.AppConfig) (yr.YRNowViewModel, yr.YRForecastViewModel) {
+	var yrNowViewModel yr.YRNowViewModel
+	var yrForecastViewModel yr.YRForecastViewModel
+	
+	forecast, err := yrService.GetForecast()
+	if err != nil {
+		slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
+			"err", err)
+		yrNowViewModel = yr.YRNowViewModel{
+			Enabled: appConfig.Weather.Enabled,
+			Message: "Fel vid väderdatahämtning",
+		}
+		yrForecastViewModel = yr.YRForecastViewModel{
+			Enabled: appConfig.Weather.Enabled,
+			Message: "Fel vid väderdatahämtning",
+		}
+	} else {
+		yrNowViewModel = yr.NewYRNowViewModel(appConfig, *forecast)
+		yrForecastViewModel = yr.NewYRForecastViewModel(appConfig, *forecast)
+	}
+
+	return yrNowViewModel, yrForecastViewModel
 }
 
 func main() {
@@ -79,47 +74,45 @@ func main() {
 	logger := slog.New(handler)
 	slog.SetDefault(logger)
 
+	// Services
+	yrServiceArgs := yr.YRServiceArgs{
+		ForecastTTL: 300,
+		Lat: appConfig.Weather.Lat,
+		Lon: appConfig.Weather.Lon,
+	}
+	yrService = yr.NewYRService(yrServiceArgs)
+
 	// Routes
 	handleTempl("/", func() templ.Component {
-		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
-		if err != nil {
-			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
-				"err", err)
-			// TODO: UI representation of errors
-		}
+		yrNowViewModel, yrForecastViewModel := getWeatherViewModels(*appConfig)
 
-		model := index.Model{
+		model := index.ViewModel{
 			Config:     *appConfig,
-			Time:       clock.NewModel(),
-			YRNow:      yr.NewYRNowModel(*appConfig, *forecast),
-			YRForecast: yr.NewYRForecastModel(*appConfig, *forecast),
+			Departures: gtfs.NewDeparturesViewModel(),
+			Time:       clock.NewViewModel(),
+			YRNow:      yrNowViewModel,
+			YRForecast: yrForecastViewModel,
 		}
 
-		return index.View(model, getPageModel("/"))
+		return index.View(model, shared.NewPageViewModel("/"))
+	})
+
+	handleTempl("/htmx/departures", func() templ.Component {
+		return gtfs.DeparturesView(gtfs.NewDeparturesViewModel())
 	})
 
 	handleTempl("/htmx/time", func() templ.Component {
-		return clock.View(clock.NewModel())
+		return clock.View(clock.NewViewModel())
 	})
 
 	handleTempl("/htmx/yrnow", func() templ.Component {
-		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
-		if err != nil {
-			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
-				"err", err)
-			// TODO: UI representation of errors
-		}
-		return yr.YRNowView(yr.NewYRNowModel(*appConfig, *forecast))
+		yrNowViewModel, _ := getWeatherViewModels(*appConfig)
+		return yr.YRNowView(yrNowViewModel)
 	})
 
 	handleTempl("/htmx/yrforecast", func() templ.Component {
-		forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
-		if err != nil {
-			slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
-				"err", err)
-			// TODO: UI representation of errors
-		}
-		return yr.YRForecastView(yr.NewYRForecastModel(*appConfig, *forecast))
+		_, yrForecastViewModel := getWeatherViewModels(*appConfig)
+		return yr.YRForecastView(yrForecastViewModel)
 	})
 
 	// Static files

@@ -1,6 +1,6 @@
 package clock
 
-templ View(model Model) {
+templ View(model ViewModel) {
 	<div hx-get="/htmx/time"
 		 hx-trigger="every 5s"
 		 hx-swap="outerHTML">
