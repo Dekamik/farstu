@@ -1,13 +1,13 @@
 package clock
 
-type Model struct {
+type ViewModel struct {
 	Date string
 	Time string
 }
 
-func NewModel() Model {
+func NewViewModel() ViewModel {
 	t := GetTime()
-	return Model{
+	return ViewModel{
 		Date: t.Date,
 		Time: t.Time,
 	}

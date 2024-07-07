@@ -3,6 +3,7 @@ package main
 import (
 	"farstu/internal/clock"
 	"farstu/internal/config"
+	"farstu/internal/gtfs"
 	"farstu/internal/index"
 	"farstu/internal/shared"
 	"farstu/internal/yr"
@@ -56,18 +57,23 @@ func main() {
 			// TODO: UI representation of errors
 		}
 
-		model := index.Model{
+		model := index.ViewModel{
 			Config:     *appConfig,
-			Time:       clock.NewModel(),
-			YRNow:      yr.NewYRNowModel(*appConfig, *forecast),
-			YRForecast: yr.NewYRForecastModel(*appConfig, *forecast),
+			Departures: gtfs.NewDeparturesViewModel(),
+			Time:       clock.NewViewModel(),
+			YRNow:      yr.NewYRNowViewModel(*appConfig, *forecast),
+			YRForecast: yr.NewYRForecastViewModel(*appConfig, *forecast),
 		}
 
-		return index.View(model, shared.NewPageModel("/"))
+		return index.View(model, shared.NewPageViewModel("/"))
+	})
+	
+	handleTempl("/htmx/departures", func() templ.Component {
+		return gtfs.DeparturesView(gtfs.NewDeparturesViewModel())
 	})
 
 	handleTempl("/htmx/time", func() templ.Component {
-		return clock.View(clock.NewModel())
+		return clock.View(clock.NewViewModel())
 	})
 
 	handleTempl("/htmx/yrnow", func() templ.Component {
@@ -77,7 +83,7 @@ func main() {
 				"err", err)
 			// TODO: UI representation of errors
 		}
-		return yr.YRNowView(yr.NewYRNowModel(*appConfig, *forecast))
+		return yr.YRNowView(yr.NewYRNowViewModel(*appConfig, *forecast))
 	})
 
 	handleTempl("/htmx/yrforecast", func() templ.Component {
@@ -87,7 +93,7 @@ func main() {
 				"err", err)
 			// TODO: UI representation of errors
 		}
-		return yr.YRForecastView(yr.NewYRForecastModel(*appConfig, *forecast))
+		return yr.YRForecastView(yr.NewYRForecastViewModel(*appConfig, *forecast))
 	})
 
 	// Static files

@@ -5,29 +5,29 @@ import (
 	"strconv"
 )
 
-templ YRNowView(model YRForecastItemModel) {
+templ YRNowView(model YRNowViewModel) {
 	<div hx-get="/htmx/yrnow" hx-trigger="every 6m" hx-swap="outerHTML">
 		<div class="row">
 			<div class="col text-right">
 				<p class="weather-symbol text-center">
 					<img
-						src={ "/static/images/weather/dist/light-mode/default/svg/" + model.SymbolID + ".svg" }
-						alt={ model.SymbolCode }
+						src={ "/static/images/weather/dist/light-mode/default/svg/" + model.Forecast.SymbolID + ".svg" }
+						alt={ model.Forecast.SymbolCode }
 					/>
 				</p>
 			</div>
 			<div class="col">
 				<div class="row">
 					<div class="col">
-						<p class={ "temperature text-end" , shared.CSSColor(model.TemperatureColor) }>
-							{ strconv.FormatFloat(model.Temperature, 'f', 0, 64) }°
+						<p class={ "temperature text-end" , shared.CSSColor(model.Forecast.TemperatureColor) }>
+							{ strconv.FormatFloat(model.Forecast.Temperature, 'f', 0, 64) }°
 						</p>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
-						<p class={ "precipitation text-end text-" + model.PrecipitationColor }>
-							{ strconv.FormatFloat(model.Precipitation, 'f', 0, 64) } mm
+						<p class={ "precipitation text-end text-" + model.Forecast.PrecipitationColor }>
+							{ strconv.FormatFloat(model.Forecast.Precipitation, 'f', 0, 64) } mm
 						</p>
 					</div>
 				</div>
@@ -36,7 +36,7 @@ templ YRNowView(model YRForecastItemModel) {
 	</div>
 }
 
-templ YRForecastView(model YRForecastModel) {
+templ YRForecastView(model YRForecastViewModel) {
 	<table class="table" hx-get="/htmx/yrforecast" hx-trigger="every 15m" hx-swap="outerHTML">
 		<thead>
 			<tr>

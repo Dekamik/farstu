@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type YRForecastItemModel struct {
+type YRForecastItem struct {
 	Enabled            bool
 	Time               string
 	Precipitation      float64
@@ -17,30 +17,38 @@ type YRForecastItemModel struct {
 	TemperatureColor   string
 }
 
-func NewYRNowModel(config config.AppConfig, forecast YRLocationForecast) YRForecastItemModel {
+type YRNowViewModel struct {
+	Enabled  bool
+	Forecast YRForecastItem
+}
+
+func NewYRNowViewModel(config config.AppConfig, forecast YRLocationForecast) YRNowViewModel {
 	latest := forecast.Properties.Timeseries[0]
 	precipitation := latest.Data.Next6Hours.Details.PrecipitationAmount
 	symbolCode := latest.Data.Next6Hours.Summary.SymbolCode
 	temperature := latest.Data.Instant.Details.AirTemperature
 
-	return YRForecastItemModel{
-		Enabled:            config.Weather.Enabled,
-		Precipitation:      precipitation,
-		PrecipitationColor: getPrecipitationColorClass(config, precipitation),
-		SymbolCode:         symbolCode,
-		SymbolID:           YRSymbolsID[symbolCode],
-		Temperature:        temperature,
-		TemperatureColor:   getTemperatureColor(config, temperature),
+	return YRNowViewModel{
+		Enabled: config.Weather.Enabled,
+		Forecast: YRForecastItem{
+			Enabled:            config.Weather.Enabled,
+			Precipitation:      precipitation,
+			PrecipitationColor: getPrecipitationColorClass(config, precipitation),
+			SymbolCode:         symbolCode,
+			SymbolID:           YRSymbolsID[symbolCode],
+			Temperature:        temperature,
+			TemperatureColor:   getTemperatureColor(config, temperature),
+		},
 	}
 }
 
-type YRForecastModel struct {
+type YRForecastViewModel struct {
 	Enabled bool
-	Items   []YRForecastItemModel
+	Items   []YRForecastItem
 }
 
-func NewYRForecastModel(config config.AppConfig, forecast YRLocationForecast) YRForecastModel {
-	items := make([]YRForecastItemModel, 0)
+func NewYRForecastViewModel(config config.AppConfig, forecast YRLocationForecast) YRForecastViewModel {
+	items := make([]YRForecastItem, 0)
 
 	for _, item := range forecast.Properties.Timeseries {
 		timeStr := item.Time.Local().Format("15")
@@ -52,7 +60,7 @@ func NewYRForecastModel(config config.AppConfig, forecast YRLocationForecast) YR
 		symbolCode := item.Data.Next6Hours.Summary.SymbolCode
 		precipitation := item.Data.Next6Hours.Details.PrecipitationAmount
 
-		forecastItem := YRForecastItemModel{
+		forecastItem := YRForecastItem{
 			Time:               fmt.Sprintf("%s-%s", timeStr, item.Time.Local().Add(time.Hour*6).Format("15")),
 			Temperature:        temperature,
 			TemperatureColor:   getTemperatureColor(config, temperature),
@@ -65,7 +73,7 @@ func NewYRForecastModel(config config.AppConfig, forecast YRLocationForecast) YR
 		items = append(items, forecastItem)
 	}
 
-	return YRForecastModel{
+	return YRForecastViewModel{
 		Enabled: config.Weather.Enabled,
 		Items:   items[0:config.Weather.MaxRows],
 	}

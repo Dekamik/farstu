@@ -10,11 +10,12 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"farstu/internal/clock"
+	"farstu/internal/gtfs"
 	"farstu/internal/shared"
 	"farstu/internal/yr"
 )
 
-func View(model Model, pageModel shared.PageModel) templ.Component {
+func View(model ViewModel, pageModel shared.PageViewModel) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -60,7 +61,15 @@ func View(model Model, pageModel shared.PageModel) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"row\"><div class=\"col\"><!--\n\t\t\t\t\t\t{{ template \"htmx_sl.html\" .}}\n\t\t\t\t\t--></div><div class=\"col\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"row\"><div class=\"col\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = gtfs.DeparturesView(model.Departures).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!--\n\t\t\t\t\t\t{{ template \"htmx_sl.html\" .}}\n\t\t\t\t\t--></div><div class=\"col\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
