@@ -159,7 +159,7 @@ func YRForecastView(model YRForecastModel) templ.Component {
 		}
 		if len(model.Items) > 0 {
 			for _, item := range model.Items {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr style=\"height: 2em\"><th scope=\"row\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" style=\"height: 2em\"><th scope=\"row\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

@@ -46,7 +46,7 @@ templ YRForecastView(model YRForecastModel) {
 		<tbody>
 			if len(model.Items) > 0 {
 				for _, item := range model.Items {
-					<tr style="height: 2em">
+					<tr class="fs-5" style="height: 2em">
 						<th scope="row">{ item.Time }</th>
 						<td class={ shared.CSSColor(item.TemperatureColor) }>
 							{ strconv.FormatFloat(item.Temperature, 'f', 0, 64) }°
