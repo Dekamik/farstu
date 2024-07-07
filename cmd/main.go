@@ -22,6 +22,8 @@ var logLevelMap = map[string]slog.Level{
 	"error": slog.LevelError,
 }
 
+var yrService yr.YRService
+
 func handleTempl(path string, componentFunc func() templ.Component) {
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		componentFunc().Render(r.Context(), w)
@@ -32,7 +34,7 @@ func getWeatherViewModels(appConfig config.AppConfig) (yr.YRNowViewModel, yr.YRF
 	var yrNowViewModel yr.YRNowViewModel
 	var yrForecastViewModel yr.YRForecastViewModel
 	
-	forecast, err := yr.NewYRLocationForecast(appConfig.Weather.Lat, appConfig.Weather.Lon)
+	forecast, err := yrService.GetForecast()
 	if err != nil {
 		slog.Error("An error occurred while fetching weather forcasts from the YR.no API",
 			"err", err)
@@ -71,6 +73,14 @@ func main() {
 	handler := slog.NewTextHandler(os.Stdout, &opts)
 	logger := slog.New(handler)
 	slog.SetDefault(logger)
+
+	// Services
+	yrServiceArgs := yr.YRServiceArgs{
+		ForecastTTL: 300,
+		Lat: appConfig.Weather.Lat,
+		Lon: appConfig.Weather.Lon,
+	}
+	yrService = yr.NewYRService(yrServiceArgs)
 
 	// Routes
 	handleTempl("/", func() templ.Component {
