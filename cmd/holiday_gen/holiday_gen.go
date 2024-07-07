@@ -34,5 +34,6 @@ type SHolidayResponse struct {
 }
 
 func main() {
-
+	// TODO: Scrape this API: https://api.dryg.net/ to gather Swedish holidays
+	// Exempel: https://sholiday.faboul.se/dagar/v2.1/2024
 }
