@@ -43,6 +43,7 @@ func NewSLService(args SLServiceArgs) (SLService, error) {
 			break
 		}
 	}
+
 	if !siteIDFound {
 		return nil, ErrSiteIDNotFound
 	}
