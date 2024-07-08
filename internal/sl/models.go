@@ -15,7 +15,7 @@ type Departure struct {
 	TransportMode string
 }
 
-func NewDeparturesViewModel(config config.AppConfig, response SLSiteDeparturesResponse) DeparturesViewModel {
+func NewDeparturesViewModel(config config.AppConfig, response slSiteDeparturesResponse) DeparturesViewModel {
 	departures := make([]Departure, 0)
 
 	for _, item := range response.Departures {

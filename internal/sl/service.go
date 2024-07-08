@@ -7,16 +7,16 @@ import (
 )
 
 type SLService interface {
-	GetDepartures() (*SLSiteDeparturesResponse, error)
+	GetDepartures() (*slSiteDeparturesResponse, error)
 }
 
 type slServiceImpl struct{
-	cachedDepartures cache.Cache[SLSiteDeparturesResponse]
+	cachedDepartures cache.Cache[slSiteDeparturesResponse]
 }
 
 var _ SLService = slServiceImpl{}
 
-func (s slServiceImpl) GetDepartures() (*SLSiteDeparturesResponse, error) {
+func (s slServiceImpl) GetDepartures() (*slSiteDeparturesResponse, error) {
 	return s.cachedDepartures.Get()
 }
 
@@ -48,7 +48,7 @@ func NewSLService(args SLServiceArgs) (SLService, error) {
 		return nil, ErrSiteIDNotFound
 	}
 
-	refreshDepartures := func() (*SLSiteDeparturesResponse, error) {
+	refreshDepartures := func() (*slSiteDeparturesResponse, error) {
 		return getSLSiteDepartures(siteID)
 	}
 	

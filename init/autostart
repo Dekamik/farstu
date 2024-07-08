@@ -1,0 +1,7 @@
+@xset s off
+@xset -dpms
+@xset s noblank
+@bash $HOME/farstu/init/update.sh
+@farstu
+@chromium-browser --kiosk http://localhost:8080
+@unclutter -idle 0.1 -root

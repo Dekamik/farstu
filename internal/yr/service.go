@@ -3,16 +3,16 @@ package yr
 import "farstu/internal/cache"
 
 type YRService interface {
-	GetForecast() (*YRLocationForecast, error)
+	GetForecast() (*yrLocationForecast, error)
 }
 
 type yrServiceImpl struct {
-	cachedForecast cache.Cache[YRLocationForecast]
+	cachedForecast cache.Cache[yrLocationForecast]
 }
 
 var _ YRService = yrServiceImpl{}
 
-func (y yrServiceImpl) GetForecast() (*YRLocationForecast, error) {
+func (y yrServiceImpl) GetForecast() (*yrLocationForecast, error) {
 	return y.cachedForecast.Get()
 }
 
@@ -23,7 +23,7 @@ type YRServiceArgs struct {
 }
 
 func NewYRService(args YRServiceArgs) YRService {
-	refreshForecast := func() (*YRLocationForecast, error) {
+	refreshForecast := func() (*yrLocationForecast, error) {
 		return newYRLocationForecast(args.Lat, args.Lon)
 	}
 

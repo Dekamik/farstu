@@ -5,12 +5,12 @@ import (
 	"fmt"
 )
 
-type SLSitesResponseItem struct {
+type slSitesResponseItem struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
-type SLSiteDeparturesResponse struct {
+type slSiteDeparturesResponse struct {
 	Departures []struct {
 		Destination string `json:"destination"`
 		Display     string `json:"display"`
@@ -21,12 +21,12 @@ type SLSiteDeparturesResponse struct {
 	} `json:"departures"`
 }
 
-func getSLSites(expand bool) (*[]SLSitesResponseItem, error) {
+func getSLSites(expand bool) (*[]slSitesResponseItem, error) {
 	url := fmt.Sprintf("https://transport.integration.sl.se/v1/sites?expand=%t", expand)
-	return api.GET[[]SLSitesResponseItem](url)
+	return api.GET[[]slSitesResponseItem](url)
 }
 
-func getSLSiteDepartures(siteID int) (*SLSiteDeparturesResponse, error) {
+func getSLSiteDepartures(siteID int) (*slSiteDeparturesResponse, error) {
 	url := fmt.Sprintf("https://transport.integration.sl.se/v1/sites/%d/departures", siteID)
-	return api.GET[SLSiteDeparturesResponse](url)
+	return api.GET[slSiteDeparturesResponse](url)
 }

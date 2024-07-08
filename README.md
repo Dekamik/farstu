@@ -24,7 +24,7 @@ forecast and upcoming public transport departures.
 4. To configure the public transport departures, go to
    [trafiklab.se](https://www.trafiklab.se/api) and create your API keys
 5. When you've got your API keys, paste them into the variables under the
-   `[GTFS]` section in `app.toml`
+   `[SL]` section in `app.toml`
 
 If you've followed the steps above, you should be able to run Farstu.
 
@@ -32,6 +32,14 @@ If you've followed the steps above, you should be able to run Farstu.
 
 Stand in the directory where you put your `app.toml` and run `farstu`. The app
 should now be running at the configured port (default `http://localhost:8080`).
+
+## Running the application on kiosk mode on Raspberry Pi
+
+1. Install unclutter with `sudo apt install unclutter`
+2. Copy the contents of the autostart file into either:
+    a. The local autostart (`/home/pi/.config/lxsession/LXDE-pi/autostart`)
+    b. The global autostart (`/etc/xdg/lxsession/LXDE-pi/autostart`)
+3. Restart the raspberry pi
 
 ### Development
 
