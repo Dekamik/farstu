@@ -2,6 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+apt install unclutter
 git clone git@github.com:Dekamik/farstu.git
 
 pushd ./farstu/
