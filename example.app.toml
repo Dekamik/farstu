@@ -1,4 +1,5 @@
 [App]
+LogFile = "./log/app.log"
 # One of: debug, info, warn, error. Default: info
 LogLevel = "info"
 Port = 8080

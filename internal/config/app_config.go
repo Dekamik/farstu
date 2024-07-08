@@ -6,6 +6,7 @@ import (
 
 type AppConfig struct {
 	App struct {
+		LogFile  string
 		LogLevel string
 		Port     int
 	}

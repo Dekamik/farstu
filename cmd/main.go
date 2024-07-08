@@ -7,9 +7,11 @@ import (
 	"farstu/internal/shared"
 	"farstu/internal/sl"
 	"farstu/internal/yr"
+	"io"
 	"log/slog"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/a-h/templ"
@@ -84,10 +86,33 @@ func main() {
 
 	// Logging
 	logLevel := logLevelMap[appConfig.App.LogLevel]
-	opts := slog.HandlerOptions{
-		Level: logLevel,
+	opts := slog.HandlerOptions{ Level: logLevel }
+	writers := []io.Writer { os.Stdout }
+
+	if appConfig.App.LogFile != "" {
+		errWhenCreatingDirectory := false
+		path := filepath.Dir(appConfig.App.LogFile)
+
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			err := os.Mkdir(path, os.ModePerm)
+			if err != nil {
+				slog.Warn("an error occurred when creating log directory")
+				errWhenCreatingDirectory = true
+			}
+		}
+
+		if !errWhenCreatingDirectory {
+			fWriter, err := os.OpenFile(appConfig.App.LogFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+			if err != nil {
+				slog.Warn("an error occurred when opening log file", "err", err)
+			} else {
+				writers = append(writers, fWriter)
+			}
+		}
 	}
-	handler := slog.NewTextHandler(os.Stdout, &opts)
+
+	multiWriter := io.MultiWriter(writers...)
+	handler := slog.NewTextHandler(multiWriter, &opts)
 	logger := slog.New(handler)
 	slog.SetDefault(logger)
 

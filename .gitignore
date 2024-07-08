@@ -25,6 +25,7 @@ go.work.sum
 .env
 
 bin/
+log/
 
 app.toml
 
