@@ -26,25 +26,25 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\" hx-get=\"/htmx/sl\" hx-trigger=\"every 15s\" hx-swap=\"outerHTML\"><thead><tr><th scope=\"col\" colspan=\"4\">Avgångar</th></tr></thead> <tbody>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\" hx-get=\"/htmx/departures\" hx-trigger=\"every 15s\" hx-swap=\"outerHTML\"><thead><tr><th scope=\"col\" colspan=\"4\">Avgångar</th></tr></thead> <tbody>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if !model.Enabled {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" stype=\"height: 2em\"><td colspan=\"4\">Avaktiverad</td></tr>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td colspan=\"4\">Avaktiverad</td></tr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else if len(model.Departures) > 0 {
 			for _, item := range model.Departures {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" stype=\"height: 2em\"><td><img class=\"icon white\" src=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td><img class=\"icon white\" src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var2 string
-				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("../images/directions/" + item.TransportMode + ".png")
+				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("/static/images/directions/" + item.TransportMode + ".png")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 21, Col: 67}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 21, Col: 72}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {
@@ -108,7 +108,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 				}
 			}
 		} else {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" stype=\"height: 2em\"><td colspan=\"4\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td colspan=\"4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

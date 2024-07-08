@@ -29,7 +29,7 @@ func NewDeparturesViewModel(config config.AppConfig, response SLSiteDeparturesRe
 	}
 
 	return DeparturesViewModel{
-		Departures: departures,
+		Departures: departures[0:config.SL.MaxRows],
 		Enabled:    config.SL.Enabled,
 	}
 }

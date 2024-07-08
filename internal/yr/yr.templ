@@ -63,14 +63,14 @@ templ YRForecastView(model YRForecastViewModel) {
 		</thead>
 		<tbody>
 			if !model.Enabled {
-				<tr class="fs-5" stype="height: 2em">
+				<tr class="fs-6" stype="height: 2em">
 					<td colspan="4">
 						Avaktiverad
 					</td>
 				</tr>
 			} else if len(model.Items) > 0 {
 				for _, item := range model.Items {
-					<tr class="fs-5" style="height: 2em">
+					<tr class="fs-6" style="height: 2em">
 						<th scope="row">{ item.Time }</th>
 						<td class={ shared.CSSColor(item.TemperatureColor) }>
 							{ strconv.FormatFloat(item.Temperature, 'f', 0, 64) }°
@@ -88,7 +88,7 @@ templ YRForecastView(model YRForecastViewModel) {
 					</tr>
 				}
 			} else {
-				<tr class="fs-5" stype="height: 2em">
+				<tr class="fs-6" stype="height: 2em">
 					<td colspan="4">{ model.Message }</td>
 				</tr>
 			}

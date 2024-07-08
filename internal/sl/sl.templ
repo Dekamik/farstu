@@ -1,7 +1,7 @@
 package sl
 
 templ DeparturesView(model DeparturesViewModel) {
-	<table class="table" hx-get="/htmx/sl" hx-trigger="every 15s" hx-swap="outerHTML">
+	<table class="table" hx-get="/htmx/departures" hx-trigger="every 15s" hx-swap="outerHTML">
 		<thead>
 			<tr>
 				<th scope="col" colspan="4">Avgångar</th>
@@ -9,16 +9,16 @@ templ DeparturesView(model DeparturesViewModel) {
 		</thead>
 		<tbody>
 			if !model.Enabled {
-				<tr class="fs-5" stype="height: 2em">
+				<tr class="fs-6" stype="height: 2em">
 					<td colspan="4">Avaktiverad</td>
 				</tr>
 			} else if len(model.Departures) > 0 {
 				for _, item := range model.Departures {
-					<tr class="fs-5" stype="height: 2em">
+					<tr class="fs-6" stype="height: 2em">
 						<td>
 							<img
 								class="icon white"
-								src={ "../images/directions/" + item.TransportMode + ".png" }
+								src={ "/static/images/directions/" + item.TransportMode + ".png" }
 								alt={ item.TransportMode }
 							/>
 						</td>
@@ -32,7 +32,7 @@ templ DeparturesView(model DeparturesViewModel) {
 					</tr>
 				}
 			} else {
-				<tr class="fs-5" stype="height: 2em">
+				<tr class="fs-6" stype="height: 2em">
 					<td colspan="4">{ model.Message }</td>
 				</tr>
 			}
