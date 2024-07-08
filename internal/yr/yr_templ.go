@@ -178,18 +178,18 @@ func YRForecastView(model YRForecastViewModel) templ.Component {
 			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\" hx-get=\"/htmx/yrforecast\" hx-trigger=\"every 15m\" hx-swap=\"outerHTML\"><thead><tr><th class=\"text-end\" scope=\"col\" colspan=\"4\">Väderleksrapport</th></tr></thead> <tbody>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\" hx-get=\"/htmx/yrforecast\" hx-trigger=\"every 16m\" hx-swap=\"outerHTML\"><thead><tr><th class=\"text-end\" scope=\"col\" colspan=\"4\">Väderleksrapport</th></tr></thead> <tbody>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if !model.Enabled {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" stype=\"height: 2em\"><td colspan=\"4\">Avaktiverad</td></tr>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td colspan=\"4\">Avaktiverad</td></tr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else if len(model.Items) > 0 {
 			for _, item := range model.Items {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" style=\"height: 2em\"><th scope=\"row\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" style=\"height: 2em\"><th scope=\"row\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -304,7 +304,7 @@ func YRForecastView(model YRForecastViewModel) templ.Component {
 				}
 			}
 		} else {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-5\" stype=\"height: 2em\"><td colspan=\"4\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td colspan=\"4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

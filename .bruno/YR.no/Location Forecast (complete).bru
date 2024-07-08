@@ -1,0 +1,20 @@
+meta {
+  name: Location Forecast (complete)
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://api.met.no/weatherapi/locationforecast/2.0/complete?lat={{lat}}&lon={{lon}}
+  body: none
+  auth: none
+}
+
+params:query {
+  lat: {{lat}}
+  lon: {{lon}}
+}
+
+headers {
+  User-Agent: farstu/0.0.0
+}

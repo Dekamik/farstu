@@ -2,7 +2,7 @@ package index
 
 import (
 	"farstu/internal/clock"
-	"farstu/internal/gtfs"
+	"farstu/internal/sl"
 	"farstu/internal/shared"
 	"farstu/internal/yr"
 )
@@ -20,10 +20,7 @@ templ View(model ViewModel, pageModel shared.PageViewModel) {
 			</div>
 			<div class="row">
 				<div class="col">
-					@gtfs.DeparturesView(model.Departures)
-					<!--
-						{{ template "htmx_sl.html" .}}
-					-->
+					@sl.DeparturesView(model.Departures)
 				</div>
 				<div class="col">
 					@yr.YRForecastView(model.YRForecast)

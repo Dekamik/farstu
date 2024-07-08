@@ -1,0 +1,15 @@
+meta {
+  name: Sites
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://transport.integration.sl.se/v1/sites?expand=true
+  body: none
+  auth: none
+}
+
+params:query {
+  expand: true
+}

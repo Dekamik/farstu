@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type YRLocationForecast struct {
+type yrLocationForecast struct {
 	Type     string `json:"type"`
 	Geometry struct {
 		Type        string    `json:"type"`
@@ -105,7 +105,7 @@ type YRLocationForecast struct {
 	} `json:"properties"`
 }
 
-func newYRLocationForecast(lat float64, lon float64) (*YRLocationForecast, error) {
+func newYRLocationForecast(lat float64, lon float64) (*yrLocationForecast, error) {
 	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%f&lon=%f", lat, lon)
-	return api.GET[YRLocationForecast](url)
+	return api.GET[yrLocationForecast](url)
 }

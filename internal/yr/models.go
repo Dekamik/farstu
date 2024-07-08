@@ -23,7 +23,7 @@ type YRNowViewModel struct {
 	Message  string
 }
 
-func NewYRNowViewModel(config config.AppConfig, forecast YRLocationForecast) YRNowViewModel {
+func NewYRNowViewModel(config config.AppConfig, forecast yrLocationForecast) YRNowViewModel {
 	latest := forecast.Properties.Timeseries[0]
 	precipitation := latest.Data.Next6Hours.Details.PrecipitationAmount
 	symbolCode := latest.Data.Next6Hours.Summary.SymbolCode
@@ -49,8 +49,8 @@ type YRForecastViewModel struct {
 	Message string
 }
 
-func NewYRForecastViewModel(config config.AppConfig, forecast YRLocationForecast) YRForecastViewModel {
-	items := make([]YRForecastItem, 0)
+func NewYRForecastViewModel(config config.AppConfig, forecast yrLocationForecast) YRForecastViewModel {
+	forecasts := make([]YRForecastItem, 0)
 
 	for _, item := range forecast.Properties.Timeseries {
 		timeStr := item.Time.Local().Format("15")
@@ -72,11 +72,11 @@ func NewYRForecastViewModel(config config.AppConfig, forecast YRLocationForecast
 			PrecipitationColor: getPrecipitationColorClass(config, precipitation),
 		}
 
-		items = append(items, forecastItem)
+		forecasts = append(forecasts, forecastItem)
 	}
 
 	return YRForecastViewModel{
 		Enabled: config.Weather.Enabled,
-		Items:   items[0:config.Weather.MaxRows],
+		Items:   forecasts[0:config.Weather.MaxRows],
 	}
 }

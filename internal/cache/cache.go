@@ -3,19 +3,19 @@ package cache
 import "time"
 
 type Cache[TObject any] interface {
-	GetOrRefresh() (*TObject, error)
+	Get() (*TObject, error)
 }
 
 type cacheImpl[TObject any] struct {
-	expiresAt   time.Time
-	object      *TObject
-	refresh     func() (*TObject, error)
-	ttl         int
+	expiresAt time.Time
+	object    *TObject
+	refresh   func() (*TObject, error)
+	ttl       int
 }
 
 var _ Cache[any] = cacheImpl[any]{}
 
-func (c cacheImpl[TObject]) GetOrRefresh() (*TObject, error) {
+func (c cacheImpl[TObject]) Get() (*TObject, error) {
 	now := time.Now()
 
 	if c.object == nil || c.expiresAt.Before(now) {
@@ -33,7 +33,7 @@ func (c cacheImpl[TObject]) GetOrRefresh() (*TObject, error) {
 
 func New[TObject any](ttl int, refresh func() (*TObject, error)) Cache[TObject] {
 	return cacheImpl[TObject]{
-		ttl:         ttl,
-		refresh:     refresh,
+		ttl:     ttl,
+		refresh: refresh,
 	}
 }
