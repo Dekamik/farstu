@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/a-h/templ"
 )
@@ -85,7 +86,8 @@ func main() {
 	}
 
 	// Logging
-	logLevel := logLevelMap[appConfig.App.LogLevel]
+	levelSanitized := strings.ToLower(appConfig.App.LogLevel)
+	logLevel := logLevelMap[levelSanitized]
 	opts := slog.HandlerOptions{ Level: logLevel }
 	writers := []io.Writer { os.Stdout }
 
