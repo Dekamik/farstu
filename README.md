@@ -12,7 +12,7 @@ forecast and upcoming public transport departures.
 2. Run `make deps` to install dev dependencies 
 3. Run `make` to generate templates, install modules and build binary (note: if
    you cannot run the dependencies (e.g. templ), you're probably missing
-   `~/go/bin` in your PATH variable)
+`~/go/bin` in your PATH variable)
 4. Run `make install` to install the app on your system
 
 ## Configuring the application
@@ -21,24 +21,21 @@ forecast and upcoming public transport departures.
 2. To configure the weather forecasts, go to [latlong.net](https://latlong.net)
    and lookup your address
 3. Paste the lat lon coordinates to the `Lat` and `Lon` variables in `app.toml`
-4. To configure the public transport departures, go to
-   [trafiklab.se](https://www.trafiklab.se/api) and create your API keys
-5. When you've got your API keys, paste them into the variables under the
-   `[SL]` section in `app.toml`
 
 If you've followed the steps above, you should be able to run Farstu.
 
 ## Running the application
 
-Stand in the directory where you put your `app.toml` and run `farstu`. The app
-should now be running at the configured port (default `http://localhost:8080`).
+Stand in the directory where the `app.toml` and the `static/` directory is
+located and run `farstu`. The app should now be running at the configured port
+(default `http://localhost:8080`).
 
 ## Running the application on kiosk mode on Raspberry Pi
 
 1. Install unclutter with `sudo apt install unclutter`
-2. Copy the contents of the autostart file into either:
-    a. The local autostart (`/home/pi/.config/lxsession/LXDE-pi/autostart`)
-    b. The global autostart (`/etc/xdg/lxsession/LXDE-pi/autostart`)
+2. Copy the contents of the autostart file into either: a. The local autostart
+   (`/home/pi/.config/lxsession/LXDE-pi/autostart`) b. The global autostart
+(`/etc/xdg/lxsession/LXDE-pi/autostart`)
 3. Restart the raspberry pi
 
 ### Development
