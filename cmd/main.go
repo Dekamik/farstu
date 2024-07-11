@@ -88,8 +88,8 @@ func main() {
 	// Logging
 	levelSanitized := strings.ToLower(appConfig.App.LogLevel)
 	logLevel := logLevelMap[levelSanitized]
-	opts := slog.HandlerOptions{ Level: logLevel }
-	writers := []io.Writer { os.Stdout }
+	opts := slog.HandlerOptions{Level: logLevel}
+	writers := []io.Writer{os.Stdout}
 
 	if appConfig.App.LogFile != "" {
 		errWhenCreatingDirectory := false
@@ -121,6 +121,7 @@ func main() {
 	// Services
 	slServiceArgs := sl.SLServiceArgs{
 		DeparturesTTL: 300,
+		RetriesSec:       []int{1, 4, 8, 8},
 		SiteName:      appConfig.SL.SiteName,
 	}
 	slService, err = sl.NewSLService(slServiceArgs)
