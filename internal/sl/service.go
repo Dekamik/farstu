@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+var ErrSiteIDNotFound = errors.New("site ID not found")
+
 type SLService interface {
 	GetViewModel() DeparturesViewModel
 }
@@ -35,8 +37,6 @@ func (s slServiceImpl) GetViewModel() DeparturesViewModel {
 
 	return slDeparturesViewModel
 }
-
-var ErrSiteIDNotFound = errors.New("site ID not found")
 
 type SLServiceArgs struct {
 	DeparturesTTL  int

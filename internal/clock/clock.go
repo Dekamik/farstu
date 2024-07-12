@@ -39,13 +39,16 @@ func GetDateStr(date time.Time) string {
 	num := date.Format("2")
 
 	var numStr string
-	switch rune(num[len(num)-1]) {
 
-	case '1', '2':
-		numStr = num + ":a"
-
-	default:
+	if num == "11" || num == "12" {
 		numStr = num + ":e"
+	} else {
+		switch rune(num[len(num)-1]) {
+		case '1', '2':
+			numStr = num + ":a"
+		default:
+			numStr = num + ":e"
+		}
 	}
 
 	return fmt.Sprintf("%s %s %s", dayNames[date.Weekday()], numStr, monthNames[date.Month()])
