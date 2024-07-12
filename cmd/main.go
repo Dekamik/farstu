@@ -25,56 +25,15 @@ var logLevelMap = map[string]slog.Level{
 	"error": slog.LevelError,
 }
 
-var slService sl.SLService
-var yrService yr.YRService
-
 func handleTempl(path string, componentFunc func() templ.Component) {
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		componentFunc().Render(r.Context(), w)
 	})
 }
 
-func getDeparturesViewModel(appConfig config.AppConfig) sl.DeparturesViewModel {
-	var slDeparturesViewModel sl.DeparturesViewModel
-
-	departures, err := slService.GetDepartures()
-	if err != nil {
-		slog.Warn("an error occurred when fetching departures from SL", "err", err)
-		slDeparturesViewModel = sl.DeparturesViewModel{
-			Enabled: appConfig.SL.Enabled,
-			Message: "Fel vid avgångsdatahämtning",
-		}
-	} else {
-		slDeparturesViewModel = sl.NewDeparturesViewModel(appConfig, *departures)
-	}
-
-	return slDeparturesViewModel
-}
-
-func getWeatherViewModels(appConfig config.AppConfig) (yr.YRNowViewModel, yr.YRForecastViewModel) {
-	var yrNowViewModel yr.YRNowViewModel
-	var yrForecastViewModel yr.YRForecastViewModel
-
-	forecast, err := yrService.GetForecast()
-	if err != nil {
-		slog.Warn("an error occurred when fetching weather forcasts from YR.no", "err", err)
-		yrNowViewModel = yr.YRNowViewModel{
-			Enabled: appConfig.Weather.Enabled,
-			Message: "Fel vid väderdatahämtning",
-		}
-		yrForecastViewModel = yr.YRForecastViewModel{
-			Enabled: appConfig.Weather.Enabled,
-			Message: "Fel vid väderdatahämtning",
-		}
-	} else {
-		yrNowViewModel = yr.NewYRNowViewModel(appConfig, *forecast)
-		yrForecastViewModel = yr.NewYRForecastViewModel(appConfig, *forecast)
-	}
-
-	return yrNowViewModel, yrForecastViewModel
-}
-
 func main() {
+	var slService sl.SLService
+	var yrService yr.YRService
 	var err error
 
 	// Config
@@ -121,10 +80,10 @@ func main() {
 	// Services
 	slServiceArgs := sl.SLServiceArgs{
 		DeparturesTTL: 300,
-		RetriesSec:       []int{1, 4, 8, 8},
+		InitRetriesSec:    []int{1, 4, 8, 8},
 		SiteName:      appConfig.SL.SiteName,
 	}
-	slService, err = sl.NewSLService(slServiceArgs)
+	slService, err = sl.NewSLService(slServiceArgs, *appConfig)
 	if err != nil {
 		if err == sl.ErrSiteIDNotFound {
 			slog.Error("SL site ID not found", "site_name", appConfig.SL.SiteName)
@@ -140,15 +99,15 @@ func main() {
 		Lat:         appConfig.Weather.Lat,
 		Lon:         appConfig.Weather.Lon,
 	}
-	yrService = yr.NewYRService(yrServiceArgs)
+	yrService = yr.NewYRService(yrServiceArgs, *appConfig)
 
 	// Routes
 	handleTempl("/", func() templ.Component {
-		yrNowViewModel, yrForecastViewModel := getWeatherViewModels(*appConfig)
+		yrNowViewModel, yrForecastViewModel := yrService.GetViewModels()
 
 		model := index.ViewModel{
 			Config:     *appConfig,
-			Departures: getDeparturesViewModel(*appConfig),
+			Departures: slService.GetViewModel(),
 			Time:       clock.NewViewModel(),
 			YRNow:      yrNowViewModel,
 			YRForecast: yrForecastViewModel,
@@ -158,7 +117,7 @@ func main() {
 	})
 
 	handleTempl("/htmx/departures", func() templ.Component {
-		return sl.DeparturesView(getDeparturesViewModel(*appConfig))
+		return sl.DeparturesView(slService.GetViewModel())
 	})
 
 	handleTempl("/htmx/time", func() templ.Component {
@@ -166,12 +125,12 @@ func main() {
 	})
 
 	handleTempl("/htmx/yrnow", func() templ.Component {
-		yrNowViewModel, _ := getWeatherViewModels(*appConfig)
+		yrNowViewModel, _ := yrService.GetViewModels()
 		return yr.YRNowView(yrNowViewModel)
 	})
 
 	handleTempl("/htmx/yrforecast", func() templ.Component {
-		_, yrForecastViewModel := getWeatherViewModels(*appConfig)
+		_, yrForecastViewModel := yrService.GetViewModels()
 		return yr.YRForecastView(yrForecastViewModel)
 	})
 

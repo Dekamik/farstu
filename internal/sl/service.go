@@ -2,39 +2,53 @@ package sl
 
 import (
 	"errors"
-	"farstu/internal/cache"
+	"farstu/internal/config"
 	"log/slog"
 	"strings"
 	"time"
 )
 
 type SLService interface {
-	GetDepartures() (*slSiteDeparturesResponse, error)
+	GetViewModel() DeparturesViewModel
 }
 
 type slServiceImpl struct {
-	cachedDepartures cache.Cache[slSiteDeparturesResponse]
+	appConfig config.AppConfig
+	siteID    int
 }
 
 var _ SLService = slServiceImpl{}
 
-func (s slServiceImpl) GetDepartures() (*slSiteDeparturesResponse, error) {
-	return s.cachedDepartures.Get()
+func (s slServiceImpl) GetViewModel() DeparturesViewModel {
+	var slDeparturesViewModel DeparturesViewModel
+
+	departures, err := getSLSiteDepartures(s.siteID)
+	if err != nil {
+		slog.Warn("an error occurred when fetching departures from SL", "err", err)
+		slDeparturesViewModel = DeparturesViewModel{
+			Enabled: s.appConfig.SL.Enabled,
+			Message: "Fel vid avgångsdatahämtning",
+		}
+	} else {
+		slDeparturesViewModel = NewDeparturesViewModel(s.appConfig, *departures)
+	}
+
+	return slDeparturesViewModel
 }
 
 var ErrSiteIDNotFound = errors.New("site ID not found")
 
 type SLServiceArgs struct {
-	DeparturesTTL int
-	RetriesSec       []int
-	SiteName      string
+	DeparturesTTL  int
+	InitRetriesSec []int
+	SiteName       string
 }
 
-func NewSLService(args SLServiceArgs) (SLService, error) {
+func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, error) {
 	sites, err := getSLSites(false)
 	if err != nil {
-		if len(args.RetriesSec) > 0 {
-			for i, retryWaitSecs := range args.RetriesSec {
+		if len(args.InitRetriesSec) > 0 {
+			for i, retryWaitSecs := range args.InitRetriesSec {
 				slog.Info("waiting for next try", "retry", i, "wait_secs", retryWaitSecs)
 				time.Sleep(time.Duration(retryWaitSecs) * time.Second)
 
@@ -67,11 +81,8 @@ func NewSLService(args SLServiceArgs) (SLService, error) {
 		return nil, ErrSiteIDNotFound
 	}
 
-	refreshDepartures := func() (*slSiteDeparturesResponse, error) {
-		return getSLSiteDepartures(siteID)
-	}
-
 	return slServiceImpl{
-		cachedDepartures: cache.New(args.DeparturesTTL, refreshDepartures),
+		appConfig: appConfig,
+		siteID: siteID,
 	}, nil
 }
