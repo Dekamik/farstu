@@ -9,7 +9,8 @@ import (
 type YRForecastItem struct {
 	Enabled            bool
 	Time               string
-	Precipitation      float64
+	PrecipitationMin   float64
+	PrecipitationMax   float64
 	PrecipitationColor string
 	SymbolCode         string
 	SymbolID           string
@@ -25,7 +26,8 @@ type YRNowViewModel struct {
 
 func NewYRNowViewModel(config config.AppConfig, forecast yrLocationForecast) YRNowViewModel {
 	latest := forecast.Properties.Timeseries[0]
-	precipitation := latest.Data.Next6Hours.Details.PrecipitationAmount
+	precipitationMin := latest.Data.Next6Hours.Details.PrecipitationAmountMin
+	precipitationMax := latest.Data.Next6Hours.Details.PrecipitationAmountMax
 	symbolCode := latest.Data.Next6Hours.Summary.SymbolCode
 	temperature := latest.Data.Instant.Details.AirTemperature
 
@@ -33,8 +35,9 @@ func NewYRNowViewModel(config config.AppConfig, forecast yrLocationForecast) YRN
 		Enabled: config.Weather.Enabled,
 		Forecast: &YRForecastItem{
 			Enabled:            config.Weather.Enabled,
-			Precipitation:      precipitation,
-			PrecipitationColor: getPrecipitationColorClass(config, precipitation),
+			PrecipitationMin:   precipitationMin,
+			PrecipitationMax:   precipitationMax,
+			PrecipitationColor: getPrecipitationColorClass(config, precipitationMin),
 			SymbolCode:         symbolCode,
 			SymbolID:           YRSymbolsID[symbolCode],
 			Temperature:        temperature,
@@ -60,7 +63,8 @@ func NewYRForecastViewModel(config config.AppConfig, forecast yrLocationForecast
 
 		temperature := item.Data.Instant.Details.AirTemperature
 		symbolCode := item.Data.Next6Hours.Summary.SymbolCode
-		precipitation := item.Data.Next6Hours.Details.PrecipitationAmount
+		precipitationMin := item.Data.Next6Hours.Details.PrecipitationAmountMin
+		precipitationMax := item.Data.Next6Hours.Details.PrecipitationAmountMax
 
 		forecastItem := YRForecastItem{
 			Time:               fmt.Sprintf("%s-%s", timeStr, item.Time.Local().Add(time.Hour*6).Format("15")),
@@ -68,8 +72,9 @@ func NewYRForecastViewModel(config config.AppConfig, forecast yrLocationForecast
 			TemperatureColor:   getTemperatureColor(config, temperature),
 			SymbolCode:         symbolCode,
 			SymbolID:           YRSymbolsID[symbolCode],
-			Precipitation:      precipitation,
-			PrecipitationColor: getPrecipitationColorClass(config, precipitation),
+			PrecipitationMin:   precipitationMin,
+			PrecipitationMax:   precipitationMax,
+			PrecipitationColor: getPrecipitationColorClass(config, precipitationMax),
 		}
 
 		forecasts = append(forecasts, forecastItem)

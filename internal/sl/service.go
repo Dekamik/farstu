@@ -2,35 +2,68 @@ package sl
 
 import (
 	"errors"
-	"farstu/internal/cache"
+	"farstu/internal/config"
+	"log/slog"
 	"strings"
+	"time"
 )
 
+var ErrSiteIDNotFound = errors.New("site ID not found")
+
 type SLService interface {
-	GetDepartures() (*slSiteDeparturesResponse, error)
+	GetViewModel() DeparturesViewModel
 }
 
-type slServiceImpl struct{
-	cachedDepartures cache.Cache[slSiteDeparturesResponse]
+type slServiceImpl struct {
+	appConfig config.AppConfig
+	siteID    int
 }
 
 var _ SLService = slServiceImpl{}
 
-func (s slServiceImpl) GetDepartures() (*slSiteDeparturesResponse, error) {
-	return s.cachedDepartures.Get()
-}
+func (s slServiceImpl) GetViewModel() DeparturesViewModel {
+	var slDeparturesViewModel DeparturesViewModel
 
-var ErrSiteIDNotFound = errors.New("site ID not found")
+	departures, err := getSLSiteDepartures(s.siteID)
+	if err != nil {
+		slog.Warn("an error occurred when fetching departures from SL", "err", err)
+		slDeparturesViewModel = DeparturesViewModel{
+			Enabled: s.appConfig.SL.Enabled,
+			Message: "Fel vid avgångsdatahämtning",
+		}
+	} else {
+		slDeparturesViewModel = NewDeparturesViewModel(s.appConfig, *departures)
+	}
+
+	return slDeparturesViewModel
+}
 
 type SLServiceArgs struct {
-	DeparturesTTL int
-	SiteName      string
+	DeparturesTTL  int
+	InitRetriesSec []int
+	SiteName       string
 }
 
-func NewSLService(args SLServiceArgs) (SLService, error) {
+func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, error) {
 	sites, err := getSLSites(false)
 	if err != nil {
-		return nil, err
+		if len(args.InitRetriesSec) > 0 {
+			for i, retryWaitSecs := range args.InitRetriesSec {
+				slog.Info("waiting for next try", "retry", i, "wait_secs", retryWaitSecs)
+				time.Sleep(time.Duration(retryWaitSecs) * time.Second)
+
+				sites, err = getSLSites(false)
+				if err == nil {
+					break
+				}
+			}
+
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, err
+		}
 	}
 
 	var siteID int
@@ -48,11 +81,8 @@ func NewSLService(args SLServiceArgs) (SLService, error) {
 		return nil, ErrSiteIDNotFound
 	}
 
-	refreshDepartures := func() (*slSiteDeparturesResponse, error) {
-		return getSLSiteDepartures(siteID)
-	}
-	
 	return slServiceImpl{
-		cachedDepartures: cache.New(args.DeparturesTTL, refreshDepartures),
+		appConfig: appConfig,
+		siteID:    siteID,
 	}, nil
 }

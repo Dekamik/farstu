@@ -106,6 +106,6 @@ type yrLocationForecast struct {
 }
 
 func newYRLocationForecast(lat float64, lon float64) (*yrLocationForecast, error) {
-	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%f&lon=%f", lat, lon)
+	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=%f&lon=%f", lat, lon)
 	return api.GET[yrLocationForecast](url)
 }
