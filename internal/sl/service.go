@@ -83,6 +83,6 @@ func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, er
 
 	return slServiceImpl{
 		appConfig: appConfig,
-		siteID: siteID,
+		siteID:    siteID,
 	}, nil
 }

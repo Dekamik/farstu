@@ -79,9 +79,9 @@ func main() {
 
 	// Services
 	slServiceArgs := sl.SLServiceArgs{
-		DeparturesTTL: 300,
-		InitRetriesSec:    []int{1, 4, 8, 8},
-		SiteName:      appConfig.SL.SiteName,
+		DeparturesTTL:  300,
+		InitRetriesSec: []int{1, 4, 8, 8},
+		SiteName:       appConfig.SL.SiteName,
 	}
 	slService, err = sl.NewSLService(slServiceArgs, *appConfig)
 	if err != nil {
