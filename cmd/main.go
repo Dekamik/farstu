@@ -31,20 +31,7 @@ func handleTempl(path string, componentFunc func() templ.Component) {
 	})
 }
 
-func main() {
-	var slService sl.SLService
-	var yrService yr.YRService
-	var err error
-
-	// Config
-	appConfigPath := "app.toml"
-	appConfig, err := config.ReadAppConfig(appConfigPath)
-	if err != nil {
-		slog.Error("An error occurred while reading "+appConfigPath, "err", err)
-		os.Exit(1)
-	}
-
-	// Logging
+func setupLogging(appConfig config.AppConfig) {
 	levelSanitized := strings.ToLower(appConfig.App.LogLevel)
 	logLevel := logLevelMap[levelSanitized]
 	opts := slog.HandlerOptions{Level: logLevel}
@@ -76,14 +63,18 @@ func main() {
 	handler := slog.NewTextHandler(multiWriter, &opts)
 	logger := slog.New(handler)
 	slog.SetDefault(logger)
+}
 
-	// Services
+func setupServices(appConfig config.AppConfig) (sl.SLService, yr.YRService) {
+	var slService sl.SLService
+	var yrService yr.YRService
+
 	slServiceArgs := sl.SLServiceArgs{
 		DeparturesTTL:  300,
 		InitRetriesSec: []int{1, 4, 8, 8},
 		SiteName:       appConfig.SL.SiteName,
 	}
-	slService, err = sl.NewSLService(slServiceArgs, *appConfig)
+	slService, err := sl.NewSLService(slServiceArgs, appConfig)
 	if err != nil {
 		if err == sl.ErrSiteIDNotFound {
 			slog.Error("SL site ID not found", "site_name", appConfig.SL.SiteName)
@@ -99,14 +90,17 @@ func main() {
 		Lat:         appConfig.Weather.Lat,
 		Lon:         appConfig.Weather.Lon,
 	}
-	yrService = yr.NewYRService(yrServiceArgs, *appConfig)
+	yrService = yr.NewYRService(yrServiceArgs, appConfig)
 
-	// Routes
+	return slService, yrService
+}
+
+func setupRoutes(appConfig config.AppConfig, slService sl.SLService, yrService yr.YRService) {
 	handleTempl("/", func() templ.Component {
 		yrNowViewModel, yrForecastViewModel := yrService.GetViewModels()
 
 		model := index.ViewModel{
-			Config:     *appConfig,
+			Config:     appConfig,
 			Departures: slService.GetViewModel(),
 			Time:       clock.NewViewModel(),
 			YRNow:      yrNowViewModel,
@@ -133,6 +127,20 @@ func main() {
 		_, yrForecastViewModel := yrService.GetViewModels()
 		return yr.YRForecastView(yrForecastViewModel)
 	})
+}
+
+func main() {
+	// Config
+	appConfigPath := "app.toml"
+	appConfig, err := config.ReadAppConfig(appConfigPath)
+	if err != nil {
+		slog.Error("An error occurred while reading "+appConfigPath, "err", err)
+		os.Exit(1)
+	}
+
+	setupLogging(*appConfig)
+	slService, yrService := setupServices(*appConfig)
+	setupRoutes(*appConfig, slService, yrService)
 
 	// Static files
 	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
