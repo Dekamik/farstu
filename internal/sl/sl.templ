@@ -44,16 +44,29 @@ templ SLDeparturesNextView(model DeparturesViewModel) {
 					</span>
 				</td>
 				<td>{ model.Departures[0].Destination }</td>
+				<td></td>
 			</tr>
+			<tr class="sl-next-departure text-center">
+				<td colspan="4">
+					{ model.Departures[0].DisplayTime }
+				</td>
+			</tr>
+			if len(model.Departures) > 1 {
+				<tr class="fs-6" stype="height: 2em">
+					<td>
+						<img class="icon white" src={ "/static/images/directions/" + model.Departures[1].TransportMode + ".png" } alt={ model.Departures[1].TransportMode } />
+					</td>
+					<td>
+						<span class="badge bg-danger">
+							{ model.Departures[1].LineNumber }
+						</span>
+					</td>
+					<td>{ model.Departures[1].Destination }</td>
+					<th scope="row">{ model.Departures[1].DisplayTime }</th>
+				</tr>
+			}
 		</tbody>
 	</table>
-	<div class="row">
-		<div class="col">
-			<h1 class="sl-next-departure text-center">
-				{ model.Departures[0].DisplayTime }
-			</h1>
-		</div>
-	</div>
 	} else {
 	<div>
 		<div class="row">
