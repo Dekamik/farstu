@@ -40,10 +40,6 @@ func (y yrServiceImpl) GetViewModels() (YRNowViewModel, YRForecastViewModel) {
 	return yrNowViewModel, yrForecastViewModel
 }
 
-func (y yrServiceImpl) GetForecast() (*yrLocationForecast, error) {
-	return y.cachedForecast.Get()
-}
-
 type YRServiceArgs struct {
 	ForecastTTL int
 	Lat         float64
