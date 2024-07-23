@@ -120,6 +120,14 @@ func main() {
 		return sl.DeparturesView(slService.GetViewModel())
 	})
 
+	handleTempl("/htmx/departures/next", func() templ.Component {
+		return sl.SLDeparturesNextView(slService.GetViewModel())
+	})
+
+	handleTempl("/htmx/departures/list", func() templ.Component {
+		return sl.SLDeparturesListView(slService.GetViewModel())
+	})
+
 	handleTempl("/htmx/time", func() templ.Component {
 		return clock.View(clock.NewViewModel())
 	})

@@ -1,41 +1,99 @@
 package sl
 
 templ DeparturesView(model DeparturesViewModel) {
-	<table class="table" hx-get="/htmx/departures" hx-trigger="every 15s" hx-swap="outerHTML">
-		<thead>
-			<tr>
-				<th scope="col" colspan="4">Avgångar</th>
-			</tr>
-		</thead>
+<ul class="nav nav-tabs" id="sl-tab" role="tablist">
+	<li class="nav-item" role="presentation">
+		<button class="nav-link active" id="sl-next-tab" data-bs-toggle="tab" data-bs-target="#sl-next" type="button"
+			role="tab" aria-controls="sl-list" aria-selected="true">Nästa</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="sl-list-tab" data-bs-toggle="tab" data-bs-target="#sl-list" type="button"
+			role="tab" aria-controls="sl-list" aria-selected="false">Lista</button>
+	</li>
+</ul>
+<div class="tab-content" id="sl-tab-content">
+	<div class="tab-pane fade show active" id="sl-next" role="tabpanel" aria-labelledby="sl-next-tab">
+		@SLDeparturesNextView(model)
+	</div>
+	<div class="tab-pane fade" id="sl-list" role="tabpanel" aria-labelledby="sl-list-tab">
+		@SLDeparturesListView(model)
+	</div>
+</div>
+}
+
+templ SLDeparturesNextView(model DeparturesViewModel) {
+<div hx-get="/htmx/departures/next" hx-trigger="every 15s" hx-swap="outerHTML">
+	if !model.Enabled {
+	<div>
+		<div class="row">
+			<div class="col">
+				SL avaktiverad
+			</div>
+		</div>
+	</div>
+	} else if len(model.Departures) > 0 {
+	<table class="table">
 		<tbody>
-			if !model.Enabled {
-				<tr class="fs-6" stype="height: 2em">
-					<td colspan="4">Avaktiverad</td>
-				</tr>
-			} else if len(model.Departures) > 0 {
-				for _, item := range model.Departures {
-					<tr class="fs-6" stype="height: 2em">
-						<td>
-							<img
-								class="icon white"
-								src={ "/static/images/directions/" + item.TransportMode + ".png" }
-								alt={ item.TransportMode }
-							/>
-						</td>
-						<td>
-							<span class="badge bg-danger">
-								{ item.LineNumber }
-							</span>
-						</td>
-						<td>{ item.Destination }</td>
-						<th scope="row">{ item.DisplayTime }</th>
-					</tr>
-				}
-			} else {
-				<tr class="fs-6" stype="height: 2em">
-					<td colspan="4">{ model.Message }</td>
-				</tr>
-			}
+			<tr class="fs-6" stype="height: 2em">
+				<td>
+					<img class="icon white" src={ "/static/images/directions/" + model.Departures[0].TransportMode + ".png" } alt={ model.Departures[0].TransportMode } />
+				</td>
+				<td>
+					<span class="badge bg-danger">
+						{ model.Departures[0].LineNumber }
+					</span>
+				</td>
+				<td>{ model.Departures[0].Destination }</td>
+			</tr>
 		</tbody>
 	</table>
+	<div class="row">
+		<div class="col">
+			<h1 class="sl-next-departure text-center">
+				{ model.Departures[0].DisplayTime }
+			</h1>
+		</div>
+	</div>
+	} else {
+	<div>
+		<div class="row">
+			<div class="col">
+				{ model.Message }
+			</div>
+		</div>
+	</div>
+	}
+</div>
+}
+
+templ SLDeparturesListView(model DeparturesViewModel) {
+<table class="table" hx-get="/htmx/departures/list" hx-trigger="every 15s" hx-swap="outerHTML">
+	<tbody>
+		if !model.Enabled {
+		<tr class="fs-6" stype="height: 2em">
+			<td colspan="4">SL avaktiverad</td>
+		</tr>
+		} else if len(model.Departures) > 0 {
+		for _, item := range model.Departures {
+		<tr class="fs-6" stype="height: 2em">
+			<td>
+				<img class="icon white" src={ "/static/images/directions/" + item.TransportMode + ".png" } alt={
+					item.TransportMode } />
+			</td>
+			<td>
+				<span class="badge bg-danger">
+					{ item.LineNumber }
+				</span>
+			</td>
+			<td>{ item.Destination }</td>
+			<th scope="row">{ item.DisplayTime }</th>
+		</tr>
+		}
+		} else {
+		<tr class="fs-6" stype="height: 2em">
+			<td colspan="4">{ model.Message }</td>
+		</tr>
+		}
+	</tbody>
+</table>
 }
