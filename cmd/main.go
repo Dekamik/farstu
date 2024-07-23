@@ -25,12 +25,6 @@ var logLevelMap = map[string]slog.Level{
 	"error": slog.LevelError,
 }
 
-func handleTempl(path string, componentFunc func() templ.Component) {
-	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		componentFunc().Render(r.Context(), w)
-	})
-}
-
 func setupLogging(appConfig config.AppConfig) {
 	levelSanitized := strings.ToLower(appConfig.App.LogLevel)
 	logLevel := logLevelMap[levelSanitized]
@@ -93,6 +87,12 @@ func setupServices(appConfig config.AppConfig) (sl.SLService, yr.YRService) {
 	yrService = yr.NewYRService(yrServiceArgs, appConfig)
 
 	return slService, yrService
+}
+
+func handleTempl(path string, componentFunc func() templ.Component) {
+	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+		componentFunc().Render(r.Context(), w)
+	})
 }
 
 func setupRoutes(appConfig config.AppConfig, slService sl.SLService, yrService yr.YRService) {
