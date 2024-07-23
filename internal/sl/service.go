@@ -2,6 +2,7 @@ package sl
 
 import (
 	"errors"
+	"farstu/internal/cache"
 	"farstu/internal/config"
 	"log/slog"
 	"strings"
@@ -15,8 +16,8 @@ type SLService interface {
 }
 
 type slServiceImpl struct {
-	appConfig config.AppConfig
-	siteID    int
+	appConfig        config.AppConfig
+	cachedDepartures cache.Cache[slSiteDeparturesResponse]
 }
 
 var _ SLService = slServiceImpl{}
@@ -24,7 +25,7 @@ var _ SLService = slServiceImpl{}
 func (s slServiceImpl) GetViewModel() DeparturesViewModel {
 	var slDeparturesViewModel DeparturesViewModel
 
-	departures, err := getSLSiteDepartures(s.siteID)
+	departures, err := s.cachedDepartures.Get()
 	if err != nil {
 		slog.Warn("an error occurred when fetching departures from SL", "err", err)
 		slDeparturesViewModel = DeparturesViewModel{
@@ -81,8 +82,12 @@ func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, er
 		return nil, ErrSiteIDNotFound
 	}
 
+	refreshDepartures := func() (*slSiteDeparturesResponse, error) {
+		return getSLSiteDepartures(siteID)
+	}
+
 	return slServiceImpl{
 		appConfig: appConfig,
-		siteID:    siteID,
+		cachedDepartures: cache.New(args.DeparturesTTL, refreshDepartures),
 	}, nil
 }
