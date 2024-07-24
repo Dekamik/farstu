@@ -28,8 +28,13 @@ func NewDeparturesViewModel(config config.AppConfig, response slSiteDeparturesRe
 		departures = append(departures, departure)
 	}
 
+	selectedDepartures := make([]Departure, 0)
+	if len(departures) != 0 {
+		selectedDepartures = departures[0:config.SL.MaxRows]
+	}
+
 	return DeparturesViewModel{
-		Departures: departures[0:config.SL.MaxRows],
+		Departures: selectedDepartures,
 		Enabled:    config.SL.Enabled,
 	}
 }
