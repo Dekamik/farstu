@@ -17,6 +17,7 @@ type YRForecastItem struct {
 	Temperature        float64
 	TemperatureColor   string
 	MaxUVIndex         float64
+	UVColor            string
 }
 
 type YRNowViewModel struct {
@@ -34,36 +35,23 @@ type forecastAggregatesResult struct {
 	UVIndexMax       float64
 }
 
-func getForecastAggregates(forecasts yrLocationForecast) []forecastAggregatesResult {
-	aggregates := make([]forecastAggregatesResult, 0)
-	aggregate := forecastAggregatesResult{}
-	isFirst := true
-	aggregate.FirstHour = forecasts.Properties.Timeseries[0].Time.Local().Format("15")
-
-	for _, item := range forecasts.Properties.Timeseries {
-		hour := item.Time.Local().Format("15")
-		if !isFirst && (hour == "00" || hour == "06" || hour == "12" || hour == "18") {
-			aggregates = append(aggregates, aggregate)
-			aggregate = forecastAggregatesResult{}
-			aggregate.FirstHour = hour
-		}
-		isFirst = false
-
-		aggregate.PrecipitationMin += item.Data.Next1Hours.Details.PrecipitationAmountMin
-		aggregate.PrecipitationMax += item.Data.Next1Hours.Details.PrecipitationAmountMax
-		aggregate.LastHour = hour
-
-		uvIndex := item.Data.Instant.Details.UltravioletIndexClearSky
-		if uvIndex > aggregate.UVIndexMax {
-			aggregate.UVIndexMax = uvIndex
-		}
+func calculateUVColor(uvIndex float64) string {
+	if uvIndex < 3 {
+		// Green
+		return "#3ea72d"
+	} else if uvIndex < 6 {
+		// Yellow
+		return "#fff300"
+	} else if uvIndex < 8 {
+		// Orange
+		return "#f18b00"
+	} else if uvIndex < 11 {
+		// Red
+		return "#e53210"
+	} else {
+		// Violet
+		return "#b567a4"
 	}
-
-	aggregates = append(aggregates, aggregate)
-	for i, item := range aggregates {
-		aggregates[i].Time = fmt.Sprintf("%s-%s", item.FirstHour, item.LastHour)
-	}
-	return aggregates
 }
 
 func NewYRNowViewModel(config config.AppConfig, forecast yrLocationForecast) YRNowViewModel {
@@ -86,6 +74,7 @@ func NewYRNowViewModel(config config.AppConfig, forecast yrLocationForecast) YRN
 			Temperature:        temperature,
 			TemperatureColor:   getTemperatureColor(config, temperature),
 			MaxUVIndex:         uvIndex,
+			UVColor:            calculateUVColor(uvIndex),
 		},
 	}
 }
@@ -98,12 +87,19 @@ type YRForecastViewModel struct {
 
 func NewYRForecastViewModel(config config.AppConfig, forecast yrLocationForecast) YRForecastViewModel {
 	forecasts := make([]YRForecastItem, 0)
-	aggregates := getForecastAggregates(forecast)
 
-	for _, item := range forecast.Properties.Timeseries {
+	for i, item := range forecast.Properties.Timeseries {
 		hour := item.Time.Local().Format("15")
 		if hour != "00" && hour != "06" && hour != "12" && hour != "18" {
 			continue
+		}
+
+		var largestUVIndex float64 = 0.0
+		for j := i; j < i+6; j++ {
+			itemUVIndex := forecast.Properties.Timeseries[j].Data.Instant.Details.UltravioletIndexClearSky
+			if itemUVIndex > largestUVIndex {
+				largestUVIndex = itemUVIndex
+			}
 		}
 
 		temperature := item.Data.Instant.Details.AirTemperature
@@ -112,14 +108,6 @@ func NewYRForecastViewModel(config config.AppConfig, forecast yrLocationForecast
 		precipitationMax := item.Data.Next6Hours.Details.PrecipitationAmountMax
 
 		timeStr := fmt.Sprintf("%s-%s", hour, item.Time.Local().Add(time.Hour*6).Format("15"))
-		var aggregate forecastAggregatesResult
-		for _, item := range aggregates {
-			if aggregate.Time == timeStr {
-				aggregate = item
-				break
-			}
-		}
-
 		forecastItem := YRForecastItem{
 			Time:               timeStr,
 			Temperature:        temperature,
@@ -129,7 +117,8 @@ func NewYRForecastViewModel(config config.AppConfig, forecast yrLocationForecast
 			PrecipitationMin:   precipitationMin,
 			PrecipitationMax:   precipitationMax,
 			PrecipitationColor: getPrecipitationColorClass(config, precipitationMax),
-			MaxUVIndex:         aggregate.UVIndexMax,
+			MaxUVIndex:         largestUVIndex,
+			UVColor:            calculateUVColor(largestUVIndex),
 		}
 
 		forecasts = append(forecasts, forecastItem)

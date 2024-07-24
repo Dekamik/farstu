@@ -1,98 +1,115 @@
 package yr
 
 import (
-"farstu/internal/shared"
-"strconv"
+	"farstu/internal/shared"
+	"strconv"
 )
 
 templ YRNowView(model YRNowViewModel) {
-if !model.Enabled {
-<div>
-	<div class="row">
-		<div class="col text-right">
-			Väder avaktiverad
-		</div>
-	</div>
-</div>
-} else if model.Forecast != nil {
-<div hx-get="/htmx/yrnow" hx-trigger="every 6m" hx-swap="outerHTML">
-	<div class="row">
-		<div class="col text-right">
-			<p class="weather-symbol text-center">
-				<img src={ "/static/images/weather/dist/light-mode/default/svg/" + model.Forecast.SymbolID + ".svg" }
-					alt={ model.Forecast.SymbolCode } />
-			</p>
-		</div>
-		<div class="col">
+	if !model.Enabled {
+		<div>
 			<div class="row">
-				<div class="col">
-					<p class={ "temperature text-end" , shared.CSSColor(model.Forecast.TemperatureColor) }>
-						{ strconv.FormatFloat(model.Forecast.Temperature, 'f', 0, 64) }°
-					</p>
+				<div class="col text-right">
+					Väder avaktiverad
 				</div>
 			</div>
+		</div>
+	} else if model.Forecast != nil {
+		<div hx-get="/htmx/yrnow" hx-trigger="every 6m" hx-swap="outerHTML">
 			<div class="row">
+				<div class="col text-right">
+					<p class="weather-symbol text-center">
+						<img
+							src={ "/static/images/weather/dist/light-mode/default/svg/" + model.Forecast.SymbolID + ".svg" }
+							alt={ model.Forecast.SymbolCode }
+						/>
+					</p>
+				</div>
 				<div class="col">
-					<p class={ "precipitation text-end text-" + model.Forecast.PrecipitationColor }>
-						if model.Forecast.PrecipitationMax > 0 {
-							{ strconv.FormatFloat(model.Forecast.PrecipitationMin, 'f', 1, 64) + "-" +
-								strconv.FormatFloat(model.Forecast.PrecipitationMax, 'f', 1, 64) } mm
+					<div class="row">
+						<div class="col">
+							<p class={ "temperature text-end" , shared.CSSColor(model.Forecast.TemperatureColor) }>
+								{ strconv.FormatFloat(model.Forecast.Temperature, 'f', 0, 64) }°
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						if model.Forecast.MaxUVIndex >= 3.0 {
+							<div class="col fw-bold text-end uvindex">
+								<span class={ shared.CSSColor(model.Forecast.UVColor) }>
+									{ "UV " + strconv.FormatFloat(model.Forecast.MaxUVIndex, 'f', 1, 64) }
+								</span>
+							</div>
 						}
-					</p>
+						if model.Forecast.PrecipitationMax > 0 {
+							<div class="col">
+								<span class={ "precipitation text-end text-" + model.Forecast.PrecipitationColor }>
+									{ strconv.FormatFloat(model.Forecast.PrecipitationMin, 'f', 1, 64) + "-" +
+						strconv.FormatFloat(model.Forecast.PrecipitationMax, 'f', 1, 64) } mm
+								</span>
+							</div>
+						}
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
-} else {
-<div>
-	<div class="row">
-		<div class="col text-right">
-			{ model.Message }
+	} else {
+		<div>
+			<div class="row">
+				<div class="col text-right">
+					{ model.Message }
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-}
+	}
 }
 
 templ YRForecastView(model YRForecastViewModel) {
-<table class="table" hx-get="/htmx/yrforecast" hx-trigger="every 16m" hx-swap="outerHTML">
-	<thead>
-		<tr>
-			<th class="text-end" scope="col" colspan="4">Väderleksrapport</th>
-		</tr>
-	</thead>
-	<tbody>
-		if !model.Enabled {
-		<tr class="fs-6" stype="height: 2em">
-			<td colspan="4">
-				Avaktiverad
-			</td>
-		</tr>
-		} else if len(model.Items) > 0 {
-		for _, item := range model.Items {
-		<tr class="fs-6" style="height: 2em">
-			<th scope="row">{ item.Time }</th>
-			<td class={ shared.CSSColor(item.TemperatureColor) }>
-				{ strconv.FormatFloat(item.Temperature, 'f', 0, 64) }°
-			</td>
-			<td>
-				<img class="icon" src={ "/static/images/weather/dist/light-mode/default/svg/" + item.SymbolID + ".svg" }
-					alt={ item.SymbolCode } />
-			</td>
-			<td class={ "text-" + item.PrecipitationColor }>
-				if item.PrecipitationMax > 0 {
-					{ strconv.FormatFloat(item.PrecipitationMin, 'f', 1, 64) + "-" +
-						strconv.FormatFloat(item.PrecipitationMax, 'f', 1, 64) } mm
+	<table class="table" hx-get="/htmx/yrforecast" hx-trigger="every 16m" hx-swap="outerHTML">
+		<thead>
+			<tr>
+				<th class="text-end" scope="col" colspan="4">Väderleksrapport</th>
+			</tr>
+		</thead>
+		<tbody>
+			if !model.Enabled {
+				<tr class="fs-6" stype="height: 2em">
+					<td colspan="4">
+						Avaktiverad
+					</td>
+				</tr>
+			} else if len(model.Items) > 0 {
+				for _, item := range model.Items {
+					<tr class="fs-6" style="height: 2em">
+						<th scope="row">{ item.Time }</th>
+						<td class={ shared.CSSColor(item.TemperatureColor) }>
+							{ strconv.FormatFloat(item.Temperature, 'f', 0, 64) }°
+						</td>
+						<td>
+							<img
+								class="icon"
+								src={ "/static/images/weather/dist/light-mode/default/svg/" + item.SymbolID + ".svg" }
+								alt={ item.SymbolCode }
+							/>
+						</td>
+						<td class={ shared.CSSColor(item.UVColor) }>
+							if item.MaxUVIndex >= 3.0 {
+								{ "UV " + strconv.FormatFloat(item.MaxUVIndex, 'f', 1, 64) }
+							}
+						</td>
+						<td class={ "text-" + item.PrecipitationColor }>
+							if item.PrecipitationMax > 0 {
+								{ strconv.FormatFloat(item.PrecipitationMin, 'f', 1, 64) + "-" +
+				strconv.FormatFloat(item.PrecipitationMax, 'f', 1, 64) } mm
+							}
+						</td>
+					</tr>
 				}
-			</td>
-		</tr>
-		}
-		} else {
-		<tr class="fs-6" stype="height: 2em">
-			<td colspan="4">{ model.Message }</td>
-		</tr>
-		}
-	</tbody>
-</table>
+			} else {
+				<tr class="fs-6" stype="height: 2em">
+					<td colspan="4">{ model.Message }</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 }
