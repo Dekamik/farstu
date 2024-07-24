@@ -68,7 +68,7 @@ func NewYRNowViewModel(config config.AppConfig, forecast yrLocationForecast) YRN
 			Enabled:            config.Weather.Enabled,
 			PrecipitationMin:   precipitationMin,
 			PrecipitationMax:   precipitationMax,
-			PrecipitationColor: getPrecipitationColorClass(config, precipitationMin),
+			PrecipitationColor: getPrecipitationColorClass(config, precipitationMax),
 			SymbolCode:         symbolCode,
 			SymbolID:           YRSymbolsID[symbolCode],
 			Temperature:        temperature,

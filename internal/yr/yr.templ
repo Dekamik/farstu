@@ -33,23 +33,25 @@ templ YRNowView(model YRNowViewModel) {
 							</p>
 						</div>
 					</div>
-					<div class="row">
-						if model.Forecast.MaxUVIndex >= 3.0 {
+					if model.Forecast.MaxUVIndex >= 3.0 {
+						<div class="row">
 							<div class="col fw-bold text-end uvindex">
 								<span class={ shared.CSSColor(model.Forecast.UVColor) }>
 									{ "UV " + strconv.FormatFloat(model.Forecast.MaxUVIndex, 'f', 1, 64) }
 								</span>
 							</div>
-						}
-						if model.Forecast.PrecipitationMax > 0 {
-							<div class="col">
-								<span class={ "precipitation text-end text-" + model.Forecast.PrecipitationColor }>
+						</div>
+					}
+					if model.Forecast.PrecipitationMax > 0 {
+						<div class="row">
+							<div class="col text-end">
+								<span class={ "precipitation text-" + model.Forecast.PrecipitationColor }>
 									{ strconv.FormatFloat(model.Forecast.PrecipitationMin, 'f', 1, 64) + "-" +
 						strconv.FormatFloat(model.Forecast.PrecipitationMax, 'f', 1, 64) } mm
 								</span>
 							</div>
-						}
-					</div>
+						</div>
+					}
 				</div>
 			</div>
 		</div>
