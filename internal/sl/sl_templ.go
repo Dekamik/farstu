@@ -227,7 +227,7 @@ func SLDeparturesNextView(model DeparturesViewModel) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if model.Message == "" {
+			if model.Message != "" {
 				var templ_7745c5c3_Var13 string
 				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(model.Message)
 				if templ_7745c5c3_Err != nil {
