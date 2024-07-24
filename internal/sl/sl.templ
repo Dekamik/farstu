@@ -71,7 +71,11 @@ templ SLDeparturesNextView(model DeparturesViewModel) {
 	<div>
 		<div class="row">
 			<div class="col">
-				{ model.Message }
+				if model.Message == "" {
+					{ model.Message }
+				} else {
+					{ "Inga avgångar närmsta timme" }
+				}
 			</div>
 		</div>
 	</div>
