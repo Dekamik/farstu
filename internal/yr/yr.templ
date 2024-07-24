@@ -68,13 +68,13 @@ templ YRForecastView(model YRForecastViewModel) {
 	<table class="table" hx-get="/htmx/yrforecast" hx-trigger="every 16m" hx-swap="outerHTML">
 		<thead>
 			<tr>
-				<th class="text-end" scope="col" colspan="4">Väderleksrapport</th>
+				<th class="text-end" scope="col" colspan="5">Väderleksrapport</th>
 			</tr>
 		</thead>
 		<tbody>
 			if !model.Enabled {
 				<tr class="fs-6" stype="height: 2em">
-					<td colspan="4">
+					<td colspan="5">
 						Avaktiverad
 					</td>
 				</tr>
@@ -107,7 +107,7 @@ templ YRForecastView(model YRForecastViewModel) {
 				}
 			} else {
 				<tr class="fs-6" stype="height: 2em">
-					<td colspan="4">{ model.Message }</td>
+					<td colspan="5">{ model.Message }</td>
 				</tr>
 			}
 		</tbody>
