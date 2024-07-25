@@ -6,7 +6,7 @@ css CSSColor(rgb string) {
 
 templ Page(model PageViewModel) {
 	<!DOCTYPE html>
-	<html lang="sv" data-bs-theme="dark">
+	<html class="text-shadow" lang="sv" data-bs-theme="dark">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -23,8 +23,8 @@ templ Page(model PageViewModel) {
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
 		</head>
-		<body>
-			<nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark">
+		<body class="theme-summer-bg">
+			<nav class="navbar fixed-top navbar-expand-sm navbar-dark">
 				<div class="container-fluid">
 					<div class="navbar-nav">
 						for _, item := range model.NavItems {

@@ -1,3 +1,11 @@
+td {
+	background: rgba(0, 0, 0, 0) !important;
+}
+
+th {
+	background: rgba(0, 0, 0, 0) !important;
+}
+
 .clock {
     font-size: 4rem;
     font-weight: 500;
@@ -25,8 +33,16 @@
     font-weight: 500;
 }
 
+.precipitation-color {
+	color: #80aaff;
+}
+
 .row-upper {
     line-height: 0.7;
+}
+
+.shadow {
+	
 }
 
 .sl-next-departure {
@@ -39,12 +55,36 @@
     font-weight: 500;
 }
 
+.text-shadow {
+	text-shadow: 0px 0px 5px black;
+}
+
+.text-shadow-disabled {
+	text-shadow: 0px 0px 0px black !important;
+}
+
+.theme-summer-bg {
+	background-color: #6699ff;
+}
+
+.theme-summer-cloud {
+	background-color: #e6eeff;
+}
+
+.transparent-bg {
+	background: rgba(0, 0, 0, 0) !important;
+}
+
 .uvindex {
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-/* Magical style to turn any image white */
 .white {
+	color: #FFF;
+}
+
+/* Magical style to turn any image white */
+.white-convert {
     filter: invert(75%) sepia(2%) saturate(1443%) hue-rotate(157deg) brightness(98%) contrast(87%);
 }

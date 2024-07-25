@@ -18,10 +18,6 @@ var navItems = []NavItemViewModel{
 		Icon: "bi-house-door-fill",
 	},
 	{
-		Href: "/weather",
-		Icon: "bi-cloud-sun-fill",
-	},
-	{
 		Href: "/disruptions",
 		Icon: "bi-exclamation-triangle-fill",
 	},
