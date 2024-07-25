@@ -21,12 +21,12 @@ type slSiteDeparturesResponse struct {
 	} `json:"departures"`
 }
 
-func getSLSites(expand bool) (*[]slSitesResponseItem, error) {
+func callSLSites(expand bool) (*[]slSitesResponseItem, error) {
 	url := fmt.Sprintf("https://transport.integration.sl.se/v1/sites?expand=%t", expand)
 	return api.GET[[]slSitesResponseItem](url)
 }
 
-func getSLSiteDepartures(siteID int) (*slSiteDeparturesResponse, error) {
+func callSLSiteDepartures(siteID int) (*slSiteDeparturesResponse, error) {
 	url := fmt.Sprintf("https://transport.integration.sl.se/v1/sites/%d/departures", siteID)
 	return api.GET[slSiteDeparturesResponse](url)
 }
