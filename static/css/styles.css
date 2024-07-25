@@ -28,6 +28,13 @@ th {
     font-size: 2rem;
 }
 
+.outline {
+	-webkit-filter: drop-shadow(-1px -1px 2px black)
+		drop-shadow(1px 1px 2px black);
+	filter: drop-shadow(-1px -1px 2px black)
+		drop-shadow(1px 1px 2px black);
+}
+
 .precipitation {
     font-size: 1.5rem;
     font-weight: 500;
@@ -41,10 +48,6 @@ th {
     line-height: 0.7;
 }
 
-.shadow {
-	
-}
-
 .sl-next-departure {
 	font-size: 2.9rem;
 	font-weight: bold;
@@ -55,16 +58,16 @@ th {
     font-weight: 500;
 }
 
-.text-shadow {
-	text-shadow: 0px 0px 5px black;
+.text-outline {
+	text-shadow: -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black, 1px 1px 2px black;
 }
 
-.text-shadow-disabled {
+.text-outline-disabled {
 	text-shadow: 0px 0px 0px black !important;
 }
 
 .theme-summer-bg {
-	background-color: #6699ff;
+	background-color: #3399ff;
 }
 
 .theme-summer-cloud {

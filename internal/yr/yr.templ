@@ -20,6 +20,7 @@ templ YRNowView(model YRNowViewModel) {
 				<div class="col text-right">
 					<p class="weather-symbol text-center">
 						<img
+							class="outline"
 							src={ "/static/images/weather/dist/light-mode/default/svg/" + model.Forecast.SymbolID + ".svg" }
 							alt={ model.Forecast.SymbolCode }
 						/>
@@ -89,7 +90,7 @@ templ YRForecastView(model YRForecastViewModel) {
 						</td>
 						<td>
 							<img
-								class="icon"
+								class="icon outline"
 								src={ "/static/images/weather/dist/light-mode/default/svg/" + item.SymbolID + ".svg" }
 								alt={ item.SymbolCode }
 							/>
