@@ -46,14 +46,14 @@ type SLServiceArgs struct {
 }
 
 func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, error) {
-	sites, err := getSLSites(false)
+	sites, err := callSLSites(false)
 	if err != nil {
 		if len(args.InitRetriesSec) > 0 {
 			for i, retryWaitSecs := range args.InitRetriesSec {
 				slog.Info("waiting for next try", "retry", i, "wait_secs", retryWaitSecs)
 				time.Sleep(time.Duration(retryWaitSecs) * time.Second)
 
-				sites, err = getSLSites(false)
+				sites, err = callSLSites(false)
 				if err == nil {
 					break
 				}
@@ -83,7 +83,7 @@ func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, er
 	}
 
 	refreshDepartures := func() (*slSiteDeparturesResponse, error) {
-		return getSLSiteDepartures(siteID)
+		return callSLSiteDepartures(siteID)
 	}
 
 	return slServiceImpl{

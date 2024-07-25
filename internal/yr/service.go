@@ -48,7 +48,7 @@ type YRServiceArgs struct {
 
 func NewYRService(args YRServiceArgs, appConfig config.AppConfig) YRService {
 	refreshForecast := func() (*yrLocationForecast, error) {
-		return newYRLocationForecast(args.Lat, args.Lon)
+		return callYRLocationForecast(args.Lat, args.Lon)
 	}
 
 	return &yrServiceImpl{

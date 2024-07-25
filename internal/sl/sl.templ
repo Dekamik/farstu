@@ -1,13 +1,13 @@
 package sl
 
 templ DeparturesView(model DeparturesViewModel) {
-<ul class="nav nav-tabs" id="sl-tab" role="tablist">
+<ul class="nav nav-tabs white-border" id="sl-tab" role="tablist">
 	<li class="nav-item" role="presentation">
-		<button class="nav-link active" id="sl-next-tab" data-bs-toggle="tab" data-bs-target="#sl-next" type="button"
+		<button class="nav-link transparent-bg text-outline white-border active" id="sl-next-tab" data-bs-toggle="tab" data-bs-target="#sl-next" type="button"
 			role="tab" aria-controls="sl-list" aria-selected="true">Nästa</button>
 	</li>
 	<li class="nav-item" role="presentation">
-		<button class="nav-link" id="sl-list-tab" data-bs-toggle="tab" data-bs-target="#sl-list" type="button"
+		<button class="nav-link transparent-bg text-outline white-border" id="sl-list-tab" data-bs-toggle="tab" data-bs-target="#sl-list" type="button"
 			role="tab" aria-controls="sl-list" aria-selected="false">Lista</button>
 	</li>
 </ul>
@@ -36,10 +36,10 @@ templ SLDeparturesNextView(model DeparturesViewModel) {
 		<tbody>
 			<tr class="fs-6" stype="height: 2em">
 				<td>
-					<img class="icon white" src={ "/static/images/directions/" + model.Departures[0].TransportMode + ".png" } alt={ model.Departures[0].TransportMode } />
+					<img class="icon outline" src={ "/static/images/directions/" + model.Departures[0].TransportMode + "-W.png" } alt={ model.Departures[0].TransportMode } />
 				</td>
 				<td>
-					<span class="badge bg-danger">
+					<span class="badge bg-danger outline text-outline-disabled">
 						{ model.Departures[0].LineNumber }
 					</span>
 				</td>
@@ -54,10 +54,10 @@ templ SLDeparturesNextView(model DeparturesViewModel) {
 			if len(model.Departures) > 1 {
 				<tr class="fs-6" stype="height: 2em">
 					<td>
-						<img class="icon white" src={ "/static/images/directions/" + model.Departures[1].TransportMode + ".png" } alt={ model.Departures[1].TransportMode } />
+						<img class="icon outline" src={ "/static/images/directions/" + model.Departures[1].TransportMode + "-W.png" } alt={ model.Departures[1].TransportMode } />
 					</td>
 					<td>
-						<span class="badge bg-danger">
+						<span class="badge bg-danger outline text-outline-disabled">
 							{ model.Departures[1].LineNumber }
 						</span>
 					</td>
@@ -94,11 +94,11 @@ templ SLDeparturesListView(model DeparturesViewModel) {
 		for _, item := range model.Departures {
 		<tr class="fs-6" stype="height: 2em">
 			<td>
-				<img class="icon white" src={ "/static/images/directions/" + item.TransportMode + ".png" } alt={
+				<img class="icon outline" src={ "/static/images/directions/" + item.TransportMode + "-W.png" } alt={
 					item.TransportMode } />
 			</td>
 			<td>
-				<span class="badge bg-danger">
+				<span class="badge bg-danger outline text-outline-disabled">
 					{ item.LineNumber }
 				</span>
 			</td>

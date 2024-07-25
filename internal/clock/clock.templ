@@ -4,10 +4,10 @@ templ View(model ViewModel) {
 	<div hx-get="/htmx/time"
 		 hx-trigger="every 5s"
 		 hx-swap="outerHTML">
-		<p class="clock">
+		<p class="clock white">
 			{ model.Time }
 		</p>
-		<p class="date">
+		<p class="date white">
 			{ model.Date }
 		</p>
 	</div>

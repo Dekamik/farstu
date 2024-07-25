@@ -26,7 +26,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul class=\"nav nav-tabs\" id=\"sl-tab\" role=\"tablist\"><li class=\"nav-item\" role=\"presentation\"><button class=\"nav-link active\" id=\"sl-next-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-next\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"true\">Nästa</button></li><li class=\"nav-item\" role=\"presentation\"><button class=\"nav-link\" id=\"sl-list-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-list\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"false\">Lista</button></li></ul><div class=\"tab-content\" id=\"sl-tab-content\"><div class=\"tab-pane fade show active\" id=\"sl-next\" role=\"tabpanel\" aria-labelledby=\"sl-next-tab\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul class=\"nav nav-tabs white-border\" id=\"sl-tab\" role=\"tablist\"><li class=\"nav-item\" role=\"presentation\"><button class=\"nav-link transparent-bg text-outline white-border active\" id=\"sl-next-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-next\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"true\">Nästa</button></li><li class=\"nav-item\" role=\"presentation\"><button class=\"nav-link transparent-bg text-outline white-border\" id=\"sl-list-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-list\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"false\">Lista</button></li></ul><div class=\"tab-content\" id=\"sl-tab-content\"><div class=\"tab-pane fade show active\" id=\"sl-next\" role=\"tabpanel\" aria-labelledby=\"sl-next-tab\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -78,14 +78,14 @@ func SLDeparturesNextView(model DeparturesViewModel) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		} else if len(model.Departures) > 0 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\"><tbody><tr class=\"fs-6\" stype=\"height: 2em\"><td><img class=\"icon white\" src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<table class=\"table\"><tbody><tr class=\"fs-6\" stype=\"height: 2em\"><td><img class=\"icon outline\" src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("/static/images/directions/" + model.Departures[0].TransportMode + ".png")
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("/static/images/directions/" + model.Departures[0].TransportMode + "-W.png")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 39, Col: 108}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 39, Col: 112}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -98,13 +98,13 @@ func SLDeparturesNextView(model DeparturesViewModel) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(model.Departures[0].TransportMode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 39, Col: 150}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 39, Col: 154}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></td><td><span class=\"badge bg-danger\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></td><td><span class=\"badge bg-danger outline text-outline-disabled\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -148,14 +148,14 @@ func SLDeparturesNextView(model DeparturesViewModel) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if len(model.Departures) > 1 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td><img class=\"icon white\" src=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td><img class=\"icon outline\" src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var8 string
-				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("/static/images/directions/" + model.Departures[1].TransportMode + ".png")
+				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("/static/images/directions/" + model.Departures[1].TransportMode + "-W.png")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 57, Col: 109}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 57, Col: 113}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
@@ -168,13 +168,13 @@ func SLDeparturesNextView(model DeparturesViewModel) templ.Component {
 				var templ_7745c5c3_Var9 string
 				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(model.Departures[1].TransportMode)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 57, Col: 151}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 57, Col: 155}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></td><td><span class=\"badge bg-danger\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></td><td><span class=\"badge bg-danger outline text-outline-disabled\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -290,14 +290,14 @@ func SLDeparturesListView(model DeparturesViewModel) templ.Component {
 			}
 		} else if len(model.Departures) > 0 {
 			for _, item := range model.Departures {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td><img class=\"icon white\" src=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"fs-6\" stype=\"height: 2em\"><td><img class=\"icon outline\" src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var16 string
-				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs("/static/images/directions/" + item.TransportMode + ".png")
+				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs("/static/images/directions/" + item.TransportMode + "-W.png")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 97, Col: 92}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 97, Col: 96}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
@@ -317,7 +317,7 @@ func SLDeparturesListView(model DeparturesViewModel) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></td><td><span class=\"badge bg-danger\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></td><td><span class=\"badge bg-danger outline text-outline-disabled\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

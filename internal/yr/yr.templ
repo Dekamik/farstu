@@ -20,6 +20,7 @@ templ YRNowView(model YRNowViewModel) {
 				<div class="col text-right">
 					<p class="weather-symbol text-center">
 						<img
+							class="outline"
 							src={ "/static/images/weather/dist/light-mode/default/svg/" + model.Forecast.SymbolID + ".svg" }
 							alt={ model.Forecast.SymbolCode }
 						/>
@@ -45,7 +46,7 @@ templ YRNowView(model YRNowViewModel) {
 					if model.Forecast.PrecipitationMax > 0 {
 						<div class="row">
 							<div class="col text-end">
-								<span class={ "precipitation text-" + model.Forecast.PrecipitationColor }>
+								<span class="precipitation precipitation-color">
 									{ strconv.FormatFloat(model.Forecast.PrecipitationMin, 'f', 1, 64) + "-" +
 						strconv.FormatFloat(model.Forecast.PrecipitationMax, 'f', 1, 64) } mm
 								</span>
@@ -84,12 +85,12 @@ templ YRForecastView(model YRForecastViewModel) {
 				for _, item := range model.Items {
 					<tr class="fs-6" style="height: 2em">
 						<th scope="row">{ item.Time }</th>
-						<td class={ shared.CSSColor(item.TemperatureColor) }>
+						<td class={ "fw-bold", shared.CSSColor(item.TemperatureColor) }>
 							{ strconv.FormatFloat(item.Temperature, 'f', 0, 64) }°
 						</td>
 						<td>
 							<img
-								class="icon"
+								class="icon outline"
 								src={ "/static/images/weather/dist/light-mode/default/svg/" + item.SymbolID + ".svg" }
 								alt={ item.SymbolCode }
 							/>
@@ -99,7 +100,7 @@ templ YRForecastView(model YRForecastViewModel) {
 								{ "UV " + strconv.FormatFloat(item.MaxUVIndex, 'f', 1, 64) }
 							}
 						</td>
-						<td class={ "text-" + item.PrecipitationColor }>
+						<td class="precipitation-color">
 							if item.PrecipitationMax > 0 {
 								{ strconv.FormatFloat(item.PrecipitationMin, 'f', 1, 64) + "-" +
 				strconv.FormatFloat(item.PrecipitationMax, 'f', 1, 64) } mm

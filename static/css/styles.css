@@ -1,3 +1,13 @@
+td {
+	background: rgba(0, 0, 0, 0) !important;
+	border-color: #fff !important;
+}
+
+th {
+	background: rgba(0, 0, 0, 0) !important;
+	border-color: #fff !important;
+}
+
 .clock {
     font-size: 4rem;
     font-weight: 500;
@@ -20,9 +30,20 @@
     font-size: 2rem;
 }
 
+.outline {
+	-webkit-filter: drop-shadow(-1px -1px 2px black)
+		drop-shadow(1px 1px 2px black);
+	filter: drop-shadow(-1px -1px 2px black)
+		drop-shadow(1px 1px 2px black);
+}
+
 .precipitation {
     font-size: 1.5rem;
     font-weight: 500;
+}
+
+.precipitation-color {
+	color: #80aaff;
 }
 
 .row-upper {
@@ -39,12 +60,111 @@
     font-weight: 500;
 }
 
+.text-outline {
+	text-shadow: -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black, 1px 1px 2px black;
+}
+
+.text-outline-disabled {
+	text-shadow: 0px 0px 0px black !important;
+}
+
+.theme-img {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	z-index: -1;
+}
+
+.theme-autumn-day-bg {
+	background-color: #ffc34d;
+}
+
+.theme-autumn-day-fg {
+	/* #ffdd99 */
+	filter: invert(81%) sepia(45%) saturate(344%) hue-rotate(345deg) brightness(103%) contrast(101%);
+}
+
+.theme-autumn-night-bg {
+	background-color: #332200;
+}
+
+.theme-autumn-night-fg {
+	/* #805500 */
+	filter: invert(31%) sepia(37%) saturate(2029%) hue-rotate(18deg) brightness(95%) contrast(101%);
+}
+
+.theme-spring-day-bg {
+	background-color: #ffb3d7;
+}
+
+.theme-spring-day-fg {
+	/* #ffe6f1 */
+	filter: invert(87%) sepia(30%) saturate(234%) hue-rotate(298deg) brightness(102%) contrast(103%);
+}
+
+.theme-spring-night-bg {
+	background-color: #4d0024;
+}
+
+.theme-spring-night-fg {
+	/* #660030 */
+	filter: invert(8%) sepia(74%) saturate(5861%) hue-rotate(323deg) brightness(106%) contrast(105%);
+}
+
+.theme-summer-day-bg {
+	background-color: #3399ff;
+}
+
+.theme-summer-day-fg {
+	/* #80bfff */
+	filter: invert(63%) sepia(14%) saturate(1614%) hue-rotate(179deg) brightness(111%) contrast(101%);
+}
+
+.theme-summer-night-bg {
+	background-color: #004280;
+}
+
+.theme-summer-night-fg {
+	/* #315d81 */
+	filter: invert(34%) sepia(27%) saturate(864%) hue-rotate(165deg) brightness(94%) contrast(98%);
+}
+
+.theme-winter-day-bg {
+	background-color: #80ffbd;
+}
+
+.theme-winter-day-fg {
+	/* #e6fff2 */
+	filter: invert(77%) sepia(2%) saturate(7438%) hue-rotate(191deg) brightness(133%) contrast(101%);
+}
+
+.theme-winter-night-bg {
+	background-color: #003319;
+}
+
+.theme-winter-night-fg {
+	/* #576b61 */
+	filter: invert(41%) sepia(12%) saturate(528%) hue-rotate(97deg) brightness(92%) contrast(85%);
+}
+
+.transparent-bg {
+	background: rgba(0, 0, 0, 0) !important;
+}
+
 .uvindex {
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-/* Magical style to turn any image white */
 .white {
+	color: #FFF;
+}
+
+.white-border {
+	border-color: #fff !important;
+}
+
+/* Magical style to turn any image white */
+.white-convert {
     filter: invert(75%) sepia(2%) saturate(1443%) hue-rotate(157deg) brightness(98%) contrast(87%);
 }
