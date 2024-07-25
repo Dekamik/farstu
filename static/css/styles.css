@@ -1,9 +1,11 @@
 td {
 	background: rgba(0, 0, 0, 0) !important;
+	border-color: #fff !important;
 }
 
 th {
 	background: rgba(0, 0, 0, 0) !important;
+	border-color: #fff !important;
 }
 
 .clock {
@@ -73,12 +75,40 @@ th {
 	z-index: -1;
 }
 
+.theme-autumn-bg {
+	background-color: #ffc34d;
+}
+
+.theme-autumn-fg {
+	/* #ffdd99 */
+	filter: invert(81%) sepia(45%) saturate(344%) hue-rotate(345deg) brightness(103%) contrast(101%);
+}
+
+.theme-spring-bg {
+	background-color: #ffb3d7;
+}
+
+.theme-spring-fg {
+	/* #ffe6f1 */
+	filter: invert(87%) sepia(30%) saturate(234%) hue-rotate(298deg) brightness(102%) contrast(103%);
+}
+
 .theme-summer-bg {
 	background-color: #3399ff;
 }
 
 .theme-summer-fg {
+	/* #80bfff */
 	filter: invert(63%) sepia(14%) saturate(1614%) hue-rotate(179deg) brightness(111%) contrast(101%);
+}
+
+.theme-winter-bg {
+	background-color: #80ffbd;
+}
+
+.theme-winter-fg {
+	/* #e6fff2 */
+	filter: invert(77%) sepia(2%) saturate(7438%) hue-rotate(191deg) brightness(133%) contrast(101%);
 }
 
 .transparent-bg {
@@ -92,6 +122,10 @@ th {
 
 .white {
 	color: #FFF;
+}
+
+.white-border {
+	border-color: #fff !important;
 }
 
 /* Magical style to turn any image white */
