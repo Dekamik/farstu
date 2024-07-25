@@ -66,12 +66,19 @@ th {
 	text-shadow: 0px 0px 0px black !important;
 }
 
+.theme-img {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	z-index: -1;
+}
+
 .theme-summer-bg {
 	background-color: #3399ff;
 }
 
-.theme-summer-cloud {
-	background-color: #e6eeff;
+.theme-summer-fg {
+	filter: invert(63%) sepia(14%) saturate(1614%) hue-rotate(179deg) brightness(111%) contrast(101%);
 }
 
 .transparent-bg {
