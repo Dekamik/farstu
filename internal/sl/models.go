@@ -28,10 +28,12 @@ func NewDeparturesViewModel(config config.AppConfig, response slSiteDeparturesRe
 		departures = append(departures, departure)
 	}
 
-	// Trying to make a slice of an empty array makes the program panic
+	// Bounds checking required, or it will crash
 	selectedDepartures := make([]Departure, 0)
-	if len(departures) != 0 {
+	if len(departures) > 0 && len(departures) > config.SL.MaxRows {
 		selectedDepartures = departures[0:config.SL.MaxRows]
+	} else {
+		selectedDepartures = departures
 	}
 
 	return DeparturesViewModel{
