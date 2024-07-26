@@ -1,15 +1,13 @@
 package page
 
 import (
-	"strconv"
-
 	"github.com/a-h/templ"
 )
 
 type PageViewModel struct {
 	ActiveHref string
 	NavItems   []NavItemViewModel
-	PageTTL    string
+	PageTTL    int
 	Season     string
 	TimeOfDay  string
 }
@@ -53,7 +51,7 @@ func NewPageViewModel(args NewPageViewModelArgs) PageViewModel {
 	return PageViewModel{
 		ActiveHref: args.ActiveHref,
 		NavItems:   navModels,
-		PageTTL:    strconv.Itoa(args.SecondsUntilNextSunEvent),
+		PageTTL:    args.SecondsUntilNextSunEvent,
 		Season:     args.Season,
 		TimeOfDay:  args.TimeOfDay,
 	}

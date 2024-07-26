@@ -22,10 +22,7 @@ templ Page(model PageViewModel) {
 			<script>
 				// Trigger a reload on sunrise and sunset
 				const model = JSON.parse(document.getElementById('viewModel').textContent);
-				function refresh() {
-					location.reload();
-				};
-				const sunTimeout = setTimeout(refresh, model.PageTTL + '000')
+				const sunTimeout = setTimeout(function () {location.reload();}, model.PageTTL * 1000);
 			</script>
 		</head>
 		<body class={ "theme-" + model.Season + "-" + model.TimeOfDay + "-bg" }>

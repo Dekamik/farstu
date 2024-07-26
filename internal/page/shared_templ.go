@@ -34,7 +34,7 @@ func Page(model PageViewModel) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n\t\t\t\t// Trigger a reload on sunrise and sunset\n\t\t\t\tconst model = JSON.parse(document.getElementById('viewModel').textContent);\n\t\t\t\tfunction refresh() {\n\t\t\t\t\tlocation.reload();\n\t\t\t\t};\n\t\t\t\tconst sunTimeout = setTimeout(refresh, model.PageTTL + '000')\n\t\t\t</script></head>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n\t\t\t\t// Trigger a reload on sunrise and sunset\n\t\t\t\tconst model = JSON.parse(document.getElementById('viewModel').textContent);\n\t\t\t\tconst sunTimeout = setTimeout(function () {location.reload();}, model.PageTTL * 1000);\n\t\t\t</script></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
