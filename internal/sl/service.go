@@ -87,7 +87,7 @@ func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, er
 	}
 
 	return slServiceImpl{
-		appConfig: appConfig,
+		appConfig:        appConfig,
 		cachedDepartures: cache.New(args.DeparturesTTL, refreshDepartures),
 	}, nil
 }
