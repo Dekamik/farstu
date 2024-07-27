@@ -67,7 +67,7 @@ func YRNowView(model YRNowViewModel) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var4 = []any{"temperature text-end", shared.CSSColor(model.Forecast.TemperatureColor)}
+			var templ_7745c5c3_Var4 = []any{"fw-bold temperature text-end", shared.CSSColor(model.Forecast.TemperatureColor)}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -103,11 +103,11 @@ func YRNowView(model YRNowViewModel) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if model.Forecast.MaxUVIndex >= 3.0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"row\"><div class=\"col fw-bold text-end uvindex\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"row\"><div class=\"col text-end uvindex\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var7 = []any{shared.CSSColor(model.Forecast.UVColor)}
+				var templ_7745c5c3_Var7 = []any{"fw-bold", shared.CSSColor(model.Forecast.UVColor)}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var7...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -144,7 +144,7 @@ func YRNowView(model YRNowViewModel) templ.Component {
 				}
 			}
 			if model.Forecast.PrecipitationMax > 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"row\"><div class=\"col text-end\"><span class=\"precipitation precipitation-color\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"row\"><div class=\"col text-end\"><span class=\"fw-bold precipitation precipitation-color\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -297,7 +297,7 @@ func YRForecastView(model YRForecastViewModel) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var19 = []any{shared.CSSColor(item.UVColor)}
+				var templ_7745c5c3_Var19 = []any{"fw-bold", shared.CSSColor(item.UVColor)}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var19...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -330,7 +330,7 @@ func YRForecastView(model YRForecastViewModel) templ.Component {
 						return templ_7745c5c3_Err
 					}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"precipitation-color\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"fw-bold precipitation-color\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

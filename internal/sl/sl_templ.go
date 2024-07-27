@@ -26,7 +26,7 @@ func DeparturesView(model DeparturesViewModel) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul class=\"nav nav-tabs white-border\" id=\"sl-tab\" role=\"tablist\"><li class=\"nav-item\" role=\"presentation\"><button class=\"nav-link transparent-bg text-outline white-border active\" id=\"sl-next-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-next\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"true\">Nästa</button></li><li class=\"nav-item\" role=\"presentation\"><button class=\"nav-link transparent-bg text-outline white-border\" id=\"sl-list-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-list\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"false\">Lista</button></li></ul><div class=\"tab-content\" id=\"sl-tab-content\"><div class=\"tab-pane fade show active\" id=\"sl-next\" role=\"tabpanel\" aria-labelledby=\"sl-next-tab\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul class=\"nav nav-tabs white-border\" id=\"sl-tab\" role=\"tablist\"><li class=\"nav-item\" role=\"presentation\"><button class=\"fw-bold nav-link transparent-bg text-outline white-border active\" id=\"sl-next-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-next\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"true\">Nästa</button></li><li class=\"nav-item\" role=\"presentation\"><button class=\"fw-bold nav-link transparent-bg text-outline white-border\" id=\"sl-list-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#sl-list\" type=\"button\" role=\"tab\" aria-controls=\"sl-list\" aria-selected=\"false\">Lista</button></li></ul><div class=\"tab-content\" id=\"sl-tab-content\"><div class=\"tab-pane fade show active\" id=\"sl-next\" role=\"tabpanel\" aria-labelledby=\"sl-next-tab\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -117,14 +117,14 @@ func SLDeparturesNextView(model DeparturesViewModel) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></td><td>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></td><td class=\"fw-bold\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(model.Departures[0].Destination)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 46, Col: 41}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 46, Col: 57}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -187,14 +187,14 @@ func SLDeparturesNextView(model DeparturesViewModel) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></td><td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></td><td class=\"fw-bold\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var11 string
 				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(model.Departures[1].Destination)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 64, Col: 42}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 64, Col: 58}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -330,14 +330,14 @@ func SLDeparturesListView(model DeparturesViewModel) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></td><td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></td><td class=\"fw-bold\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var19 string
 				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(item.Destination)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 105, Col: 25}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/sl/sl.templ`, Line: 105, Col: 41}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 				if templ_7745c5c3_Err != nil {

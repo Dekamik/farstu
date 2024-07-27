@@ -29,15 +29,15 @@ templ YRNowView(model YRNowViewModel) {
 				<div class="col">
 					<div class="row">
 						<div class="col">
-							<p class={ "temperature text-end" , shared.CSSColor(model.Forecast.TemperatureColor) }>
+							<p class={ "fw-bold temperature text-end" , shared.CSSColor(model.Forecast.TemperatureColor) }>
 								{ strconv.FormatFloat(model.Forecast.Temperature, 'f', 0, 64) }°
 							</p>
 						</div>
 					</div>
 					if model.Forecast.MaxUVIndex >= 3.0 {
 						<div class="row">
-							<div class="col fw-bold text-end uvindex">
-								<span class={ shared.CSSColor(model.Forecast.UVColor) }>
+							<div class="col text-end uvindex">
+								<span class={ "fw-bold", shared.CSSColor(model.Forecast.UVColor) }>
 									{ "UV " + strconv.FormatFloat(model.Forecast.MaxUVIndex, 'f', 1, 64) }
 								</span>
 							</div>
@@ -46,7 +46,7 @@ templ YRNowView(model YRNowViewModel) {
 					if model.Forecast.PrecipitationMax > 0 {
 						<div class="row">
 							<div class="col text-end">
-								<span class="precipitation precipitation-color">
+								<span class="fw-bold precipitation precipitation-color">
 									{ strconv.FormatFloat(model.Forecast.PrecipitationMin, 'f', 1, 64) + "-" +
 						strconv.FormatFloat(model.Forecast.PrecipitationMax, 'f', 1, 64) } mm
 								</span>
@@ -95,12 +95,12 @@ templ YRForecastView(model YRForecastViewModel) {
 								alt={ item.SymbolCode }
 							/>
 						</td>
-						<td class={ shared.CSSColor(item.UVColor) }>
+						<td class={ "fw-bold", shared.CSSColor(item.UVColor) }>
 							if item.MaxUVIndex >= 3.0 {
 								{ "UV " + strconv.FormatFloat(item.MaxUVIndex, 'f', 1, 64) }
 							}
 						</td>
-						<td class="precipitation-color">
+						<td class="fw-bold precipitation-color">
 							if item.PrecipitationMax > 0 {
 								{ strconv.FormatFloat(item.PrecipitationMin, 'f', 1, 64) + "-" +
 				strconv.FormatFloat(item.PrecipitationMax, 'f', 1, 64) } mm
