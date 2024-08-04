@@ -23,10 +23,6 @@ var navItems = []NavItemViewModel{
 		Href: "/",
 		Icon: "bi-house-door-fill",
 	},
-	{
-		Href: "/disruptions",
-		Icon: "bi-exclamation-triangle-fill",
-	},
 }
 
 type NewPageViewModelArgs struct {
