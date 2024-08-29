@@ -1,0 +1,21 @@
+meta {
+  name: Sunrise
+  type: http
+  seq: 3
+}
+
+get {
+  url: https://api.met.no/weatherapi/sunrise/3.0/sun?lat={{lat}}&lon={{lon}}&date=2024-07-25
+  body: none
+  auth: none
+}
+
+params:query {
+  lat: {{lat}}
+  lon: {{lon}}
+  date: 2024-07-25
+}
+
+headers {
+  User-Agent: farstu/0.0.0
+}

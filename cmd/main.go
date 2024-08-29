@@ -4,7 +4,7 @@ import (
 	"farstu/internal/clock"
 	"farstu/internal/config"
 	"farstu/internal/index"
-	"farstu/internal/shared"
+	"farstu/internal/page"
 	"farstu/internal/sl"
 	"farstu/internal/yr"
 	"io"
@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/a-h/templ"
 )
@@ -107,11 +108,37 @@ func setupRoutes(appConfig config.AppConfig, slService sl.SLService, yrService y
 			YRForecast: yrForecastViewModel,
 		}
 
-		return index.View(model, shared.NewPageViewModel("/"))
+		seasonAndTimeOfDay, err := page.GetSeasonAndTimeOfDay(*appConfig)
+		if err != nil {
+			slog.Error("an unhandled error occurred", "err", err)
+			// Try again in an hour
+			nextRetry := int(time.Now().Local().Add(time.Duration(1) * time.Hour).Sub(time.Now().Local()).Seconds())
+			seasonAndTimeOfDay = &page.SeasonAndTimeOfDay{
+				Season:                   "summer",
+				SecondsUntilNextSunEvent: nextRetry,
+				TimeOfDay:                "day",
+			}
+		}
+
+		args := page.NewPageViewModelArgs{
+			ActiveHref:               "/",
+			SecondsUntilNextSunEvent: seasonAndTimeOfDay.SecondsUntilNextSunEvent,
+			Season:                   seasonAndTimeOfDay.Season,
+			TimeOfDay:                seasonAndTimeOfDay.TimeOfDay,
+		}
+		return index.View(model, page.NewPageViewModel(args))
 	})
 
 	handleTempl("/htmx/departures", func() templ.Component {
 		return sl.DeparturesView(slService.GetViewModel())
+	})
+
+	handleTempl("/htmx/departures/next", func() templ.Component {
+		return sl.SLDeparturesNextView(slService.GetViewModel())
+	})
+
+	handleTempl("/htmx/departures/list", func() templ.Component {
+		return sl.SLDeparturesListView(slService.GetViewModel())
 	})
 
 	handleTempl("/htmx/time", func() templ.Component {

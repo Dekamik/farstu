@@ -40,10 +40,6 @@ func (y yrServiceImpl) GetViewModels() (YRNowViewModel, YRForecastViewModel) {
 	return yrNowViewModel, yrForecastViewModel
 }
 
-func (y yrServiceImpl) GetForecast() (*yrLocationForecast, error) {
-	return y.cachedForecast.Get()
-}
-
 type YRServiceArgs struct {
 	ForecastTTL int
 	Lat         float64
@@ -52,7 +48,7 @@ type YRServiceArgs struct {
 
 func NewYRService(args YRServiceArgs, appConfig config.AppConfig) YRService {
 	refreshForecast := func() (*yrLocationForecast, error) {
-		return newYRLocationForecast(args.Lat, args.Lon)
+		return callYRLocationForecast(args.Lat, args.Lon)
 	}
 
 	return &yrServiceImpl{

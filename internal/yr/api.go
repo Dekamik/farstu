@@ -3,8 +3,28 @@ package yr
 import (
 	"farstu/internal/api"
 	"fmt"
+	"strings"
 	"time"
 )
+
+type YRTime struct {
+	time.Time
+}
+
+const yrTimeLayout = "2006-01-02T15:04-07:00"
+
+func (yt *YRTime) UnmarshalJSON(b []byte) error {
+	var err error
+	s := strings.Trim(string(b), "\"")
+
+	if s == "null" {
+		yt.Time = time.Time{}
+		return nil
+	}
+
+	yt.Time, err = time.Parse(yrTimeLayout, s)
+	return err
+}
 
 type yrLocationForecast struct {
 	Type     string `json:"type"`
@@ -105,7 +125,24 @@ type yrLocationForecast struct {
 	} `json:"properties"`
 }
 
-func newYRLocationForecast(lat float64, lon float64) (*yrLocationForecast, error) {
+type YRSunrise struct {
+	Properties struct {
+		Sunrise struct {
+			Time YRTime `json:"time"`
+		} `json:"sunrise"`
+		Sunset struct {
+			Time YRTime `json:"time"`
+		} `json:"sunset"`
+	} `json:"properties"`
+}
+
+func callYRLocationForecast(lat float64, lon float64) (*yrLocationForecast, error) {
 	url := fmt.Sprintf("https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=%f&lon=%f", lat, lon)
 	return api.GET[yrLocationForecast](url)
+}
+
+func CallYRSunrise(lat float64, lon float64, date time.Time) (*YRSunrise, error) {
+	dateStr := date.Format("2006-01-02")
+	url := fmt.Sprintf("https://api.met.no/weatherapi/sunrise/3.0/sun?lat=%f&lon=%f&date=%s", lat, lon, dateStr)
+	return api.GET[YRSunrise](url)
 }

@@ -24,7 +24,7 @@ TempColorCoolCoolest = "#0033cc"
 TempColorCoolHottest = "#ccd9ff"
 TempColorMid = "#dee2e6"
 TempColorHotCoolest = "#ffcccc"
-TempColorHotHottest = "#990000"
+TempColorHotHottest = "#ff0000"
 
 ClassPrecip = "primary"
 ClassNoPrecip = "light"

@@ -2,13 +2,13 @@ package index
 
 import (
 	"farstu/internal/clock"
+	"farstu/internal/page"
 	"farstu/internal/sl"
-	"farstu/internal/shared"
 	"farstu/internal/yr"
 )
 
-templ View(model ViewModel, pageModel shared.PageViewModel) {
-	@shared.Page(pageModel) {
+templ View(model ViewModel, pageModel page.PageViewModel) {
+	@page.Page(pageModel) {
 		<div class="mx-3 my-3" style="padding-top:70px">
 			<div class="row row-upper">
 				<div class="col">
