@@ -10,8 +10,8 @@ import (
 )
 
 func ParseHexToColor(s string) (c color.RGBA, err error) {
-    asserts.UserErrAssert(s[0] == '#', "colors must begin with #")
-    asserts.UserErrAssert(len(s) == 7 || len(s) == 4, "colors must be formatted like #FFFFFF or #FFF")
+    asserts.Assert(s[0] == '#', "colors must begin with #")
+    asserts.Assert(len(s) == 7 || len(s) == 4, "colors must be formatted like #FFFFFF or #FFF")
 
 	c.A = 0xff
 
@@ -67,9 +67,9 @@ func getTemperatureColor(conf config.AppConfig, temperature float64) string {
     tempMid := conf.Weather.Colors.TempMid
     tempMax := conf.Weather.Colors.TempMax
 
-    asserts.UserErrAssert(tempMin < tempMid, "Min must be smaller than mid")
-    asserts.UserErrAssert(tempMid < tempMax, "Mid must be smaller than max")
-    asserts.UserErrAssert(tempMin < tempMax, "Min must be smaller than max")
+    asserts.Assert(tempMin < tempMid, "Min must be smaller than mid")
+    asserts.Assert(tempMid < tempMax, "Mid must be smaller than max")
+    asserts.Assert(tempMin < tempMax, "Min must be smaller than max")
 
 	if temperature == tempMid {
 		return conf.Weather.Colors.TempColorMid
