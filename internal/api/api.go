@@ -18,7 +18,7 @@ func GET[T any](url string) (*T, error) {
 
 func call[T any](req *http.Request) (*T, error) {
 	client := &http.Client{}
-	userAgent := fmt.Sprintf("farstu/%s", "0.0.0")
+	userAgent := fmt.Sprintf("farstu/%s", "0.0.0") // TODO: Handle versioning
 	req.Header.Set("User-Agent", userAgent)
 
 	res, err := client.Do(req)

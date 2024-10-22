@@ -1,6 +1,7 @@
 package yr
 
 import (
+	"farstu/internal/asserts"
 	"farstu/internal/config"
 	"fmt"
 	"image/color"
@@ -9,6 +10,9 @@ import (
 )
 
 func ParseHexToColor(s string) (c color.RGBA, err error) {
+    asserts.UserErrAssert(s[0] == '#', "colors must begin with #")
+    asserts.UserErrAssert(len(s) == 7 || len(s) == 4, "colors must be formatted like #FFFFFF or #FFF")
+
 	c.A = 0xff
 
 	switch len(s) {
@@ -59,11 +63,19 @@ func LerpHexString(min string, max string, value float64) (string, error) {
 }
 
 func getTemperatureColor(conf config.AppConfig, temperature float64) string {
-	if temperature == conf.Weather.Colors.TempMid {
+    tempMin := conf.Weather.Colors.TempMin
+    tempMid := conf.Weather.Colors.TempMid
+    tempMax := conf.Weather.Colors.TempMax
+
+    asserts.UserErrAssert(tempMin < tempMid, "Min must be smaller than mid")
+    asserts.UserErrAssert(tempMid < tempMax, "Mid must be smaller than max")
+    asserts.UserErrAssert(tempMin < tempMax, "Min must be smaller than max")
+
+	if temperature == tempMid {
 		return conf.Weather.Colors.TempColorMid
-	} else if temperature <= conf.Weather.Colors.TempMin {
+	} else if temperature <= tempMin {
 		return conf.Weather.Colors.TempColorCoolCoolest
-	} else if temperature >= conf.Weather.Colors.TempMax {
+	} else if temperature >= tempMax {
 		return conf.Weather.Colors.TempColorHotHottest
 	}
 
@@ -71,14 +83,14 @@ func getTemperatureColor(conf config.AppConfig, temperature float64) string {
 	var color1 string
 	var value float64
 
-	if temperature > conf.Weather.Colors.TempMid {
+	if temperature > tempMid {
 		color0 = conf.Weather.Colors.TempColorHotCoolest
 		color1 = conf.Weather.Colors.TempColorHotHottest
-		value = math.Abs(temperature / conf.Weather.Colors.TempMax)
+		value = math.Abs(temperature / tempMax)
 	} else {
 		color0 = conf.Weather.Colors.TempColorCoolHottest
 		color1 = conf.Weather.Colors.TempColorCoolCoolest
-		value = math.Abs(temperature / conf.Weather.Colors.TempMin)
+		value = math.Abs(temperature / tempMin)
 	}
 
 	color, err := LerpHexString(color0, color1, value)

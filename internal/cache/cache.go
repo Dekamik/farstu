@@ -1,6 +1,9 @@
 package cache
 
-import "time"
+import (
+	"farstu/internal/asserts"
+	"time"
+)
 
 type Cache[TObject any] interface {
 	Get() (*TObject, error)
@@ -32,6 +35,8 @@ func (c cacheImpl[TObject]) Get() (*TObject, error) {
 }
 
 func New[TObject any](ttl int, refresh func() (*TObject, error)) Cache[TObject] {
+	asserts.Assert(ttl >= 0, "TTL cannot be negative")
+
 	return cacheImpl[TObject]{
 		ttl:     ttl,
 		refresh: refresh,
