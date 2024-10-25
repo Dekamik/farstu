@@ -45,6 +45,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	err = os.Setenv("FARSTU_ENVIRONMENT", appConfig.App.Environment)
+	if err != nil {
+		slog.Error("An error occurred when setting FARSTU_ENVIRONMENT="+appConfig.App.Environment, "err", err)
+		os.Exit(1)
+	}
+
 	// Logging
 	levelSanitized := strings.ToLower(appConfig.App.LogLevel)
 	logLevel := logLevelMap[levelSanitized]

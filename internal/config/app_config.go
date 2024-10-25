@@ -6,9 +6,10 @@ import (
 
 type AppConfig struct {
 	App struct {
-		LogFile  string
-		LogLevel string
-		Port     int
+		Environment string
+		LogFile     string
+		LogLevel    string
+		Port        int
 	}
 	SL struct {
 		Enabled  bool
