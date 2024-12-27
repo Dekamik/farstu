@@ -1,0 +1,24 @@
+meta {
+  name: Deviations
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://deviations.integration.sl.se/v1/messages?future=true&line=11&transport_authority=1&line=13&line=43&line=157&line=504&line=540
+  body: none
+  auth: none
+}
+
+params:query {
+  future: true
+  line: 11
+  transport_authority: 1
+  line: 13
+  line: 43
+  line: 157
+  line: 504
+  line: 540
+  ~site: <siteId1,siteId2>
+  ~transport_mode: <mode1,mode2>
+}
