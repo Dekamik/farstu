@@ -1,10 +1,10 @@
 package index
 
 import (
-	"farstu/internal/clock"
+	"farstu/internal/components/clock"
 	"farstu/internal/config"
-	"farstu/internal/sl"
-	"farstu/internal/yr"
+	"farstu/internal/components/sl"
+	"farstu/internal/components/yr"
 )
 
 type ViewModel struct {

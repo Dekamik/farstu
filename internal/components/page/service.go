@@ -2,7 +2,7 @@ package page
 
 import (
 	"farstu/internal/config"
-	"farstu/internal/yr"
+	"farstu/internal/components/yr"
 	"time"
 )
 

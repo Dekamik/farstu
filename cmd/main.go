@@ -1,12 +1,12 @@
 package main
 
 import (
-	"farstu/internal/clock"
+	"farstu/internal/components/clock"
 	"farstu/internal/config"
-	"farstu/internal/index"
-	"farstu/internal/page"
-	"farstu/internal/sl"
-	"farstu/internal/yr"
+	"farstu/internal/components/index"
+	"farstu/internal/components/page"
+	"farstu/internal/components/sl"
+	"farstu/internal/components/yr"
 	"io"
 	"log/slog"
 	"net/http"
