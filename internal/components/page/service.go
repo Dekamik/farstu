@@ -1,8 +1,8 @@
 package page
 
 import (
-	"farstu/internal/config"
-	"farstu/internal/components/yr"
+	"github.com/Dekamik/farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/components/yr"
 	"time"
 )
 

@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"farstu/internal/components/shared"
+	"github.com/Dekamik/farstu/internal/components/shared"
 	"strconv"
 )
 

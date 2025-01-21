@@ -1,4 +1,4 @@
-module farstu
+module github.com/Dekamik/farstu
 
 go 1.23
 

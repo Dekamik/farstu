@@ -1,12 +1,12 @@
 package main
 
 import (
-	"farstu/internal/components/clock"
-	"farstu/internal/config"
-	"farstu/internal/components/index"
-	"farstu/internal/components/page"
-	"farstu/internal/components/sl"
-	"farstu/internal/components/yr"
+	"github.com/Dekamik/farstu/internal/components/clock"
+	"github.com/Dekamik/farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/components/index"
+	"github.com/Dekamik/farstu/internal/components/page"
+	"github.com/Dekamik/farstu/internal/components/sl"
+	"github.com/Dekamik/farstu/internal/components/yr"
 	"io"
 	"log/slog"
 	"net/http"

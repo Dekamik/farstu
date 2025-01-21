@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"farstu/internal/asserts"
+	"github.com/Dekamik/farstu/internal/asserts"
 	"time"
 )
 

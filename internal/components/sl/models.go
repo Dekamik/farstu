@@ -1,6 +1,6 @@
 package sl
 
-import "farstu/internal/config"
+import "github.com/Dekamik/farstu/internal/config"
 
 type DeparturesViewModel struct {
 	Departures []Departure

@@ -2,8 +2,8 @@ package sl
 
 import (
 	"errors"
-	"farstu/internal/cache"
-	"farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/cache"
+	"github.com/Dekamik/farstu/internal/config"
 	"log/slog"
 	"strings"
 	"time"

@@ -9,10 +9,10 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"farstu/internal/components/clock"
-	"farstu/internal/components/page"
-	"farstu/internal/components/sl"
-	"farstu/internal/components/yr"
+	"github.com/Dekamik/farstu/internal/components/clock"
+	"github.com/Dekamik/farstu/internal/components/page"
+	"github.com/Dekamik/farstu/internal/components/sl"
+	"github.com/Dekamik/farstu/internal/components/yr"
 )
 
 func View(model ViewModel, pageModel page.PageViewModel) templ.Component {

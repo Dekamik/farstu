@@ -1,7 +1,7 @@
 package sl
 
 import (
-	"farstu/internal/api"
+	"github.com/Dekamik/farstu/internal/api"
 	"fmt"
 )
 

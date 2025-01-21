@@ -1,8 +1,8 @@
 package yr
 
 import (
-	"farstu/internal/asserts"
-	"farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/asserts"
+	"github.com/Dekamik/farstu/internal/config"
 	"fmt"
 	"image/color"
 	"log/slog"
