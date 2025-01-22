@@ -30,26 +30,29 @@ type slDeviationsResponse struct {
 			Upto time.Time `json:"upto"`
 		} `json:"publish"`
 
-		Priority []struct {
+		Priority struct {
 			ImportanceLevel int `json:"importance_level"`
-			InfluenceLevel int `json:"influence_level"`
-			UrgencyLevel int `json:"urgency_level"`
+			InfluenceLevel  int `json:"influence_level"`
+			UrgencyLevel    int `json:"urgency_level"`
 		} `json:"priority"`
 
 		MessageVariants []struct {
-			Header string `json:"header"`
-			Details string `json:"details"`
+			Header     string `json:"header"`
+			Details    string `json:"details"`
 			ScopeAlias string `json:"scope_alias"`
-			Weblink string `json:"weblink"`
-			Language string `json:"language"`
-		}
-		Lines []struct {
-			ID int `json:"id"`
-			Designation string `json:"designation"`
-			TransportMode string `json:"transportMode"`
-			Name string `json:"name"`
-			GroupOfLines string `json:"group_of_lines"`
-		}
+			Weblink    string `json:"weblink"`
+			Language   string `json:"language"`
+		} `json:"message_variants"`
+
+		Scope struct {
+			Lines []struct {
+				ID            int    `json:"id"`
+				Designation   string `json:"designation"`
+				TransportMode string `json:"transportMode"`
+				Name          string `json:"name"`
+				GroupOfLines  string `json:"group_of_lines"`
+			} `json:"lines"`
+		} `json:"scope"`
 	}
 }
 
@@ -64,11 +67,11 @@ func callSLSiteDepartures(siteID int) (*slSiteDeparturesResponse, error) {
 }
 
 type callSLDeviationsArgs struct {
-	Future bool
+	Future             bool
 	TransportAuthority *int
-	Sites []int
-	Lines []int
-	TransportMode string
+	Sites              []int
+	Lines              []int
+	TransportMode      string
 }
 
 func callSLDeviations(args callSLDeviationsArgs) (*slDeviationsResponse, error) {
