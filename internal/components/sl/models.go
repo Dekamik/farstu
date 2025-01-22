@@ -46,11 +46,15 @@ type Deviation struct {
 	ImportanceLevel int
 	InfluenceLevel  int
 	UrgencyLevel    int
+	MessageVariants map[string]DeviationMessage
+	Lines           []DeviationLine
+}
+
+type DeviationMessage struct {
 	Header          string
 	Details         string
 	ScopeAlias      string
 	Weblink         string
-	Lines           []DeviationLine
 }
 
 type DeviationLine struct {
@@ -74,10 +78,16 @@ func NewDeviationsViewModel(config config.AppConfig, response slDeviationsRespon
 			ImportanceLevel: item.Priority.ImportanceLevel,
 			InfluenceLevel:  item.Priority.InfluenceLevel,
 			UrgencyLevel:    item.Priority.UrgencyLevel,
-			Header:          item.MessageVariants[0].Header,
-			Details:         item.MessageVariants[0].Details,
-			ScopeAlias:      item.MessageVariants[0].ScopeAlias,
-			Weblink:         item.MessageVariants[0].Weblink,
+		}
+
+		for _, message := range response.Deviations[i].MessageVariants {
+			m := DeviationMessage{
+				Header: message.Header,
+				Details: message.Details,
+				ScopeAlias: message.ScopeAlias,
+				Weblink: message.Weblink,
+			}
+			deviation.MessageVariants[message.Language] = m
 		}
 
 		for _, line := range response.Deviations[i].Scope.Lines {
