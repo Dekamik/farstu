@@ -2,9 +2,9 @@ package index
 
 import (
 	"github.com/Dekamik/farstu/internal/components/clock"
-	"github.com/Dekamik/farstu/internal/config"
 	"github.com/Dekamik/farstu/internal/components/sl"
 	"github.com/Dekamik/farstu/internal/components/yr"
+	"github.com/Dekamik/farstu/internal/config"
 )
 
 type ViewModel struct {

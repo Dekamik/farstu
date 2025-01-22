@@ -1,17 +1,17 @@
 package yr
 
 import (
+	"fmt"
 	"github.com/Dekamik/farstu/internal/asserts"
 	"github.com/Dekamik/farstu/internal/config"
-	"fmt"
 	"image/color"
 	"log/slog"
 	"math"
 )
 
 func ParseHexToColor(s string) (c color.RGBA, err error) {
-    asserts.Assert(s[0] == '#', "colors must begin with #")
-    asserts.Assert(len(s) == 7 || len(s) == 4, "colors must be formatted like #FFFFFF or #FFF")
+	asserts.Assert(s[0] == '#', "colors must begin with #")
+	asserts.Assert(len(s) == 7 || len(s) == 4, "colors must be formatted like #FFFFFF or #FFF")
 
 	c.A = 0xff
 
@@ -63,13 +63,13 @@ func LerpHexString(min string, max string, value float64) (string, error) {
 }
 
 func getTemperatureColor(conf config.AppConfig, temperature float64) string {
-    tempMin := conf.Weather.Colors.TempMin
-    tempMid := conf.Weather.Colors.TempMid
-    tempMax := conf.Weather.Colors.TempMax
+	tempMin := conf.Weather.Colors.TempMin
+	tempMid := conf.Weather.Colors.TempMid
+	tempMax := conf.Weather.Colors.TempMax
 
-    asserts.Assert(tempMin < tempMid, "Min must be smaller than mid")
-    asserts.Assert(tempMid < tempMax, "Mid must be smaller than max")
-    asserts.Assert(tempMin < tempMax, "Min must be smaller than max")
+	asserts.Assert(tempMin < tempMid, "Min must be smaller than mid")
+	asserts.Assert(tempMid < tempMax, "Mid must be smaller than max")
+	asserts.Assert(tempMin < tempMax, "Min must be smaller than max")
 
 	if temperature == tempMid {
 		return conf.Weather.Colors.TempColorMid

@@ -51,10 +51,10 @@ type Deviation struct {
 }
 
 type DeviationMessage struct {
-	Header          string
-	Details         string
-	ScopeAlias      string
-	Weblink         string
+	Header     string
+	Details    string
+	ScopeAlias string
+	Weblink    string
 }
 
 type DeviationLine struct {
@@ -82,10 +82,10 @@ func NewDeviationsViewModel(config config.AppConfig, response slDeviationsRespon
 
 		for _, message := range response.Deviations[i].MessageVariants {
 			m := DeviationMessage{
-				Header: message.Header,
-				Details: message.Details,
+				Header:     message.Header,
+				Details:    message.Details,
 				ScopeAlias: message.ScopeAlias,
-				Weblink: message.Weblink,
+				Weblink:    message.Weblink,
 			}
 			deviation.MessageVariants[message.Language] = m
 		}
