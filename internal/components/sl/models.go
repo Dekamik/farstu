@@ -70,17 +70,17 @@ type DeviationsViewModel struct {
 	Message    string
 }
 
-func NewDeviationsViewModel(config config.AppConfig, response slDeviationsResponse) DeviationsViewModel {
+func NewDeviationsViewModel(config config.AppConfig, response []slDeviationResponse) DeviationsViewModel {
 	deviations := make([]Deviation, 0)
 
-	for i, item := range response.Deviations {
+	for i, item := range response {
 		deviation := Deviation{
 			ImportanceLevel: item.Priority.ImportanceLevel,
 			InfluenceLevel:  item.Priority.InfluenceLevel,
 			UrgencyLevel:    item.Priority.UrgencyLevel,
 		}
 
-		for _, message := range response.Deviations[i].MessageVariants {
+		for _, message := range response[i].MessageVariants {
 			m := DeviationMessage{
 				Header:     message.Header,
 				Details:    message.Details,
@@ -90,7 +90,7 @@ func NewDeviationsViewModel(config config.AppConfig, response slDeviationsRespon
 			deviation.MessageVariants[message.Language] = m
 		}
 
-		for _, line := range response.Deviations[i].Scope.Lines {
+		for _, line := range response[i].Scope.Lines {
 			l := DeviationLine{
 				ID:            line.ID,
 				Designation:   line.Designation,

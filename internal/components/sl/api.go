@@ -23,37 +23,35 @@ type slSiteDeparturesResponse struct {
 	} `json:"departures"`
 }
 
-type slDeviationsResponse struct {
-	Deviations []struct {
-		Publish struct {
-			From time.Time `json:"from"`
-			Upto time.Time `json:"upto"`
-		} `json:"publish"`
+type slDeviationResponse struct {
+	Publish struct {
+		From time.Time `json:"from"`
+		Upto time.Time `json:"upto"`
+	} `json:"publish"`
 
-		Priority struct {
-			ImportanceLevel int `json:"importance_level"`
-			InfluenceLevel  int `json:"influence_level"`
-			UrgencyLevel    int `json:"urgency_level"`
-		} `json:"priority"`
+	Priority struct {
+		ImportanceLevel int `json:"importance_level"`
+		InfluenceLevel  int `json:"influence_level"`
+		UrgencyLevel    int `json:"urgency_level"`
+	} `json:"priority"`
 
-		MessageVariants []struct {
-			Header     string `json:"header"`
-			Details    string `json:"details"`
-			ScopeAlias string `json:"scope_alias"`
-			Weblink    string `json:"weblink"`
-			Language   string `json:"language"`
-		} `json:"message_variants"`
+	MessageVariants []struct {
+		Header     string `json:"header"`
+		Details    string `json:"details"`
+		ScopeAlias string `json:"scope_alias"`
+		Weblink    string `json:"weblink"`
+		Language   string `json:"language"`
+	} `json:"message_variants"`
 
-		Scope struct {
-			Lines []struct {
-				ID            int    `json:"id"`
-				Designation   string `json:"designation"`
-				TransportMode string `json:"transportMode"`
-				Name          string `json:"name"`
-				GroupOfLines  string `json:"group_of_lines"`
-			} `json:"lines"`
-		} `json:"scope"`
-	}
+	Scope struct {
+		Lines []struct {
+			ID            int    `json:"id"`
+			Designation   string `json:"designation"`
+			TransportMode string `json:"transportMode"`
+			Name          string `json:"name"`
+			GroupOfLines  string `json:"group_of_lines"`
+		} `json:"lines"`
+	} `json:"scope"`
 }
 
 func callSLSites(expand bool) (*[]slSitesResponseItem, error) {
@@ -74,7 +72,7 @@ type callSLDeviationsArgs struct {
 	TransportMode      string
 }
 
-func callSLDeviations(args callSLDeviationsArgs) (*slDeviationsResponse, error) {
+func callSLDeviations(args callSLDeviationsArgs) (*[]slDeviationResponse, error) {
 	if args.TransportAuthority == nil {
 		default_ta := 1
 		args.TransportAuthority = &default_ta
@@ -92,5 +90,5 @@ func callSLDeviations(args callSLDeviationsArgs) (*slDeviationsResponse, error) 
 		url = fmt.Sprintf("%s&transport_mode=%s", url, args.TransportMode)
 	}
 
-	return api.GET[slDeviationsResponse](url)
+	return api.GET[[]slDeviationResponse](url)
 }
