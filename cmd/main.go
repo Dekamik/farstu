@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/Dekamik/farstu/internal/components/clock"
 	"github.com/Dekamik/farstu/internal/components/index"
-	"github.com/Dekamik/farstu/internal/components/page"
+	"github.com/Dekamik/farstu/internal/components/shared"
 	"github.com/Dekamik/farstu/internal/components/sl"
 	"github.com/Dekamik/farstu/internal/components/yr"
 	"github.com/Dekamik/farstu/internal/config"
@@ -120,25 +120,25 @@ func main() {
 			YRForecast: yrForecastViewModel,
 		}
 
-		seasonAndTimeOfDay, err := page.GetSeasonAndTimeOfDay(*appConfig)
+		seasonAndTimeOfDay, err := yr.GetSeasonAndTimeOfDay(*appConfig)
 		if err != nil {
 			slog.Error("an unhandled error occurred", "err", err)
 			// Try again in an hour
 			nextRetry := int(time.Now().Local().Add(time.Duration(1) * time.Hour).Sub(time.Now().Local()).Seconds())
-			seasonAndTimeOfDay = &page.SeasonAndTimeOfDay{
+			seasonAndTimeOfDay = &yr.SeasonAndTimeOfDay{
 				Season:                   "summer",
 				SecondsUntilNextSunEvent: nextRetry,
 				TimeOfDay:                "day",
 			}
 		}
 
-		args := page.NewPageViewModelArgs{
+		args := shared.NewPageViewModelArgs{
 			ActiveHref:               "/",
 			SecondsUntilNextSunEvent: seasonAndTimeOfDay.SecondsUntilNextSunEvent,
 			Season:                   seasonAndTimeOfDay.Season,
 			TimeOfDay:                seasonAndTimeOfDay.TimeOfDay,
 		}
-		return index.View(model, page.NewPageViewModel(args))
+		return index.View(model, shared.NewPageViewModel(args))
 	})
 
 	handleTempl("/htmx/departures", func() templ.Component {

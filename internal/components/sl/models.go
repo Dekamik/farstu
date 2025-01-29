@@ -66,6 +66,7 @@ type DeviationLine struct {
 }
 
 type DeviationsViewModel struct {
+	ID         string
 	Deviations []Deviation
 	Message    string
 }

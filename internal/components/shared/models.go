@@ -1,4 +1,4 @@
-package page
+package shared
 
 import (
 	"github.com/a-h/templ"
@@ -51,4 +51,9 @@ func NewPageViewModel(args NewPageViewModelArgs) PageViewModel {
 		Season:     args.Season,
 		TimeOfDay:  args.TimeOfDay,
 	}
+}
+
+type ModalViewModel struct {
+	ID    string
+	Title string
 }

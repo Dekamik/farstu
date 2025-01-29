@@ -1,5 +1,9 @@
 package sl
 
-templ DeviationsView(model DeviationsViewModel) {
-	
+import "github.com/Dekamik/farstu/internal/components/shared"
+
+templ DeviationsModal(model DeviationsViewModel) {
+@shared.Modal(shared.ModalViewModel{ID: model.ID, Title: "Störningar"}) {
+<p>Hej, världen!</p>
+}
 }
