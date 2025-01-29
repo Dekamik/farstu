@@ -1,0 +1,15 @@
+package settings
+
+import "github.com/Dekamik/farstu/internal/components/page"
+
+templ SettingsView(pageModel page.PageViewModel) {
+	@page.Page(pageModel) {
+		<div class="mx-3 my-3" style="padding-top:70px">
+			<div class="row">
+				<div class="col">
+					@UpdateView()
+				</div>
+			</div>
+		</div>
+	}
+}
