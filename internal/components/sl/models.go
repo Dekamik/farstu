@@ -82,6 +82,8 @@ func NewDeviationsViewModel(config config.AppConfig, response []slDeviationRespo
 			ImportanceLevel: item.Priority.ImportanceLevel,
 			InfluenceLevel:  item.Priority.InfluenceLevel,
 			UrgencyLevel:    item.Priority.UrgencyLevel,
+			MessageVariants: make(map[string]DeviationMessage),
+			Lines: make([]DeviationLine, 0),
 		}
 
 		for _, message := range response[i].MessageVariants {

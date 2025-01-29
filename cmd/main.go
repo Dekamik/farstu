@@ -50,7 +50,7 @@ func main() {
 		if _, err := os.Stat(path); os.IsNotExist(err) {
 			err := os.Mkdir(path, os.ModePerm)
 			if err != nil {
-				slog.Warn("an error occurred when creating log directory")
+				slog.Warn("an error occurred when creating log directory", "err", err)
 				errWhenCreatingDirectory = true
 			}
 		}
