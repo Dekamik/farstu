@@ -1,6 +1,9 @@
 package sl
 
-import "github.com/Dekamik/farstu/internal/config"
+import (
+	"github.com/Dekamik/farstu/internal/components/shared"
+	"github.com/Dekamik/farstu/internal/config"
+)
 
 type Departure struct {
 	Destination   string
@@ -66,9 +69,9 @@ type DeviationLine struct {
 }
 
 type DeviationsViewModel struct {
-	ID         string
 	Deviations []Deviation
 	Message    string
+	Page       shared.PageViewModel
 }
 
 func NewDeviationsViewModel(config config.AppConfig, response []slDeviationResponse) DeviationsViewModel {

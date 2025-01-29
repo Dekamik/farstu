@@ -12,9 +12,14 @@ type AppConfig struct {
 		Port        int
 	}
 	SL struct {
-		Enabled  bool
-		MaxRows  int
-		SiteName string
+		Enabled    bool
+		MaxRows    int
+		SiteName   string
+		Deviations struct {
+			Future bool
+			Lines  []int
+			Sites  []int
+		}
 	}
 	Weather struct {
 		Enabled bool

@@ -18,15 +18,9 @@ type NavItemViewModel struct {
 	IsActive bool
 }
 
-var navItems = []NavItemViewModel{
-	{
-		Href: "/",
-		Icon: "bi-house-door-fill",
-	},
-}
-
 type NewPageViewModelArgs struct {
 	ActiveHref               string
+	NavItems []NavItemViewModel
 	Season                   string
 	SecondsUntilNextSunEvent int
 	TimeOfDay                string
@@ -35,7 +29,7 @@ type NewPageViewModelArgs struct {
 func NewPageViewModel(args NewPageViewModelArgs) PageViewModel {
 	navModels := make([]NavItemViewModel, 0)
 
-	for _, item := range navItems {
+	for _, item := range args.NavItems {
 		model := NavItemViewModel{
 			Href:     item.Href,
 			Icon:     item.Icon,

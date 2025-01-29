@@ -1,12 +1,6 @@
 package main
 
 import (
-	"github.com/Dekamik/farstu/internal/components/clock"
-	"github.com/Dekamik/farstu/internal/components/index"
-	"github.com/Dekamik/farstu/internal/components/shared"
-	"github.com/Dekamik/farstu/internal/components/sl"
-	"github.com/Dekamik/farstu/internal/components/yr"
-	"github.com/Dekamik/farstu/internal/config"
 	"io"
 	"log/slog"
 	"net/http"
@@ -14,9 +8,11 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
-	"github.com/a-h/templ"
+	"github.com/Dekamik/farstu/internal/components/sl"
+	"github.com/Dekamik/farstu/internal/components/yr"
+	"github.com/Dekamik/farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/routing"
 )
 
 var logLevelMap = map[string]slog.Level{
@@ -26,17 +22,7 @@ var logLevelMap = map[string]slog.Level{
 	"error": slog.LevelError,
 }
 
-func handleTempl(path string, componentFunc func() templ.Component) {
-	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		componentFunc().Render(r.Context(), w)
-	})
-}
-
 func main() {
-	var slService sl.SLService
-	var yrService yr.YRService
-	var err error
-
 	// Config
 	appConfigPath := "app.toml"
 	appConfig, err := config.ReadAppConfig(appConfigPath)
@@ -85,8 +71,12 @@ func main() {
 	slog.SetDefault(logger)
 
 	// Services
+	var slService sl.SLService
+	var yrService yr.YRService
+
 	slServiceArgs := sl.SLServiceArgs{
 		DeparturesTTL:  300,
+		DeviationsTTL:  3,
 		InitRetriesSec: []int{1, 4, 8, 8},
 		SiteName:       appConfig.SL.SiteName,
 	}
@@ -108,64 +98,13 @@ func main() {
 	}
 	yrService = yr.NewYRService(yrServiceArgs, *appConfig)
 
-	// Routes
-	handleTempl("/", func() templ.Component {
-		yrNowViewModel, yrForecastViewModel := yrService.GetViewModels()
-
-		model := index.ViewModel{
-			Config:     *appConfig,
-			Departures: slService.GetViewModel(),
-			Time:       clock.NewViewModel(),
-			YRNow:      yrNowViewModel,
-			YRForecast: yrForecastViewModel,
-		}
-
-		seasonAndTimeOfDay, err := yr.GetSeasonAndTimeOfDay(*appConfig)
-		if err != nil {
-			slog.Error("an unhandled error occurred", "err", err)
-			// Try again in an hour
-			nextRetry := int(time.Now().Local().Add(time.Duration(1) * time.Hour).Sub(time.Now().Local()).Seconds())
-			seasonAndTimeOfDay = &yr.SeasonAndTimeOfDay{
-				Season:                   "summer",
-				SecondsUntilNextSunEvent: nextRetry,
-				TimeOfDay:                "day",
-			}
-		}
-
-		args := shared.NewPageViewModelArgs{
-			ActiveHref:               "/",
-			SecondsUntilNextSunEvent: seasonAndTimeOfDay.SecondsUntilNextSunEvent,
-			Season:                   seasonAndTimeOfDay.Season,
-			TimeOfDay:                seasonAndTimeOfDay.TimeOfDay,
-		}
-		return index.View(model, shared.NewPageViewModel(args))
-	})
-
-	handleTempl("/htmx/departures", func() templ.Component {
-		return sl.DeparturesView(slService.GetViewModel())
-	})
-
-	handleTempl("/htmx/departures/next", func() templ.Component {
-		return sl.SLDeparturesNextView(slService.GetViewModel())
-	})
-
-	handleTempl("/htmx/departures/list", func() templ.Component {
-		return sl.SLDeparturesListView(slService.GetViewModel())
-	})
-
-	handleTempl("/htmx/time", func() templ.Component {
-		return clock.View(clock.NewViewModel())
-	})
-
-	handleTempl("/htmx/yrnow", func() templ.Component {
-		yrNowViewModel, _ := yrService.GetViewModels()
-		return yr.YRNowView(yrNowViewModel)
-	})
-
-	handleTempl("/htmx/yrforecast", func() templ.Component {
-		_, yrForecastViewModel := yrService.GetViewModels()
-		return yr.YRForecastView(yrForecastViewModel)
-	})
+	services := routing.Services{
+		AppConfig: appConfig,
+		SL: &slService,
+		YR: &yrService,
+	}
+	routing.Routes(services)
+	routing.HTMXRoutes(services)
 
 	// Static files
 	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))

@@ -2,8 +2,16 @@ package sl
 
 import "github.com/Dekamik/farstu/internal/components/shared"
 
-templ DeviationsModal(model DeviationsViewModel) {
-@shared.Modal(shared.ModalViewModel{ID: model.ID, Title: "Störningar"}) {
-<p>Hej, världen!</p>
+templ DeviationsView(model DeviationsViewModel) {
+@shared.Page(model.Page) {
+<div class="mx-3 my-3" style="padding-top:70px">
+	<div class="row">
+		<div class="col">
+			<p>
+			    Deviations
+			</p>
+		</div>
+	</div>
+</div>
 }
 }

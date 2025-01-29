@@ -66,16 +66,15 @@ func callSLSiteDepartures(siteID int) (*slSiteDeparturesResponse, error) {
 
 type callSLDeviationsArgs struct {
 	Future             bool
-	TransportAuthority *int
+	TransportAuthority int
 	Sites              []int
 	Lines              []int
 	TransportMode      string
 }
 
 func callSLDeviations(args callSLDeviationsArgs) (*[]slDeviationResponse, error) {
-	if args.TransportAuthority == nil {
-		default_ta := 1
-		args.TransportAuthority = &default_ta
+	if args.TransportAuthority == 0 {
+		args.TransportAuthority = 1 // default value 1 = SL
 	}
 
 	url := fmt.Sprintf("https://deviations.integration.sl.se/v1/messages?future=%t&transport_authority=%d", args.Future, args.TransportAuthority)
