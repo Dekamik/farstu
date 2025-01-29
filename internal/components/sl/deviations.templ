@@ -1,15 +1,33 @@
 package sl
 
-import "github.com/Dekamik/farstu/internal/components/shared"
+import (
+"github.com/Dekamik/farstu/internal/components/shared"
+"strconv"
+)
 
 templ DeviationsView(model DeviationsViewModel) {
 @shared.Page(model.Page) {
 <div class="mx-3 my-3" style="padding-top:70px">
 	<div class="row">
 		<div class="col">
-			<p>
-			    Deviations
-			</p>
+			<div class="accordion" id="deviations">
+				for i, deviation := range model.Deviations {
+				{{ id := "deviation" + strconv.Itoa(i) }}
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+							data-bs-target={ "#" + id } aria-expanded="true" aria-controls={ id }>
+							{ deviation.MessageVariants["sv"].Header }
+						</button>
+					</h2>
+					<div id={ id } class="accordion-collapse collapse" data-bs-parent="#deviations">
+						<div class="accordion-body">
+							{ deviation.MessageVariants["sv"].Details }
+						</div>
+					</div>
+				</div>
+				}
+			</div>
 		</div>
 	</div>
 </div>

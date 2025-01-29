@@ -25,10 +25,12 @@ templ Page(model PageViewModel) {
     </script>
 </head>
 
-<body class={ "theme-" + model.Season + "-" + model.TimeOfDay + "-bg" }>
-    <img class={ "theme-img theme-" + model.Season + "-" + model.TimeOfDay + "-fg" }
+{{ theme := "theme-" + model.Season + "-" + model.TimeOfDay + "-bg" }}
+
+<body class={ theme }>
+    <img class={ "theme-img " + theme }
         src="/static/images/custom/clouds-horizon.svg" />
-    <nav class="navbar fixed-top navbar-expand-sm navbar-dark">
+    <nav class={"navbar fixed-top navbar-expand-sm navbar-dark " + theme }>
         <div class="container-fluid">
             <div class="navbar-nav">
                 for _, item := range model.NavItems {
