@@ -1,6 +1,7 @@
 package sl
 
 import (
+"fmt"
 "github.com/Dekamik/farstu/internal/components/shared"
 "strconv"
 )
@@ -15,14 +16,23 @@ templ DeviationsView(model DeviationsViewModel) {
 				{{ id := "deviation" + strconv.Itoa(i) }}
 				<div class="accordion-item">
 					<h2 class="accordion-header">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-							data-bs-target={ "#" + id } aria-expanded="true" aria-controls={ id }>
-							{ deviation.MessageVariants["sv"].Header }
+						<button class={ "accordion-button collapsed " + deviation.Render.Color } type="button"
+							data-bs-toggle="collapse" data-bs-target={ "#" + id } aria-expanded="true" aria-controls={
+							id }>
+							{ fmt.Sprintf("%s - %s", deviation.MessageVariants["sv"].ScopeAlias,
+							deviation.MessageVariants["sv"].Header) }
 						</button>
 					</h2>
 					<div id={ id } class="accordion-collapse collapse" data-bs-parent="#deviations">
 						<div class="accordion-body">
-							{ deviation.MessageVariants["sv"].Details }
+							<p>
+								{ deviation.MessageVariants["sv"].Details }
+							</p>
+							<p>
+								{ fmt.Sprintf("%d/%d/%d", deviation.Priority.ImportanceLevel,
+								deviation.Priority.InfluenceLevel,
+								deviation.Priority.UrgencyLevel) }
+							</p>
 						</div>
 					</div>
 				</div>

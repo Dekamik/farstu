@@ -1,6 +1,8 @@
 package sl
 
 import (
+	"sort"
+
 	"github.com/Dekamik/farstu/internal/components/shared"
 	"github.com/Dekamik/farstu/internal/config"
 )
@@ -46,11 +48,20 @@ func NewDeparturesViewModel(config config.AppConfig, response slSiteDeparturesRe
 }
 
 type Deviation struct {
+	Render          DeviationRender
+	Priority        DeviationPriority
+	MessageVariants map[string]DeviationMessage
+	Lines           []DeviationLine
+}
+
+type DeviationRender struct {
+	Color string
+}
+
+type DeviationPriority struct {
 	ImportanceLevel int
 	InfluenceLevel  int
 	UrgencyLevel    int
-	MessageVariants map[string]DeviationMessage
-	Lines           []DeviationLine
 }
 
 type DeviationMessage struct {
@@ -74,16 +85,35 @@ type DeviationsViewModel struct {
 	Page       shared.PageViewModel
 }
 
+func calculateRender(deviation Deviation) DeviationRender {
+	var color string = ""
+
+	switch {
+	case deviation.Priority.ImportanceLevel >= 9:
+		color = "border border-3 border-danger-subtle"
+	case deviation.Priority.ImportanceLevel >= 7:
+		color = "border border-3 border-warning"
+	default:
+		color = ""
+	}
+
+	return DeviationRender{
+		Color: color,
+	}
+}
+
 func NewDeviationsViewModel(config config.AppConfig, response []slDeviationResponse) DeviationsViewModel {
 	deviations := make([]Deviation, 0)
 
 	for i, item := range response {
 		deviation := Deviation{
-			ImportanceLevel: item.Priority.ImportanceLevel,
-			InfluenceLevel:  item.Priority.InfluenceLevel,
-			UrgencyLevel:    item.Priority.UrgencyLevel,
+			Priority: DeviationPriority{
+				ImportanceLevel: item.Priority.ImportanceLevel,
+				InfluenceLevel:  item.Priority.InfluenceLevel,
+				UrgencyLevel:    item.Priority.UrgencyLevel,
+			},
 			MessageVariants: make(map[string]DeviationMessage),
-			Lines: make([]DeviationLine, 0),
+			Lines:           make([]DeviationLine, 0),
 		}
 
 		for _, message := range response[i].MessageVariants {
@@ -107,8 +137,14 @@ func NewDeviationsViewModel(config config.AppConfig, response []slDeviationRespo
 			deviation.Lines = append(deviation.Lines, l)
 		}
 
+		deviation.Render = calculateRender(deviation)
+
 		deviations = append(deviations, deviation)
 	}
+
+	sort.Slice(deviations, func(i, j int) bool {
+		return deviations[i].Priority.ImportanceLevel > deviations[j].Priority.ImportanceLevel
+	})
 
 	return DeviationsViewModel{
 		Deviations: deviations,
