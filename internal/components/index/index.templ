@@ -1,31 +1,31 @@
 package index
 
 import (
-	"github.com/Dekamik/farstu/internal/components/clock"
-	"github.com/Dekamik/farstu/internal/components/page"
-	"github.com/Dekamik/farstu/internal/components/sl"
-	"github.com/Dekamik/farstu/internal/components/yr"
+"github.com/Dekamik/farstu/internal/components/clock"
+"github.com/Dekamik/farstu/internal/components/shared"
+"github.com/Dekamik/farstu/internal/components/sl"
+"github.com/Dekamik/farstu/internal/components/yr"
 )
 
-templ View(model ViewModel, pageModel page.PageViewModel) {
-	@page.Page(pageModel) {
-		<div class="mx-3 my-3" style="padding-top:70px">
-			<div class="row row-upper">
-				<div class="col">
-					@clock.View(model.Time)
-				</div>
-				<div class="col">
-					@yr.YRNowView(model.YRNow)
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					@sl.DeparturesView(model.Departures)
-				</div>
-				<div class="col">
-					@yr.YRForecastView(model.YRForecast)
-				</div>
-			</div>
+templ IndexView(model IndexViewModel) {
+@shared.Page(model.Page) {
+<div class="mx-3 my-3" style="padding-top:70px">
+	<div class="row row-upper">
+		<div class="col">
+			@clock.View(model.Time)
 		</div>
-	}
+		<div class="col">
+			@yr.YRNowView(model.YRNow)
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			@sl.DeparturesView(model.Departures)
+		</div>
+		<div class="col">
+			@yr.YRForecastView(model.YRForecast)
+		</div>
+	</div>
+</div>
+}
 }

@@ -1,8 +1,8 @@
 package yr
 
 import (
-	"github.com/Dekamik/farstu/internal/config"
 	"fmt"
+	"github.com/Dekamik/farstu/internal/config"
 	"time"
 )
 

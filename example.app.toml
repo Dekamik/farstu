@@ -11,6 +11,11 @@ Enabled = true
 MaxRows = 4
 SiteName = "T-Centralen"
 
+[SL.Deviations]
+Future = false
+Lines = []
+Sites = []
+
 [Weather]
 Enabled = true
 MaxRows = 4
