@@ -56,6 +56,12 @@ type Deviation struct {
 
 type DeviationRender struct {
 	Color string
+	Modes []DeviationRenderMode
+}
+
+type DeviationRenderMode struct {
+	Color string
+	Mode  string
 }
 
 type DeviationPriority struct {
@@ -97,8 +103,40 @@ func calculateRender(deviation Deviation) DeviationRender {
 		color = ""
 	}
 
+	strToMode := map[string]DeviationRenderMode{
+		"Pendeltåg": {
+			Color: "",
+			Mode:  "TRAIN",
+		},
+		"tunnelbanans gröna linje": {
+			Color: "success",
+			Mode:  "SUBWAY",
+		},
+		"tunnelbanans röda linje": {
+			Color: "danger",
+			Mode:  "SUBWAY",
+		},
+		"tunnelbanans blåa linje": {
+			Color: "primary",
+			Mode:  "SUBWAY",
+		},
+	}
+
+	linesSet := make(map[string]bool)
+	for _, line := range deviation.Lines {
+		linesSet[line.GroupOfLines] = true
+	}
+
+	modes := make([]DeviationRenderMode, 0)
+	for k := range linesSet {
+		if val, ok := strToMode[k]; ok {
+			modes = append(modes, val)
+		}
+	}
+
 	return DeviationRender{
 		Color: color,
+		Modes: modes,
 	}
 }
 
