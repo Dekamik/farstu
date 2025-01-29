@@ -75,7 +75,7 @@ func main() {
 	var yrService yr.YRService
 
 	slServiceArgs := sl.SLServiceArgs{
-		DeparturesTTL:  300,
+		DeparturesTTL:  15,
 		DeviationsTTL:  3,
 		InitRetriesSec: []int{1, 4, 8, 8},
 		SiteName:       appConfig.SL.SiteName,
