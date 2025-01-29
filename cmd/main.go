@@ -86,7 +86,7 @@ func main() {
 
 	// Services
 	slServiceArgs := sl.SLServiceArgs{
-		DeparturesTTL:  300,
+		DeparturesTTL:  15,
 		InitRetriesSec: []int{1, 4, 8, 8},
 		SiteName:       appConfig.SL.SiteName,
 	}
