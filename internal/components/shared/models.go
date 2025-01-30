@@ -16,11 +16,18 @@ type NavItemViewModel struct {
 	Href     templ.SafeURL
 	Icon     string
 	IsActive bool
+	Badge    NavItemBadgeViewModel
+}
+
+type NavItemBadgeViewModel struct {
+	Enabled bool
+	Color   string
+	Text    string
 }
 
 type NewPageViewModelArgs struct {
 	ActiveHref               string
-	NavItems []NavItemViewModel
+	NavItems                 []NavItemViewModel
 	Season                   string
 	SecondsUntilNextSunEvent int
 	TimeOfDay                string

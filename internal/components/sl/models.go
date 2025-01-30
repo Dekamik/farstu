@@ -2,6 +2,7 @@ package sl
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/Dekamik/farstu/internal/components/shared"
 	"github.com/Dekamik/farstu/internal/config"
@@ -56,6 +57,12 @@ type Deviation struct {
 
 type DeviationRender struct {
 	Color string
+	Modes []DeviationRenderMode
+}
+
+type DeviationRenderMode struct {
+	Color string
+	Mode  string
 }
 
 type DeviationPriority struct {
@@ -97,8 +104,48 @@ func calculateRender(deviation Deviation) DeviationRender {
 		color = ""
 	}
 
+	strToMode := map[string]DeviationRenderMode{
+		"buss": {
+			Color: "",
+			Mode: "BUS",
+		},
+		"Pendeltåg": {
+			Color: "",
+			Mode:  "TRAIN",
+		},
+		"tunnelbanans gröna linje": {
+			Color: "success",
+			Mode:  "METRO",
+		},
+		"tunnelbanans röda linje": {
+			Color: "danger",
+			Mode:  "METRO",
+		},
+		"tunnelbanans blåa linje": {
+			Color: "primary",
+			Mode:  "METRO",
+		},
+	}
+
+	linesSet := make(map[string]bool)
+	for _, line := range deviation.Lines {
+		linesSet[line.GroupOfLines] = true
+	}
+
+	if strings.Contains(strings.ToLower(deviation.MessageVariants["sv"].ScopeAlias), "buss") {
+		linesSet["buss"] = true
+	}
+
+	modes := make([]DeviationRenderMode, 0)
+	for k := range linesSet {
+		if val, ok := strToMode[k]; ok {
+			modes = append(modes, val)
+		}
+	}
+
 	return DeviationRender{
 		Color: color,
+		Modes: modes,
 	}
 }
 

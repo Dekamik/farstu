@@ -19,12 +19,20 @@ templ DeviationsView(model DeviationsViewModel) {
 						<button class={ "accordion-button collapsed " + deviation.Render.Color } type="button"
 							data-bs-toggle="collapse" data-bs-target={ "#" + id } aria-expanded="true" aria-controls={
 							id }>
-							{ fmt.Sprintf("%s - %s", deviation.MessageVariants["sv"].ScopeAlias,
-							deviation.MessageVariants["sv"].Header) }
+							for _, mode := range deviation.Render.Modes {
+								<span class={"border border-5 rounded bg-" + mode.Color + " border-" + mode.Color}>
+									<img class={"icon outline "} src={ "/static/images/directions/" + mode.Mode + "-W.png" } alt={ mode.Mode } />
+								</span>
+							&nbsp;
+							}
+							{ deviation.MessageVariants["sv"].Header }
 						</button>
 					</h2>
 					<div id={ id } class="accordion-collapse collapse" data-bs-parent="#deviations">
 						<div class="accordion-body">
+							<p>
+								{ deviation.MessageVariants["sv"].ScopeAlias }
+							</p>
 							<p>
 								{ deviation.MessageVariants["sv"].Details }
 							</p>

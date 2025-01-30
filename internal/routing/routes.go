@@ -60,11 +60,12 @@ func Routes(services Services) {
 		}
 
 		yrNowViewModel, yrForecastViewModel := (*services.YR).GetViewModels()
+		pageViewModel := shared.NewPageViewModel(args)
 
 		model := index.IndexViewModel{
 			Config:     *services.AppConfig,
 			Departures: (*services.SL).GetDeparturesViewModel(),
-			Page:       shared.NewPageViewModel(args),
+			Page:       pageViewModel,
 			Time:       clock.NewViewModel(),
 			YRNow:      yrNowViewModel,
 			YRForecast: yrForecastViewModel,
