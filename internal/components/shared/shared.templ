@@ -24,11 +24,11 @@ templ Page(model PageViewModel) {
 		const sunTimeout = setTimeout(function () {location.reload();}, model.PageTTL * 1000);
 	</script>
 </head>
-{{ theme := "theme-" + model.Season + "-" + model.TimeOfDay + "-bg" }}
+{{ theme := "theme-" + model.Season + "-" + model.TimeOfDay }}
 
-<body class={ theme }>
-	<img class={ "theme-img " + theme } src="/static/images/custom/clouds-horizon.svg" />
-	<nav class={ "navbar fixed-top navbar-expand-sm navbar-dark " + theme }>
+<body class={ theme + "-bg" }>
+	<img class={ "theme-img " + theme + "-fg" } src="/static/images/custom/clouds-horizon.svg" />
+	<nav class={ "navbar fixed-top navbar-expand-sm navbar-dark " + theme + "-bg" }>
 		<div class="container-fluid">
 			<div class="navbar-nav">
 				for _, item := range model.NavItems {

@@ -41,8 +41,8 @@ func Page(model PageViewModel) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		theme := "theme-" + model.Season + "-" + model.TimeOfDay + "-bg"
-		var templ_7745c5c3_Var2 = []any{theme}
+		theme := "theme-" + model.Season + "-" + model.TimeOfDay
+		var templ_7745c5c3_Var2 = []any{theme + "-bg"}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -64,7 +64,7 @@ func Page(model PageViewModel) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 = []any{"theme-img " + theme}
+		var templ_7745c5c3_Var4 = []any{"theme-img " + theme + "-fg"}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -86,7 +86,7 @@ func Page(model PageViewModel) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var6 = []any{"navbar fixed-top navbar-expand-sm navbar-dark " + theme}
+		var templ_7745c5c3_Var6 = []any{"navbar fixed-top navbar-expand-sm navbar-dark " + theme + "-bg"}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
