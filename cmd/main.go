@@ -100,8 +100,8 @@ func main() {
 
 	services := routing.Services{
 		AppConfig: appConfig,
-		SL: &slService,
-		YR: &yrService,
+		SL:        &slService,
+		YR:        &yrService,
 	}
 	routing.Routes(services)
 	routing.HTMXRoutes(services)
