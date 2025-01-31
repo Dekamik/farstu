@@ -58,10 +58,10 @@ func (s slServiceImpl) GetDeviationsViewModel() DeviationsViewModel {
 }
 
 type SLServiceArgs struct {
-	DeparturesTTL   int
-	DeviationsTTL   int
-	InitRetriesSec  []int
-	SiteName        string
+	DeparturesTTL  int
+	DeviationsTTL  int
+	InitRetriesSec []int
+	SiteName       string
 }
 
 func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, error) {

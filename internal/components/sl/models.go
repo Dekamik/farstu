@@ -107,7 +107,7 @@ func calculateRender(deviation Deviation) DeviationRender {
 	strToMode := map[string]DeviationRenderMode{
 		"buss": {
 			Color: "",
-			Mode: "BUS",
+			Mode:  "BUS",
 		},
 		"Pendeltåg": {
 			Color: "",
@@ -189,6 +189,12 @@ func NewDeviationsViewModel(config config.AppConfig, response []slDeviationRespo
 		deviations = append(deviations, deviation)
 	}
 
+	sort.Slice(deviations, func(i, j int) bool {
+		return deviations[i].Priority.UrgencyLevel > deviations[j].Priority.UrgencyLevel
+	})
+	sort.Slice(deviations, func(i, j int) bool {
+		return deviations[i].Priority.InfluenceLevel > deviations[j].Priority.InfluenceLevel
+	})
 	sort.Slice(deviations, func(i, j int) bool {
 		return deviations[i].Priority.ImportanceLevel > deviations[j].Priority.ImportanceLevel
 	})
