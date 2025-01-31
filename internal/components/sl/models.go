@@ -106,11 +106,11 @@ func calculateRender(deviation Deviation) DeviationRender {
 
 	strToMode := map[string]DeviationRenderMode{
 		"buss": {
-			Color: "",
+			Color: "dark",
 			Mode:  "BUS",
 		},
 		"Pendeltåg": {
-			Color: "",
+			Color: "dark",
 			Mode:  "TRAIN",
 		},
 		"tunnelbanans gröna linje": {
