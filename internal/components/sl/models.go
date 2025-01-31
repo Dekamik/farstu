@@ -190,6 +190,12 @@ func NewDeviationsViewModel(config config.AppConfig, response []slDeviationRespo
 	}
 
 	sort.Slice(deviations, func(i, j int) bool {
+		return deviations[i].Priority.UrgencyLevel > deviations[j].Priority.UrgencyLevel
+	})
+	sort.Slice(deviations, func(i, j int) bool {
+		return deviations[i].Priority.InfluenceLevel > deviations[j].Priority.InfluenceLevel
+	})
+	sort.Slice(deviations, func(i, j int) bool {
 		return deviations[i].Priority.ImportanceLevel > deviations[j].Priority.ImportanceLevel
 	})
 
