@@ -1,53 +1,56 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
+	"encoding/json"
+	"os"
 )
 
 type AppConfig struct {
 	App struct {
-		Environment string
-		LogFile     string
-		LogLevel    string
-		Port        int
-	}
+		Environment string `json:"environment"`
+		LogFile     string `json:"logFile"`
+		LogLevel    string `json:"logLevel"`
+		Port        int    `json:"port"`
+	} `json:"app"`
 	SL struct {
-		Enabled    bool
-		MaxRows    int
-		SiteName   string
+		Enabled    bool   `json:"enabled"`
+		MaxRows    int    `json:"maxRows"`
+		SiteName   string `json:"siteName"`
 		Deviations struct {
-			Future bool
-			Lines  []int
-			Sites  []int
-		}
-	}
+			Future bool  `json:"future"`
+			Lines  []int `json:"lines"`
+			Sites  []int `json:"sites"`
+		} `json:"deviations"`
+	} `json:"sl"`
 	Weather struct {
-		Enabled bool
-		Lat     float64
-		Lon     float64
-		MaxRows int
-
+		Enabled bool    `json:"enabled"`
+		Lat     float64 `json:"lat"`
+		Lon     float64 `json:"lon"`
+		MaxRows int     `json:"maxRows"`
 		Colors struct {
-			TempMin float64
-			TempMid float64
-			TempMax float64
-
-			TempColorCoolCoolest string
-			TempColorCoolHottest string
-			TempColorMid         string
-			TempColorHotCoolest  string
-			TempColorHotHottest  string
-
-			ClassPrecip   string
-			ClassNoPrecip string
-		}
-	}
+			TempMin              float64 `json:"tempMin"`
+			TempMid              float64 `json:"tempMid"`
+			TempMax              float64 `json:"tempMax"`
+			TempColorCoolCoolest string  `json:"tempColorCoolCoolest"`
+			TempColorCoolHottest string  `json:"tempColorCoolHottest"`
+			TempColorMid         string  `json:"tempColorMid"`
+			TempColorHotCoolest  string  `json:"tempColorHotCoolest"`
+			TempColorHotHottest  string  `json:"tempColorHotHottest"`
+			ClassPrecip          string  `json:"classPrecip"`
+			ClassNoPrecip        string  `json:"classNoPrecip"`
+		} `json:"colors"`
+	} `json:"weather"`
 }
 
 func ReadAppConfig(path string) (*AppConfig, error) {
 	var config AppConfig
 
-	_, err := toml.DecodeFile(path, &config)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(data, &config)
 	if err != nil {
 		return nil, err
 	}
