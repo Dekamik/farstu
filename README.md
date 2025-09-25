@@ -17,16 +17,16 @@ forecast and upcoming public transport departures.
 
 ## Configuring the application
 
-1. Copy `example.app.toml` to `app.toml`
+1. Copy `example.app.json` to `app.json`
 2. To configure the weather forecasts, go to [latlong.net](https://latlong.net)
    and lookup your address
-3. Paste the lat lon coordinates to the `Lat` and `Lon` variables in `app.toml`
+3. Paste the lat lon coordinates to the `lat` and `lon` variables in `app.json`
 
 If you've followed the steps above, you should be able to run Farstu.
 
 ## Running the application
 
-Stand in the directory where the `app.toml` and the `static/` directory is
+Stand in the directory where the `app.json` and the `static/` directory is
 located and run `farstu`. The app should now be running at the configured port
 (default `http://localhost:8080`).
 
