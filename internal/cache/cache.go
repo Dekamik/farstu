@@ -13,7 +13,7 @@ type Cache[TObject any] interface {
 
 type cacheImpl[TObject any] struct {
 	expiresAt time.Time
-	mutex	  sync.RWMutex
+	mutex     sync.RWMutex
 	object    *TObject
 	refresh   func() (*TObject, error)
 	ttl       int
