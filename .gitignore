@@ -27,7 +27,6 @@ go.work.sum
 bin/
 log/
 
-app.toml
 app.json
 
 __debug*
