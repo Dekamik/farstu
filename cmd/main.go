@@ -24,7 +24,7 @@ var logLevelMap = map[string]slog.Level{
 
 func main() {
 	// Config
-	appConfigPath := "app.toml"
+	appConfigPath := "app.json"
 	appConfig, err := config.ReadAppConfig(appConfigPath)
 	if err != nil {
 		slog.Error("An error occurred while reading "+appConfigPath, "err", err)

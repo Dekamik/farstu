@@ -1,7 +1,8 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
+	"encoding/json"
+	"os"
 )
 
 type AppConfig struct {
@@ -44,7 +45,12 @@ type AppConfig struct {
 func ReadAppConfig(path string) (*AppConfig, error) {
 	var config AppConfig
 
-	_, err := toml.DecodeFile(path, &config)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(data, &config)
 	if err != nil {
 		return nil, err
 	}
