@@ -1,0 +1,36 @@
+{
+	"app": {
+		"environment": "Production",
+		"logFile": "./log/app.log",
+		"logLevel": "info",
+		"port": 8080
+	},
+	"sl": {
+		"enabled": true,
+		"maxRows": 4,
+		"siteName": "T-Centralen",
+		"deviations": {
+			"future": false,
+			"lines": [],
+			"sites": []
+		}
+	},
+	"weather": {
+		"enabled": true,
+		"maxRows": 4,
+		"lat": 0,
+		"lon": 0,
+		"colors": {
+			"tempMin": -30,
+			"tempMid": 0,
+			"tempMax": 30,
+			"tempColorCoolCoolest": "#0033cc",
+			"tempColorCoolHottest": "#ccd9ff",
+			"tempColorMid": "#dee2e6",
+			"tempColorHotCoolest": "#ffcccc",
+			"tempColorHotHottest": "#ff0000",
+			"classPrecip": "primary",
+			"classNoPrecip": "light"
+		}
+	}
+}
