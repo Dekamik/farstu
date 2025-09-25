@@ -24,7 +24,11 @@ var logLevelMap = map[string]slog.Level{
 
 func main() {
 	// Config
-	appConfigPath := "app.json"
+	appConfigPath := os.Getenv("FARSTU_APP_CONFIG_PATH")
+	if appConfigPath == "" {
+		appConfigPath = "app.json"
+	}
+
 	appConfig, err := config.ReadAppConfig(appConfigPath)
 	if err != nil {
 		slog.Error("An error occurred while reading "+appConfigPath, "err", err)
