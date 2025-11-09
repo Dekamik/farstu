@@ -1,9 +1,5 @@
 package shared
 
-import (
-	"github.com/a-h/templ"
-)
-
 type PageViewModel struct {
 	ActiveHref string
 	NavItems   []NavItemViewModel
@@ -13,7 +9,7 @@ type PageViewModel struct {
 }
 
 type NavItemViewModel struct {
-	Href     templ.SafeURL
+	Href     string
 	Icon     string
 	IsActive bool
 	Badge    NavItemBadgeViewModel
