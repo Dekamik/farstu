@@ -12,7 +12,7 @@ import (
 var ErrSiteIDNotFound = errors.New("site ID not found")
 
 type SLService interface {
-	GetDeparturesViewModel() DeparturesViewModel
+	GetDepartures() []Departure
 	GetDeviationsViewModel() DeviationsViewModel
 }
 
@@ -24,21 +24,32 @@ type slServiceImpl struct {
 
 var _ SLService = slServiceImpl{}
 
-func (s slServiceImpl) GetDeparturesViewModel() DeparturesViewModel {
-	var slDeparturesViewModel DeparturesViewModel
+type Departure struct {
+	Destination   string
+	DisplayTime   string
+	LineNumber    string
+	TransportMode string
+}
 
-	departures, err := s.cachedDepartures.Get()
+func (s slServiceImpl) GetDepartures() []Departure {
+	departures := make([]Departure, 0)
+	response, err := s.cachedDepartures.Get()
+
 	if err != nil {
 		slog.Warn("an error occurred when fetching departures from SL", "err", err)
-		slDeparturesViewModel = DeparturesViewModel{
-			Enabled: s.appConfig.SL.Enabled,
-			Message: "Fel vid avgångsdatahämtning",
-		}
 	} else {
-		slDeparturesViewModel = NewDeparturesViewModel(s.appConfig, *departures)
+		for _, item := range response.Departures {
+			departure := Departure{
+				Destination:   item.Destination,
+				DisplayTime:   item.Display,
+				LineNumber:    item.Line.Designation,
+				TransportMode: item.Line.TransportMode,
+			}
+			departures = append(departures, departure)
+		}
 	}
 
-	return slDeparturesViewModel
+	return departures
 }
 
 func (s slServiceImpl) GetDeviationsViewModel() DeviationsViewModel {

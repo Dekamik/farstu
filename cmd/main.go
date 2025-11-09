@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Dekamik/farstu/internal/components/sl"
-	"github.com/Dekamik/farstu/internal/components/yr"
 	"github.com/Dekamik/farstu/internal/config"
-	"github.com/Dekamik/farstu/internal/routing"
+	"github.com/Dekamik/farstu/internal/routes"
+	"github.com/Dekamik/farstu/internal/routes/index/components/sl"
+	"github.com/Dekamik/farstu/internal/routes/yr"
 )
 
 var logLevelMap = map[string]slog.Level{
