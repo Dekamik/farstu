@@ -107,6 +107,7 @@ func main() {
 		SL:        &slService,
 		YR:        &yrService,
 	}
+
 	routing.Routes(services)
 	routing.HTMXRoutes(services)
 

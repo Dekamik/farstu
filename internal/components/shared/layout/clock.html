@@ -1,0 +1,11 @@
+<ul class="menu menu-horizontal px-1"
+	hx-get="/htmx/time"
+	hx-trigger="every 5s"
+	hx-swap="outerHTML">
+	<li>
+		<p class="btn btn-ghost text-lg">{{.Date}}</p>
+	</li>
+	<li>
+		<p class="btn btn-ghost text-xl">{{.Time}}</p>
+	</li>
+</ul>

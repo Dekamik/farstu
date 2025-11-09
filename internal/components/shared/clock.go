@@ -1,4 +1,4 @@
-package clock
+package shared
 
 import (
 	"fmt"

@@ -1,6 +1,8 @@
 package routing
 
 import (
+	"html/template"
+	"log/slog"
 	"net/http"
 
 	"github.com/Dekamik/farstu/internal/components/deviations"
@@ -30,9 +32,22 @@ type Services struct {
 }
 
 func Routes(services Services) {
-	http.HandleFunc("/", index.Handler)
-	http.HandleFunc("/deviations", deviations.Handler)
-	http.HandleFunc("/settings", settings.Handler)
+	slog.Debug("Initializing routes")
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		data := index.Index{}
+		shared.ExecuteLayout(w, "internal/components/index/index.html", "/", data)
+	})
+
+	http.HandleFunc("/deviations", func(w http.ResponseWriter, r *http.Request) {
+		data := deviations.Deviations{}
+		shared.ExecuteLayout(w, "internal/components/deviations/deviations.html", "deviations", data)
+	})
+
+	http.HandleFunc("/settings", func(w http.ResponseWriter, r *http.Request) {
+		data := settings.Settings{}
+		shared.ExecuteLayout(w, "internal/components/settings/settings.html", "settings", data)
+	})
 
 	//route("/", func() templ.Component {
 	//	seasonAndTimeOfDay, err := yr.GetSeasonAndTimeOfDay(*services.AppConfig)
@@ -103,6 +118,12 @@ func Routes(services Services) {
 }
 
 func HTMXRoutes(services Services) {
+	http.HandleFunc("/htmx/time", func(w http.ResponseWriter, r *http.Request) {
+		data := shared.GetTime()
+		tmpl := template.Must(template.ParseFiles("internal/components/shared/layout/clock.html"))
+		tmpl.Execute(w, data)
+	})
+
 	//route("/htmx/departures", func() templ.Component {
 	//	return sl.DeparturesView((*services.SL).GetDeparturesViewModel())
 	//})
