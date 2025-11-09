@@ -13,7 +13,8 @@ import (
 var layouts = template.Must(template.ParseGlob("internal/components/shared/layout/*.html"))
 
 type Nav struct {
-	Highlight string
+	CurrentTime TimeData
+	Highlight   string
 }
 
 type Site struct {
@@ -40,6 +41,7 @@ func ExecuteLayout[T any](w http.ResponseWriter, templatePath string, highlightN
 
 	layoutData := Layout[T]{
 		Nav: Nav{
+			CurrentTime: GetTime(),
 			Highlight: highlightNav,
 		},
 		Site: Site{
