@@ -12,17 +12,22 @@ import (
 
 var layouts = template.Must(template.ParseGlob("internal/components/shared/layout/*.html"))
 
+type Nav struct {
+	Highlight string
+}
+
 type Site struct {
 	Lang  string
 	Theme string
 }
 
 type Layout[T any] struct {
+	Nav  Nav
 	Site Site
 	Data T
 }
 
-func ExecuteLayout[T any](w http.ResponseWriter, templatePath string, data T) {
+func ExecuteLayout[T any](w http.ResponseWriter, templatePath string, highlightNav string, data T) {
 	asserts.Assert(templatePath != "", "template path cannot be empty")
 
 	_, err := os.Stat(templatePath)
@@ -34,8 +39,11 @@ func ExecuteLayout[T any](w http.ResponseWriter, templatePath string, data T) {
 	tmpl := template.Must(template.Must(layouts.Clone()).ParseFiles(templatePath))
 
 	layoutData := Layout[T]{
+		Nav: Nav{
+			Highlight: highlightNav,
+		},
 		Site: Site{
-			Lang: "sv",
+			Lang:  "sv",
 			Theme: "synthwave",
 		},
 		Data: data,
