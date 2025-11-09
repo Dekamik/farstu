@@ -12,7 +12,7 @@ import (
 	"github.com/Dekamik/farstu/internal/config"
 	"github.com/Dekamik/farstu/internal/routes"
 	"github.com/Dekamik/farstu/internal/routes/index/components/sl"
-	"github.com/Dekamik/farstu/internal/routes/yr"
+	"github.com/Dekamik/farstu/internal/routes/index/components/yr"
 )
 
 var logLevelMap = map[string]slog.Level{

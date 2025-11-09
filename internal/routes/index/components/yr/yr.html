@@ -1,0 +1,31 @@
+<div class="overflow-x-auto">
+	<table class="table table-sm">
+		<tbody>
+			{{range .Forecast}}
+			<tr>
+				<th>
+					<span class="text-sm">{{.Time}}</span>
+				</th>
+				<td>
+					<span class="text-sm" style="color: {{.TemperatureColor}}">{{printf "%.0f" .Temperature}}°</span>
+				</td>
+				<td>
+					<span class="avatar h-6 w-6">
+						<img class="icon" src="/static/images/weather/dist/light-mode/default/svg/{{.SymbolID}}.svg" />
+					</span>
+				</td>
+				{{if gt .MaxUVIndex 3.0}}
+				<td>
+					<span class="text-sm text-warning">UV {{printf "%.1f" .MaxUVIndex}}</span>
+				</td>
+				{{end}}
+				{{if gt .PrecipitationMax 0.0}}
+				<td>
+					<span class="text-sm text-info">{{printf "%.1f" .PrecipitationMin}}-{{printf "%.1f" .PrecipitationMax}} mm</span>
+				</td>
+				{{end}}
+			</tr>
+			{{end}}
+		</tbody>
+	</table>
+</div>

@@ -9,9 +9,9 @@ import (
 	"github.com/Dekamik/farstu/internal/routes/deviations"
 	"github.com/Dekamik/farstu/internal/routes/index"
 	"github.com/Dekamik/farstu/internal/routes/index/components/sl"
+	"github.com/Dekamik/farstu/internal/routes/index/components/yr"
 	"github.com/Dekamik/farstu/internal/routes/settings"
 	"github.com/Dekamik/farstu/internal/routes/shared"
-	"github.com/Dekamik/farstu/internal/routes/yr"
 )
 
 type Services struct {
@@ -26,10 +26,12 @@ func Routes(services Services) {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		data := index.Index{
 			Departures: (*services.SL).GetDepartures(),
+			Forecast: (*services.YR).GetForecast(*services.AppConfig),
 		}
 		templates := []string{
 			"internal/routes/index/index.html",
 			"internal/routes/index/components/sl/sl.html",
+			"internal/routes/index/components/yr/yr.html",
 		}
 		shared.ExecuteLayout(w, "/", data, templates...)
 	})

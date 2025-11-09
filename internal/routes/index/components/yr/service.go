@@ -1,6 +1,7 @@
 package yr
 
 import (
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 )
 
 type YRService interface {
+	GetForecast(config.AppConfig) []YRForecastItem
 	GetViewModels() (YRNowViewModel, YRForecastViewModel)
 }
 
@@ -18,6 +20,54 @@ type yrServiceImpl struct {
 }
 
 var _ YRService = yrServiceImpl{}
+
+func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
+	forecasts := make([]YRForecastItem, 0)
+	response, err := y.cachedForecast.Get()
+
+	if err != nil {
+		slog.Warn("an error occurred when fetching weather forecasts from YR.no", "err", err)
+	} else {
+		for i, item := range response.Properties.Timeseries {
+			hour := item.Time.Local().Format("15")
+			if i != 0 && hour != "00" && hour != "06" && hour != "12" && hour != "18" {
+				continue
+			}
+
+			var largestUVIndex float64 = 0.0
+			for j := i; j < i+6; j++ {
+				itemUVIndex := response.Properties.Timeseries[j].Data.Instant.Details.UltravioletIndexClearSky
+				if itemUVIndex > largestUVIndex {
+					largestUVIndex = itemUVIndex
+				}
+			}
+
+			temperature := item.Data.Instant.Details.AirTemperature
+			symbolCode := item.Data.Next6Hours.Summary.SymbolCode
+			precipitationMin := item.Data.Next6Hours.Details.PrecipitationAmountMin
+			precipitationMax := item.Data.Next6Hours.Details.PrecipitationAmountMax
+
+			timeStr := fmt.Sprintf("%s-%s", hour, item.Time.Local().Add(time.Hour*6).Format("15"))
+
+			forecastItem := YRForecastItem{
+				Time:               timeStr,
+				Temperature:        temperature,
+				TemperatureColor:   getTemperatureColor(config, temperature),
+				SymbolCode:         symbolCode,
+				SymbolID:           YRSymbolsID[symbolCode],
+				PrecipitationMin:   precipitationMin,
+				PrecipitationMax:   precipitationMax,
+				PrecipitationColor: getPrecipitationColorClass(config, precipitationMax),
+				MaxUVIndex:         largestUVIndex,
+				UVColor:            calculateUVColor(largestUVIndex),
+			}
+
+			forecasts = append(forecasts, forecastItem)
+		}
+	}
+
+	return forecasts
+}
 
 func (y yrServiceImpl) GetViewModels() (YRNowViewModel, YRForecastViewModel) {
 	var yrNowViewModel YRNowViewModel
