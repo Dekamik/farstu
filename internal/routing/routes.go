@@ -1,9 +1,9 @@
 package routing
 
 import (
-	"html/template"
 	"net/http"
 
+	"github.com/Dekamik/farstu/internal/components/helloworld"
 	"github.com/Dekamik/farstu/internal/components/shared"
 	"github.com/Dekamik/farstu/internal/components/sl"
 	"github.com/Dekamik/farstu/internal/components/yr"
@@ -28,10 +28,7 @@ type Services struct {
 }
 
 func Routes(services Services) {
-	tmpl := template.Must(template.ParseFiles("internal/components/hello_world.html"))
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Execute(w, nil)
-	})
+	http.HandleFunc("/", helloworld.Handler)
 
 	//route("/", func() templ.Component {
 	//	seasonAndTimeOfDay, err := yr.GetSeasonAndTimeOfDay(*services.AppConfig)
