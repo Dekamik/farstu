@@ -7,6 +7,7 @@ import (
 
 	"github.com/Dekamik/farstu/internal/cache"
 	"github.com/Dekamik/farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/routes/shared"
 )
 
 type YRService interface {
@@ -47,7 +48,8 @@ func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
 			precipitationMin := item.Data.Next6Hours.Details.PrecipitationAmountMin
 			precipitationMax := item.Data.Next6Hours.Details.PrecipitationAmountMax
 
-			timeStr := fmt.Sprintf("%s-%s", hour, item.Time.Local().Add(time.Hour*6).Format("15"))
+			weekDay := item.Time.Local().Weekday()
+			timeStr := fmt.Sprintf("%s %s-%s", shared.DayNames[weekDay], hour, item.Time.Local().Add(time.Hour*6).Format("15"))
 
 			forecastItem := YRForecastItem{
 				Time:               timeStr,

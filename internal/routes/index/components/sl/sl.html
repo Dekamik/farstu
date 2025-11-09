@@ -9,20 +9,20 @@
 		<tbody>
 			{{range .Departures}}
 			<tr>
-				<th>
+				<td>
 					<span class="avatar h-6 w-6">
 						<img class="icon" src="/static/images/directions/{{.TransportMode}}-W.png" />
 					</span>
-				</th>
+				</td>
 				<td>
 					<span class="badge badge-error">{{.LineNumber}}</span>
 				</td>
 				<td>
 					<span class="text-sm">{{.Destination}}</span>
 				</td>
-				<td>
+				<th>
 					<span class="text-sm">{{.DisplayTime}}</span>
-				</td>
+				</th>
 			</tr>
 			{{end}}
 		</tbody>
