@@ -3,7 +3,9 @@ package routing
 import (
 	"net/http"
 
-	"github.com/Dekamik/farstu/internal/components/helloworld"
+	"github.com/Dekamik/farstu/internal/components/deviations"
+	"github.com/Dekamik/farstu/internal/components/index"
+	"github.com/Dekamik/farstu/internal/components/settings"
 	"github.com/Dekamik/farstu/internal/components/shared"
 	"github.com/Dekamik/farstu/internal/components/sl"
 	"github.com/Dekamik/farstu/internal/components/yr"
@@ -28,7 +30,9 @@ type Services struct {
 }
 
 func Routes(services Services) {
-	http.HandleFunc("/", helloworld.Handler)
+	http.HandleFunc("/", index.Handler)
+	http.HandleFunc("/deviations", deviations.Handler)
+	http.HandleFunc("/settings", settings.Handler)
 
 	//route("/", func() templ.Component {
 	//	seasonAndTimeOfDay, err := yr.GetSeasonAndTimeOfDay(*services.AppConfig)
