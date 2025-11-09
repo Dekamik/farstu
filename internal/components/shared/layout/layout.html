@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="{{.Site.Lang}}" data-theme="{{.Site.Theme}}">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>{{block "title" .Data}}Farstu{{end}}</title>
+	
+	{{template "imports.html"}}
+</head>
+
+<body>
+	<main class="container">
+		{{block "yield" .Data}}<p>no content found</p>{{end}}
+	</main>
+</body>
+
+</html>
