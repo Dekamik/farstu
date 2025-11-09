@@ -1,0 +1,30 @@
+<div class="overflow-x-auto"
+	hx-get="/htmx/sl"
+	hx-trigger="every 15s"
+	hx-swap="outerHTML">
+	<div class="text-center text-6xl">
+		{{ (index .Departures 0).DisplayTime }}
+	</div>
+	<table class="table table-sm">
+		<tbody>
+			{{range .Departures}}
+			<tr>
+				<th>
+					<span class="avatar h-6 w-6">
+						<img class="icon" src="/static/images/directions/{{.TransportMode}}-W.png" />
+					</span>
+				</th>
+				<td>
+					<span class="badge badge-error">{{.LineNumber}}</span>
+				</td>
+				<td>
+					<span class="text-sm">{{.Destination}}</span>
+				</td>
+				<td>
+					<span class="text-sm">{{.DisplayTime}}</span>
+				</td>
+			</tr>
+			{{end}}
+		</tbody>
+	</table>
+</div>

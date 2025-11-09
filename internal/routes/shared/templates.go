@@ -10,7 +10,7 @@ import (
 	"github.com/Dekamik/farstu/internal/asserts"
 )
 
-var layouts = template.Must(template.ParseGlob("internal/components/shared/layout/*.html"))
+var layouts = template.Must(template.ParseGlob("internal/routes/shared/layout/*.html"))
 
 type Nav struct {
 	CurrentTime TimeData
@@ -28,16 +28,16 @@ type Layout[T any] struct {
 	Data T
 }
 
-func ExecuteLayout[T any](w http.ResponseWriter, templatePath string, highlightNav string, data T) {
-	asserts.Assert(templatePath != "", "template path cannot be empty")
-
-	_, err := os.Stat(templatePath)
-	asserts.Assert(!errors.Is(err, os.ErrNotExist), fmt.Sprintf("template %s must exist", templatePath))
-	if err != nil {
-		panic(err)
+func ExecuteLayout[T any](w http.ResponseWriter, highlightNav string, data T, templatePath ...string) {
+	for _, t := range templatePath {
+		_, err := os.Stat(t)
+		asserts.Assert(!errors.Is(err, os.ErrNotExist), fmt.Sprintf("template %s must exist", templatePath))
+		if err != nil {
+			panic(err)
+		}
 	}
 
-	tmpl := template.Must(template.Must(layouts.Clone()).ParseFiles(templatePath))
+	tmpl := template.Must(template.Must(layouts.Clone()).ParseFiles(templatePath...))
 
 	layoutData := Layout[T]{
 		Nav: Nav{

@@ -5,25 +5,14 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/Dekamik/farstu/internal/components/deviations"
-	"github.com/Dekamik/farstu/internal/components/index"
-	"github.com/Dekamik/farstu/internal/components/settings"
-	"github.com/Dekamik/farstu/internal/components/shared"
-	"github.com/Dekamik/farstu/internal/components/sl"
-	"github.com/Dekamik/farstu/internal/components/yr"
 	"github.com/Dekamik/farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/routes/deviations"
+	"github.com/Dekamik/farstu/internal/routes/index"
+	"github.com/Dekamik/farstu/internal/routes/index/components/sl"
+	"github.com/Dekamik/farstu/internal/routes/settings"
+	"github.com/Dekamik/farstu/internal/routes/shared"
+	"github.com/Dekamik/farstu/internal/routes/yr"
 )
-
-var navItems = []shared.NavItemViewModel{
-	{
-		Href: "/",
-		Icon: "bi-house-door-fill",
-	},
-	{
-		Href: "/deviations",
-		Icon: "bi-cone-striped",
-	},
-}
 
 type Services struct {
 	AppConfig *config.AppConfig
@@ -35,18 +24,24 @@ func Routes(services Services) {
 	slog.Debug("Initializing routes")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data := index.Index{}
-		shared.ExecuteLayout(w, "internal/components/index/index.html", "/", data)
+		data := index.Index{
+			Departures: (*services.SL).GetDepartures(),
+		}
+		templates := []string{
+			"internal/routes/index/index.html",
+			"internal/routes/index/components/sl/sl.html",
+		}
+		shared.ExecuteLayout(w, "/", data, templates...)
 	})
 
 	http.HandleFunc("/deviations", func(w http.ResponseWriter, r *http.Request) {
 		data := deviations.Deviations{}
-		shared.ExecuteLayout(w, "internal/components/deviations/deviations.html", "deviations", data)
+		shared.ExecuteLayout(w, "deviations", data, "internal/routes/deviations/deviations.html")
 	})
 
 	http.HandleFunc("/settings", func(w http.ResponseWriter, r *http.Request) {
 		data := settings.Settings{}
-		shared.ExecuteLayout(w, "internal/components/settings/settings.html", "settings", data)
+		shared.ExecuteLayout(w, "settings", data, "internal/routes/settings/settings.html")
 	})
 
 	//route("/", func() templ.Component {
@@ -120,7 +115,15 @@ func Routes(services Services) {
 func HTMXRoutes(services Services) {
 	http.HandleFunc("/htmx/time", func(w http.ResponseWriter, r *http.Request) {
 		data := shared.GetTime()
-		tmpl := template.Must(template.ParseFiles("internal/components/shared/layout/clock.html"))
+		tmpl := template.Must(template.ParseFiles("internal/routes/shared/layout/clock.html"))
+		tmpl.Execute(w, data)
+	})
+
+	http.HandleFunc("/htmx/sl", func(w http.ResponseWriter, r *http.Request) {
+		data := index.Index{
+			Departures: (*services.SL).GetDepartures(),
+		}
+		tmpl := template.Must(template.ParseFiles("internal/routes/index/components/sl/sl.html"))
 		tmpl.Execute(w, data)
 	})
 
