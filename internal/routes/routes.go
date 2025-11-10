@@ -118,7 +118,10 @@ func HTMXRoutes(services Services) {
 	http.HandleFunc("/htmx/time", func(w http.ResponseWriter, r *http.Request) {
 		data := shared.GetTime()
 		tmpl := template.Must(template.ParseFiles("internal/routes/shared/layout/clock.html"))
-		tmpl.Execute(w, data)
+		err := tmpl.Execute(w, data)
+		if err != nil {
+			slog.Error(err.Error())
+		}
 	})
 
 	http.HandleFunc("/htmx/sl", func(w http.ResponseWriter, r *http.Request) {
@@ -126,7 +129,10 @@ func HTMXRoutes(services Services) {
 			Departures: (*services.SL).GetDepartures(),
 		}
 		tmpl := template.Must(template.ParseFiles("internal/routes/index/components/sl/sl.html"))
-		tmpl.Execute(w, data)
+		err := tmpl.Execute(w, data)
+		if err != nil {
+			slog.Error(err.Error())
+		}
 	})
 
 	//route("/htmx/departures", func() templ.Component {

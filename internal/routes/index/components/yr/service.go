@@ -48,8 +48,13 @@ func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
 			precipitationMin := item.Data.Next6Hours.Details.PrecipitationAmountMin
 			precipitationMax := item.Data.Next6Hours.Details.PrecipitationAmountMax
 
+			var timeStr string
 			weekDay := item.Time.Local().Weekday()
-			timeStr := fmt.Sprintf("%s %s-%s", shared.DayNames[weekDay], hour, item.Time.Local().Add(time.Hour*6).Format("15"))
+			if i == 0 {
+				timeStr = "Just nu"
+			} else {
+				timeStr = fmt.Sprintf("%s %s-%s", shared.DayNames[weekDay], hour, item.Time.Local().Add(time.Hour*6).Format("15"))
+			}
 
 			forecastItem := YRForecastItem{
 				Time:               timeStr,

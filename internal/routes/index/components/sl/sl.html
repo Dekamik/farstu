@@ -2,7 +2,7 @@
 	hx-get="/htmx/sl"
 	hx-trigger="every 15s"
 	hx-swap="outerHTML">
-	<div class="text-center text-6xl">
+	<div class="text-center text-8xl h-24">
 		{{ (index .Departures 0).DisplayTime }}
 	</div>
 	<table class="table table-sm">
@@ -23,6 +23,10 @@
 				<th>
 					<span class="text-sm">{{.DisplayTime}}</span>
 				</th>
+			</tr>
+			{{else}}
+			<tr>
+				<th colspan="4">Inga kommande avgångar</th>
 			</tr>
 			{{end}}
 		</tbody>
