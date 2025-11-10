@@ -10,7 +10,7 @@ type TimeData struct {
 	Date string
 }
 
-var dayNames = map[time.Weekday]string{
+var DayNames = map[time.Weekday]string{
 	time.Monday:    "Mån",
 	time.Tuesday:   "Tis",
 	time.Wednesday: "Ons",
@@ -20,7 +20,7 @@ var dayNames = map[time.Weekday]string{
 	time.Sunday:    "Sön",
 }
 
-var monthNames = map[time.Month]string{
+var MonthNames = map[time.Month]string{
 	time.January:   "jan",
 	time.February:  "feb",
 	time.March:     "mar",
@@ -51,7 +51,7 @@ func GetDateStr(date time.Time) string {
 		}
 	}
 
-	return fmt.Sprintf("%s %s %s", dayNames[date.Weekday()], numStr, monthNames[date.Month()])
+	return fmt.Sprintf("%s %s %s", DayNames[date.Weekday()], numStr, MonthNames[date.Month()])
 }
 
 func GetTime() TimeData {

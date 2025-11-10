@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -51,5 +52,8 @@ func ExecuteLayout[T any](w http.ResponseWriter, highlightNav string, data T, te
 		Data: data,
 	}
 
-	tmpl.ExecuteTemplate(w, "layout.html", layoutData)
+	err := tmpl.ExecuteTemplate(w, "layout.html", layoutData)
+	if err != nil {
+		slog.Error(err.Error())
+	}
 }
