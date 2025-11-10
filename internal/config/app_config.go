@@ -13,8 +13,6 @@ type AppConfig struct {
 		Port        int    `json:"port"`
 	} `json:"app"`
 	SL struct {
-		Enabled    bool   `json:"enabled"`
-		MaxRows    int    `json:"maxRows"`
 		SiteName   string `json:"siteName"`
 		Deviations struct {
 			Future bool  `json:"future"`
@@ -23,10 +21,8 @@ type AppConfig struct {
 		} `json:"deviations"`
 	} `json:"sl"`
 	Weather struct {
-		Enabled bool    `json:"enabled"`
 		Lat     float64 `json:"lat"`
 		Lon     float64 `json:"lon"`
-		MaxRows int     `json:"maxRows"`
 		Colors struct {
 			TempMin              float64 `json:"tempMin"`
 			TempMid              float64 `json:"tempMid"`
