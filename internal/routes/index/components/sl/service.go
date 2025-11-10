@@ -2,18 +2,20 @@ package sl
 
 import (
 	"errors"
-	"github.com/Dekamik/farstu/internal/cache"
-	"github.com/Dekamik/farstu/internal/config"
 	"log/slog"
+	"sort"
 	"strings"
 	"time"
+
+	"github.com/Dekamik/farstu/internal/cache"
+	"github.com/Dekamik/farstu/internal/config"
 )
 
 var ErrSiteIDNotFound = errors.New("site ID not found")
 
 type SLService interface {
 	GetDepartures() []Departure
-	GetDeviationsViewModel() DeviationsViewModel
+	GetDeviations() []Deviation
 }
 
 type slServiceImpl struct {
@@ -35,9 +37,7 @@ func (s slServiceImpl) GetDepartures() []Departure {
 	departures := make([]Departure, 0)
 	response, err := s.cachedDepartures.Get()
 
-	if err != nil {
-		slog.Warn("an error occurred when fetching departures from SL", "err", err)
-	} else {
+	if err == nil {
 		for _, item := range response.Departures {
 			departure := Departure{
 				Destination:   item.Destination,
@@ -47,25 +47,69 @@ func (s slServiceImpl) GetDepartures() []Departure {
 			}
 			departures = append(departures, departure)
 		}
+	} else {
+		slog.Warn("an error occurred when fetching departures from SL", "err", err)
 	}
 
 	return departures
 }
 
-func (s slServiceImpl) GetDeviationsViewModel() DeviationsViewModel {
-	var slDeviationsViewModel DeviationsViewModel
+func (s slServiceImpl) GetDeviations() []Deviation {
+	deviations := make([]Deviation, 0)
+	response, err := s.cachedDeviations.Get()
 
-	deviations, err := s.cachedDeviations.Get()
-	if err != nil {
-		slog.Warn("an error occured when fetching deviations from SL", "err", err)
-		slDeviationsViewModel = DeviationsViewModel{
-			Message: "Fel vid hämtning av störningsinformations",
+	if err == nil {
+		for i, item := range (*response) {
+			deviation := Deviation{
+				Priority: DeviationPriority{
+					ImportanceLevel: item.Priority.ImportanceLevel,
+					InfluenceLevel:  item.Priority.InfluenceLevel,
+					UrgencyLevel:    item.Priority.UrgencyLevel,
+				},
+				MessageVariants: make(map[string]DeviationMessage),
+				Lines:           make([]DeviationLine, 0),
+			}
+
+			for _, message := range (*response)[i].MessageVariants {
+				m := DeviationMessage{
+					Header:     message.Header,
+					Details:    message.Details,
+					ScopeAlias: message.ScopeAlias,
+					Weblink:    message.Weblink,
+				}
+				deviation.MessageVariants[message.Language] = m
+			}
+
+			for _, line := range (*response)[i].Scope.Lines {
+				l := DeviationLine{
+					ID:            line.ID,
+					Designation:   line.Designation,
+					TransportMode: line.TransportMode,
+					Name:          line.Name,
+					GroupOfLines:  line.GroupOfLines,
+				}
+				deviation.Lines = append(deviation.Lines, l)
+			}
+
+			deviation.Render = calculateRender(deviation)
+
+			deviations = append(deviations, deviation)
 		}
+
+		sort.Slice(deviations, func(i, j int) bool {
+			return deviations[i].Priority.UrgencyLevel > deviations[j].Priority.UrgencyLevel
+		})
+		sort.Slice(deviations, func(i, j int) bool {
+			return deviations[i].Priority.InfluenceLevel > deviations[j].Priority.InfluenceLevel
+		})
+		sort.Slice(deviations, func(i, j int) bool {
+			return deviations[i].Priority.ImportanceLevel > deviations[j].Priority.ImportanceLevel
+		})
 	} else {
-		slDeviationsViewModel = NewDeviationsViewModel(s.appConfig, *deviations)
+		slog.Warn("an error occurred when fetching deviations from SL", "err", err)
 	}
 
-	return slDeviationsViewModel
+	return deviations
 }
 
 type SLServiceArgs struct {

@@ -1,3 +1,25 @@
 {{define "yield"}}
-<h1>Deviations</h1>
+<div>
+	{{range .Deviations}}
+	<div class="collapse collapse-plus bg-base-100 border border-base-300">
+		<input type="radio" name="deviations" />
+		<div class="collapse-title font-semibold">{{ (index .MessageVariants "sv").Header }}</div>
+		<div class="collapse-content text-sm">
+			<div>
+				{{ (index .MessageVariants "sv").ScopeAlias }}
+			</div>
+			<div>
+				{{ (index .MessageVariants "sv").Details }}
+			</div>
+			<div>
+				{{ .Priority.ImportanceLevel }}/{{ .Priority.InfluenceLevel }}/{{ .Priority.UrgencyLevel }}
+			</div>
+		</div>
+	</div>
+	{{else}}
+	<div>
+		No deviations found
+	</div>
+	{{end}}
+</div>
 {{end}}

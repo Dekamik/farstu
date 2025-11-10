@@ -37,7 +37,9 @@ func Routes(services Services) {
 	})
 
 	http.HandleFunc("/deviations", func(w http.ResponseWriter, r *http.Request) {
-		data := deviations.Deviations{}
+		data := deviations.Deviations{
+			Deviations: (*services.SL).GetDeviations(),
+		}
 		shared.ExecuteLayout(w, "deviations", data, "internal/routes/deviations/deviations.html")
 	})
 

@@ -1,10 +1,7 @@
 package sl
 
 import (
-	"sort"
 	"strings"
-
-	"github.com/Dekamik/farstu/internal/config"
 )
 
 type Deviation struct {
@@ -104,60 +101,5 @@ func calculateRender(deviation Deviation) DeviationRender {
 	return DeviationRender{
 		Color: color,
 		Modes: modes,
-	}
-}
-
-func NewDeviationsViewModel(config config.AppConfig, response []slDeviationResponse) DeviationsViewModel {
-	deviations := make([]Deviation, 0)
-
-	for i, item := range response {
-		deviation := Deviation{
-			Priority: DeviationPriority{
-				ImportanceLevel: item.Priority.ImportanceLevel,
-				InfluenceLevel:  item.Priority.InfluenceLevel,
-				UrgencyLevel:    item.Priority.UrgencyLevel,
-			},
-			MessageVariants: make(map[string]DeviationMessage),
-			Lines:           make([]DeviationLine, 0),
-		}
-
-		for _, message := range response[i].MessageVariants {
-			m := DeviationMessage{
-				Header:     message.Header,
-				Details:    message.Details,
-				ScopeAlias: message.ScopeAlias,
-				Weblink:    message.Weblink,
-			}
-			deviation.MessageVariants[message.Language] = m
-		}
-
-		for _, line := range response[i].Scope.Lines {
-			l := DeviationLine{
-				ID:            line.ID,
-				Designation:   line.Designation,
-				TransportMode: line.TransportMode,
-				Name:          line.Name,
-				GroupOfLines:  line.GroupOfLines,
-			}
-			deviation.Lines = append(deviation.Lines, l)
-		}
-
-		deviation.Render = calculateRender(deviation)
-
-		deviations = append(deviations, deviation)
-	}
-
-	sort.Slice(deviations, func(i, j int) bool {
-		return deviations[i].Priority.UrgencyLevel > deviations[j].Priority.UrgencyLevel
-	})
-	sort.Slice(deviations, func(i, j int) bool {
-		return deviations[i].Priority.InfluenceLevel > deviations[j].Priority.InfluenceLevel
-	})
-	sort.Slice(deviations, func(i, j int) bool {
-		return deviations[i].Priority.ImportanceLevel > deviations[j].Priority.ImportanceLevel
-	})
-
-	return DeviationsViewModel{
-		Deviations: deviations,
 	}
 }
