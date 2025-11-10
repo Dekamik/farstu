@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"io"
 	"log/slog"
 	"net/http"
@@ -9,10 +10,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Dekamik/farstu/internal/components/sl"
-	"github.com/Dekamik/farstu/internal/components/yr"
 	"github.com/Dekamik/farstu/internal/config"
-	"github.com/Dekamik/farstu/internal/routing"
+	"github.com/Dekamik/farstu/internal/routes/deviations"
+	"github.com/Dekamik/farstu/internal/routes/index"
+	"github.com/Dekamik/farstu/internal/routes/index/components/sl"
+	"github.com/Dekamik/farstu/internal/routes/index/components/yr"
+	"github.com/Dekamik/farstu/internal/routes/settings"
+	"github.com/Dekamik/farstu/internal/routes/shared"
 )
 
 var logLevelMap = map[string]slog.Level{
@@ -102,13 +106,61 @@ func main() {
 	}
 	yrService = yr.NewYRService(yrServiceArgs, *appConfig)
 
-	services := routing.Services{
-		AppConfig: appConfig,
-		SL:        &slService,
-		YR:        &yrService,
-	}
-	routing.Routes(services)
-	routing.HTMXRoutes(services)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		data := index.Index{
+			Departures: slService.GetDepartures(),
+			Forecast: yrService.GetForecast(*appConfig),
+		}
+		templates := []string{
+			"internal/routes/index/index.html",
+			"internal/routes/index/components/sl/sl.html",
+			"internal/routes/index/components/yr/yr.html",
+		}
+		shared.ExecuteLayout(w, "/", data, templates...)
+	})
+
+	http.HandleFunc("/deviations", func(w http.ResponseWriter, r *http.Request) {
+		data := deviations.Deviations{
+			Deviations: slService.GetDeviations(),
+		}
+		shared.ExecuteLayout(w, "deviations", data, "internal/routes/deviations/deviations.html")
+	})
+
+	http.HandleFunc("/settings", func(w http.ResponseWriter, r *http.Request) {
+		data := settings.Settings{}
+		shared.ExecuteLayout(w, "settings", data, "internal/routes/settings/settings.html")
+	})
+
+	http.HandleFunc("/htmx/time", func(w http.ResponseWriter, r *http.Request) {
+		data := shared.GetTime()
+		tmpl := template.Must(template.ParseFiles("internal/routes/shared/layout/clock.html"))
+		err := tmpl.Execute(w, data)
+		if err != nil {
+			slog.Error(err.Error())
+		}
+	})
+
+	http.HandleFunc("/htmx/sl", func(w http.ResponseWriter, r *http.Request) {
+		data := index.Index{
+			Departures: slService.GetDepartures(),
+		}
+		tmpl := template.Must(template.ParseFiles("internal/routes/index/components/sl/sl.html"))
+		err := tmpl.Execute(w, data)
+		if err != nil {
+			slog.Error(err.Error())
+		}
+	})
+
+	http.HandleFunc("/htmx/yr", func(w http.ResponseWriter, r *http.Request) {
+		data := index.Index{
+			Forecast: yrService.GetForecast(*appConfig),
+		}
+		tmpl := template.Must(template.ParseFiles("internal/routes/index/components/yr/yr.html"))
+		err := tmpl.Execute(w, data)
+		if err != nil {
+			slog.Error(err.Error())
+		}
+	})
 
 	// Static files
 	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))

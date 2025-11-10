@@ -1,0 +1,60 @@
+<div class="overflow-x-auto"
+	hx-get="/htmx/yr"
+	hx-trigger="every 6m"
+	hx-swap="outerHTML">
+	<div class="h-24">
+		<div class="grid grid-cols-3 gap-2">
+			<div>
+				<span class="text-7xl" style="color: {{ (index .Forecast 0).TemperatureColor}}">{{printf "%.0f" (index .Forecast 0).Temperature}}°</span>
+			</div>
+			<div>
+				<span class="avatar h-24 w-24">
+					<img class="icon" src="/static/images/weather/dist/light-mode/default/svg/{{(index .Forecast 0).SymbolID}}.svg" />
+				</span>
+			</div>
+			<div>
+				{{if ge (index .Forecast 0).MaxUVIndex 3.0}}
+				<div>
+					<span class="text-warning">UV {{printf "%.1f" (index .Forecast 0).MaxUVIndex}}</span>
+				</div>
+				{{end}}
+				{{if gt (index .Forecast 0).PrecipitationMax 0.0}}
+				<div>
+					<span class="text-info">{{printf "%.1f" (index .Forecast 0).PrecipitationMin}}-{{printf "%.1f" .PrecipitationMax}} mm</span>
+				</div>
+				{{end}}
+			</div>
+		</div>
+	</div>
+	<table class="table table-sm">
+		<tbody>
+			{{range $i, $e := .Forecast}}
+			{{if ne $i 0}}
+			<tr>
+				<th>
+					<span class="text-sm">{{$e.Time}}</span>
+				</th>
+				<td>
+					<span class="text-sm" style="color: {{$e.TemperatureColor}}">{{printf "%.0f" $e.Temperature}}°</span>
+				</td>
+				<td>
+					<span class="avatar h-6 w-6">
+						<img class="icon" src="/static/images/weather/dist/light-mode/default/svg/{{$e.SymbolID}}.svg" />
+					</span>
+				</td>
+				{{if ge $e.MaxUVIndex 3.0}}
+				<td>
+					<span class="text-sm text-warning">UV {{printf "%.1f" $e.MaxUVIndex}}</span>
+				</td>
+				{{end}}
+				{{if gt $e.PrecipitationMax 0.0}}
+				<td>
+					<span class="text-sm text-info">{{printf "%.1f" $e.PrecipitationMin}}-{{printf "%.1f" .PrecipitationMax}} mm</span>
+				</td>
+				{{end}}
+			</tr>
+			{{end}}
+			{{end}}
+		</tbody>
+	</table>
+</div>

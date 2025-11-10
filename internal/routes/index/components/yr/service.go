@@ -1,15 +1,17 @@
 package yr
 
 import (
+	"fmt"
 	"log/slog"
 	"time"
 
 	"github.com/Dekamik/farstu/internal/cache"
 	"github.com/Dekamik/farstu/internal/config"
+	"github.com/Dekamik/farstu/internal/routes/shared"
 )
 
 type YRService interface {
-	GetViewModels() (YRNowViewModel, YRForecastViewModel)
+	GetForecast(config.AppConfig) []YRForecastItem
 }
 
 type yrServiceImpl struct {
@@ -19,27 +21,70 @@ type yrServiceImpl struct {
 
 var _ YRService = yrServiceImpl{}
 
-func (y yrServiceImpl) GetViewModels() (YRNowViewModel, YRForecastViewModel) {
-	var yrNowViewModel YRNowViewModel
-	var yrForecastViewModel YRForecastViewModel
+type YRForecastItem struct {
+	Enabled            bool
+	Time               string
+	PrecipitationMin   float64
+	PrecipitationMax   float64
+	SymbolCode         string
+	SymbolID           string
+	Temperature        float64
+	TemperatureColor   string
+	MaxUVIndex         float64
+	UVColor            string
+}
 
-	forecast, err := y.cachedForecast.Get()
+func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
+	forecasts := make([]YRForecastItem, 0)
+	response, err := y.cachedForecast.Get()
+
 	if err != nil {
-		slog.Warn("an error occurred when fetching weather forcasts from YR.no", "err", err)
-		yrNowViewModel = YRNowViewModel{
-			Enabled: y.appConfig.Weather.Enabled,
-			Message: "Fel vid väderdatahämtning",
-		}
-		yrForecastViewModel = YRForecastViewModel{
-			Enabled: y.appConfig.Weather.Enabled,
-			Message: "Fel vid väderdatahämtning",
-		}
+		slog.Warn("an error occurred when fetching weather forecasts from YR.no", "err", err)
 	} else {
-		yrNowViewModel = NewYRNowViewModel(y.appConfig, *forecast)
-		yrForecastViewModel = NewYRForecastViewModel(y.appConfig, *forecast)
+		for i, item := range response.Properties.Timeseries {
+			hour := item.Time.Local().Format("15")
+			if i != 0 && hour != "00" && hour != "06" && hour != "12" && hour != "18" {
+				continue
+			}
+
+			var largestUVIndex float64 = 0.0
+			for j := i; j < i+6; j++ {
+				itemUVIndex := response.Properties.Timeseries[j].Data.Instant.Details.UltravioletIndexClearSky
+				if itemUVIndex > largestUVIndex {
+					largestUVIndex = itemUVIndex
+				}
+			}
+
+			temperature := item.Data.Instant.Details.AirTemperature
+			symbolCode := item.Data.Next6Hours.Summary.SymbolCode
+			precipitationMin := item.Data.Next6Hours.Details.PrecipitationAmountMin
+			precipitationMax := item.Data.Next6Hours.Details.PrecipitationAmountMax
+
+			var timeStr string
+			weekDay := item.Time.Local().Weekday()
+			if i == 0 {
+				timeStr = "Just nu"
+			} else {
+				timeStr = fmt.Sprintf("%s %s-%s", shared.DayNames[weekDay], hour, item.Time.Local().Add(time.Hour*6).Format("15"))
+			}
+
+			forecastItem := YRForecastItem{
+				Time:               timeStr,
+				Temperature:        temperature,
+				TemperatureColor:   getTemperatureColor(config, temperature),
+				SymbolCode:         symbolCode,
+				SymbolID:           YRSymbolsID[symbolCode],
+				PrecipitationMin:   precipitationMin,
+				PrecipitationMax:   precipitationMax,
+				MaxUVIndex:         largestUVIndex,
+				UVColor:            calculateUVColor(largestUVIndex),
+			}
+
+			forecasts = append(forecasts, forecastItem)
+		}
 	}
 
-	return yrNowViewModel, yrForecastViewModel
+	return forecasts
 }
 
 type YRServiceArgs struct {
