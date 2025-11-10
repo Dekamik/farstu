@@ -12,7 +12,6 @@ import (
 
 type YRService interface {
 	GetForecast(config.AppConfig) []YRForecastItem
-	GetViewModels() (YRNowViewModel, YRForecastViewModel)
 }
 
 type yrServiceImpl struct {
@@ -21,6 +20,19 @@ type yrServiceImpl struct {
 }
 
 var _ YRService = yrServiceImpl{}
+
+type YRForecastItem struct {
+	Enabled            bool
+	Time               string
+	PrecipitationMin   float64
+	PrecipitationMax   float64
+	SymbolCode         string
+	SymbolID           string
+	Temperature        float64
+	TemperatureColor   string
+	MaxUVIndex         float64
+	UVColor            string
+}
 
 func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
 	forecasts := make([]YRForecastItem, 0)
@@ -64,7 +76,6 @@ func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
 				SymbolID:           YRSymbolsID[symbolCode],
 				PrecipitationMin:   precipitationMin,
 				PrecipitationMax:   precipitationMax,
-				PrecipitationColor: getPrecipitationColorClass(config, precipitationMax),
 				MaxUVIndex:         largestUVIndex,
 				UVColor:            calculateUVColor(largestUVIndex),
 			}
@@ -74,29 +85,6 @@ func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
 	}
 
 	return forecasts
-}
-
-func (y yrServiceImpl) GetViewModels() (YRNowViewModel, YRForecastViewModel) {
-	var yrNowViewModel YRNowViewModel
-	var yrForecastViewModel YRForecastViewModel
-
-	forecast, err := y.cachedForecast.Get()
-	if err != nil {
-		slog.Warn("an error occurred when fetching weather forcasts from YR.no", "err", err)
-		yrNowViewModel = YRNowViewModel{
-			Enabled: y.appConfig.Weather.Enabled,
-			Message: "Fel vid väderdatahämtning",
-		}
-		yrForecastViewModel = YRForecastViewModel{
-			Enabled: y.appConfig.Weather.Enabled,
-			Message: "Fel vid väderdatahämtning",
-		}
-	} else {
-		yrNowViewModel = NewYRNowViewModel(y.appConfig, *forecast)
-		yrForecastViewModel = NewYRForecastViewModel(y.appConfig, *forecast)
-	}
-
-	return yrNowViewModel, yrForecastViewModel
 }
 
 type YRServiceArgs struct {
