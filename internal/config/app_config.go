@@ -32,8 +32,6 @@ type AppConfig struct {
 			TempColorMid         string  `json:"tempColorMid"`
 			TempColorHotCoolest  string  `json:"tempColorHotCoolest"`
 			TempColorHotHottest  string  `json:"tempColorHotHottest"`
-			ClassPrecip          string  `json:"classPrecip"`
-			ClassNoPrecip        string  `json:"classNoPrecip"`
 		} `json:"colors"`
 	} `json:"weather"`
 }

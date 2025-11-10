@@ -26,7 +26,6 @@ type YRForecastItem struct {
 	Time               string
 	PrecipitationMin   float64
 	PrecipitationMax   float64
-	PrecipitationColor string
 	SymbolCode         string
 	SymbolID           string
 	Temperature        float64
@@ -77,7 +76,6 @@ func (y yrServiceImpl) GetForecast(config config.AppConfig) []YRForecastItem {
 				SymbolID:           YRSymbolsID[symbolCode],
 				PrecipitationMin:   precipitationMin,
 				PrecipitationMax:   precipitationMax,
-				PrecipitationColor: getPrecipitationColorClass(config, precipitationMax),
 				MaxUVIndex:         largestUVIndex,
 				UVColor:            calculateUVColor(largestUVIndex),
 			}

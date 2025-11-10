@@ -102,13 +102,6 @@ func getTemperatureColor(conf config.AppConfig, temperature float64) string {
 	return color
 }
 
-func getPrecipitationColorClass(conf config.AppConfig, precipitation float64) string {
-	if precipitation > 0 {
-		return conf.Weather.Colors.ClassPrecip
-	}
-	return conf.Weather.Colors.ClassNoPrecip
-}
-
 func calculateUVColor(uvIndex float64) string {
 	if uvIndex < 3 {
 		// Green
