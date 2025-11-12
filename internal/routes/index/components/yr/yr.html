@@ -20,7 +20,7 @@
 				{{end}}
 				{{if gt (index .Forecast 0).PrecipitationMax 0.0}}
 				<div>
-					<span class="text-info">{{printf "%.1f" (index .Forecast 0).PrecipitationMin}}-{{printf "%.1f" .PrecipitationMax}} mm</span>
+					<span class="text-info">{{printf "%.1f" (index .Forecast 0).PrecipitationMin}}-{{printf "%.1f" (index .Forecast 0).PrecipitationMax}} mm</span>
 				</div>
 				{{end}}
 			</div>
