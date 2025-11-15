@@ -33,7 +33,7 @@ func main() {
 		appConfigPath = "app.json"
 	}
 
-	appConfig, err := config.ReadAppConfig(appConfigPath)
+	appConfig, err := config.Read(appConfigPath)
 	if err != nil {
 		slog.Error("An error occurred while reading "+appConfigPath, "err", err)
 		os.Exit(1)
@@ -86,9 +86,8 @@ func main() {
 		DeparturesTTL:  15,
 		DeviationsTTL:  3,
 		InitRetriesSec: []int{1, 4, 8, 8},
-		SiteName:       appConfig.SL.SiteName,
 	}
-	slService, err = sl.NewSLService(slServiceArgs, *appConfig)
+	slService, err = sl.NewSLService(slServiceArgs, appConfigPath)
 	if err != nil {
 		if err == sl.ErrSiteIDNotFound {
 			slog.Error("SL site ID not found", "site_name", appConfig.SL.SiteName)
@@ -104,9 +103,18 @@ func main() {
 		Lat:         appConfig.Weather.Lat,
 		Lon:         appConfig.Weather.Lon,
 	}
-	yrService = yr.NewYRService(yrServiceArgs, *appConfig)
+	yrService, err = yr.NewYRService(yrServiceArgs, appConfigPath)
+	if err != nil {
+		slog.Error(err.Error())
+		os.Exit(1)
+	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		c, err := config.Read(appConfigPath)
+		if err != nil {
+			slog.Error(err.Error())
+			os.Exit(1)
+		}
 		data := index.Index{
 			Departures: slService.GetDepartures(),
 			Forecast: yrService.GetForecast(*appConfig),
@@ -116,19 +124,29 @@ func main() {
 			"internal/routes/index/components/sl/sl.html",
 			"internal/routes/index/components/yr/yr.html",
 		}
-		shared.ExecuteLayout(w, "/", data, templates...)
+		shared.ExecuteLayout(w, "/", c, data, templates...)
 	})
 
 	http.HandleFunc("/deviations", func(w http.ResponseWriter, r *http.Request) {
+		c, err := config.Read(appConfigPath)
+		if err != nil {
+			slog.Error(err.Error())
+			os.Exit(1)
+		}
 		data := deviations.Deviations{
 			Deviations: slService.GetDeviations(),
 		}
-		shared.ExecuteLayout(w, "deviations", data, "internal/routes/deviations/deviations.html")
+		shared.ExecuteLayout(w, "deviations", c, data, "internal/routes/deviations/deviations.html")
 	})
 
 	http.HandleFunc("/settings", func(w http.ResponseWriter, r *http.Request) {
+		c, err := config.Read(appConfigPath)
+		if err != nil {
+			slog.Error(err.Error())
+			os.Exit(1)
+		}
 		data := settings.Settings{}
-		shared.ExecuteLayout(w, "settings", data, "internal/routes/settings/settings.html")
+		shared.ExecuteLayout(w, "settings", c, data, "internal/routes/settings/settings.html")
 	})
 
 	http.HandleFunc("/htmx/time", func(w http.ResponseWriter, r *http.Request) {
@@ -152,11 +170,16 @@ func main() {
 	})
 
 	http.HandleFunc("/htmx/yr", func(w http.ResponseWriter, r *http.Request) {
+		c, err := config.Read(appConfigPath)
+		if err != nil {
+			slog.Error(err.Error())
+			os.Exit(1)
+		}
 		data := index.Index{
-			Forecast: yrService.GetForecast(*appConfig),
+			Forecast: yrService.GetForecast(*c),
 		}
 		tmpl := template.Must(template.ParseFiles("internal/routes/index/components/yr/yr.html"))
-		err := tmpl.Execute(w, data)
+		err = tmpl.Execute(w, data)
 		if err != nil {
 			slog.Error(err.Error())
 		}

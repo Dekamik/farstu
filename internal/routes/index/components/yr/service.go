@@ -15,7 +15,6 @@ type YRService interface {
 }
 
 type yrServiceImpl struct {
-	appConfig      config.AppConfig
 	cachedForecast cache.Cache[yrLocationForecast]
 }
 
@@ -93,15 +92,18 @@ type YRServiceArgs struct {
 	Lon         float64
 }
 
-func NewYRService(args YRServiceArgs, appConfig config.AppConfig) YRService {
+func NewYRService(args YRServiceArgs, appConfigPath string) (YRService, error) {
 	refreshForecast := func() (*yrLocationForecast, error) {
-		return callYRLocationForecast(args.Lat, args.Lon)
+		c, err := config.Read(appConfigPath)
+		if err != nil {
+			return nil, err
+		}
+		return callYRLocationForecast(c.Weather.Lat, c.Weather.Lon)
 	}
 
 	return &yrServiceImpl{
-		appConfig:      appConfig,
 		cachedForecast: cache.New(args.ForecastTTL, refreshForecast),
-	}
+	}, nil
 }
 
 var monthToSeason = map[string]string{

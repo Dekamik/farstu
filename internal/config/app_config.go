@@ -11,6 +11,7 @@ type AppConfig struct {
 		LogFile     string `json:"logFile"`
 		LogLevel    string `json:"logLevel"`
 		Port        int    `json:"port"`
+		Theme       string `json:"theme"`
 	} `json:"app"`
 	SL struct {
 		SiteName   string `json:"siteName"`
@@ -21,8 +22,8 @@ type AppConfig struct {
 		} `json:"deviations"`
 	} `json:"sl"`
 	Weather struct {
-		Lat     float64 `json:"lat"`
-		Lon     float64 `json:"lon"`
+		Lat    float64 `json:"lat"`
+		Lon    float64 `json:"lon"`
 		Colors struct {
 			TempMin              float64 `json:"tempMin"`
 			TempMid              float64 `json:"tempMid"`
@@ -36,7 +37,7 @@ type AppConfig struct {
 	} `json:"weather"`
 }
 
-func ReadAppConfig(path string) (*AppConfig, error) {
+func Read(path string) (*AppConfig, error) {
 	var config AppConfig
 
 	data, err := os.ReadFile(path)
@@ -50,4 +51,18 @@ func ReadAppConfig(path string) (*AppConfig, error) {
 	}
 
 	return &config, nil
+}
+
+func Write(config *AppConfig, path string) error {
+	buffer, err := json.Marshal(&config)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(path, buffer, os.ModeAppend)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

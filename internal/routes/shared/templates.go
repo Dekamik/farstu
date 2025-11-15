@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/Dekamik/farstu/internal/asserts"
+	"github.com/Dekamik/farstu/internal/config"
 )
 
 var layouts = template.Must(template.ParseGlob("internal/routes/shared/layout/*.html"))
@@ -29,7 +30,7 @@ type Layout[T any] struct {
 	Data T
 }
 
-func ExecuteLayout[T any](w http.ResponseWriter, highlightNav string, data T, templatePath ...string) {
+func ExecuteLayout[T any](w http.ResponseWriter, highlightNav string, config *config.AppConfig, data T, templatePath ...string) {
 	for _, t := range templatePath {
 		_, err := os.Stat(t)
 		asserts.Assert(!errors.Is(err, os.ErrNotExist), fmt.Sprintf("template %s must exist", templatePath))
@@ -47,7 +48,7 @@ func ExecuteLayout[T any](w http.ResponseWriter, highlightNav string, data T, te
 		},
 		Site: Site{
 			Lang:  "sv",
-			Theme: "synthwave",
+			Theme: config.App.Theme,
 		},
 		Data: data,
 	}
