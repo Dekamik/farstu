@@ -1,7 +1,4 @@
-<div class="overflow-x-auto"
-	hx-get="/htmx/sl"
-	hx-trigger="every 15s"
-	hx-swap="outerHTML">
+<div class="overflow-x-auto" hx-get="/htmx/sl" hx-trigger="every 15s" hx-swap="outerHTML">
 	<div class="text-center text-8xl h-24">
 		{{ (index .Departures 0).DisplayTime }}
 	</div>
