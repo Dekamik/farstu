@@ -19,7 +19,6 @@ type SLService interface {
 }
 
 type slServiceImpl struct {
-	appConfig        config.AppConfig
 	cachedDepartures cache.Cache[slSiteDeparturesResponse]
 	cachedDeviations cache.Cache[[]slDeviationResponse]
 }
@@ -116,10 +115,14 @@ type SLServiceArgs struct {
 	DeparturesTTL  int
 	DeviationsTTL  int
 	InitRetriesSec []int
-	SiteName       string
 }
 
-func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, error) {
+func NewSLService(args SLServiceArgs, appConfigPath string) (SLService, error) {
+	c, err := config.Read(appConfigPath)
+	if err != nil {
+		return nil, err
+	}
+
 	sites, err := callSLSites(false)
 	if err != nil {
 		if len(args.InitRetriesSec) > 0 {
@@ -142,7 +145,7 @@ func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, er
 	}
 
 	var siteID int
-	queryString := strings.ToLower(args.SiteName)
+	queryString := strings.ToLower(c.SL.SiteName)
 	siteIDFound := false
 	for _, site := range *sites {
 		if strings.ToLower(site.Name) == queryString {
@@ -162,15 +165,14 @@ func NewSLService(args SLServiceArgs, appConfig config.AppConfig) (SLService, er
 
 	refreshDeviations := func() (*[]slDeviationResponse, error) {
 		deviationsArgs := callSLDeviationsArgs{
-			Future: appConfig.SL.Deviations.Future,
-			Lines:  appConfig.SL.Deviations.Lines,
-			Sites:  appConfig.SL.Deviations.Sites,
+			Future: c.SL.Deviations.Future,
+			Lines:  c.SL.Deviations.Lines,
+			Sites:  c.SL.Deviations.Sites,
 		}
 		return callSLDeviations(deviationsArgs)
 	}
 
 	return slServiceImpl{
-		appConfig:        appConfig,
 		cachedDepartures: cache.New(args.DeparturesTTL, refreshDepartures),
 		cachedDeviations: cache.New(args.DeviationsTTL, refreshDeviations),
 	}, nil

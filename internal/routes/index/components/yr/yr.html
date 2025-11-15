@@ -5,11 +5,11 @@
 	<div class="h-24">
 		<div class="grid grid-cols-3 gap-2">
 			<div>
-				<span class="text-7xl" style="color: {{ (index .Forecast 0).TemperatureColor}}">{{printf "%.0f" (index .Forecast 0).Temperature}}°</span>
+				<span class="text-7xl text-outline" style="color: {{ (index .Forecast 0).TemperatureColor}}">{{printf "%.0f" (index .Forecast 0).Temperature}}°</span>
 			</div>
 			<div>
 				<span class="avatar h-24 w-24">
-					<img class="icon" src="/static/images/weather/dist/light-mode/default/svg/{{(index .Forecast 0).SymbolID}}.svg" />
+					<img class="icon icon-outline" src="/static/images/weather/dist/light-mode/default/svg/{{(index .Forecast 0).SymbolID}}.svg" />
 				</span>
 			</div>
 			<div>
@@ -35,11 +35,11 @@
 					<span class="text-sm">{{$e.Time}}</span>
 				</th>
 				<td>
-					<span class="text-sm" style="color: {{$e.TemperatureColor}}">{{printf "%.0f" $e.Temperature}}°</span>
+					<span class="text-sm font-bold text-outline" style="color: {{$e.TemperatureColor}}">{{printf "%.0f" $e.Temperature}}°</span>
 				</td>
 				<td>
 					<span class="avatar h-6 w-6">
-						<img class="icon" src="/static/images/weather/dist/light-mode/default/svg/{{$e.SymbolID}}.svg" />
+						<img class="icon icon-outline" src="/static/images/weather/dist/light-mode/default/svg/{{$e.SymbolID}}.svg" />
 					</span>
 				</td>
 				{{if ge $e.MaxUVIndex 3.0}}
