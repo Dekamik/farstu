@@ -33,9 +33,10 @@ located and run `farstu`. The app should now be running at the configured port
 ## Running the application on kiosk mode on Raspberry Pi
 
 1. Install unclutter with `sudo apt install unclutter`
-2. Copy the contents of the autostart file into either: a. The local autostart
-   (`/home/pi/.config/lxsession/LXDE-pi/autostart`) b. The global autostart
-(`/etc/xdg/lxsession/LXDE-pi/autostart`)
+2. Copy the contents of the autostart file into either: 
+    1. The wayfire config (`/home/pi/.config/wayfire.ini`)
+    2. The local autostart (`/home/pi/.config/lxsession/LXDE-pi/autostart`) 
+    3. The global autostart (`/etc/xdg/lxsession/LXDE-pi/autostart`)
 3. Restart the raspberry pi
 
 ### Development
