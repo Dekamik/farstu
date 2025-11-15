@@ -140,12 +140,33 @@ func main() {
 	})
 
 	http.HandleFunc("/settings", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			c, err := config.Read(appConfigPath)
+			if err != nil {
+				slog.Error(err.Error())
+				os.Exit(1)
+			}
+
+			c.App.Theme = r.FormValue("theme")
+
+			err = config.Write(c, appConfigPath)
+			if err != nil {
+				slog.Error(err.Error())
+				os.Exit(1)
+			}
+
+			w.Header().Add("HX-Redirect", "/settings")
+		}
+
 		c, err := config.Read(appConfigPath)
 		if err != nil {
 			slog.Error(err.Error())
 			os.Exit(1)
 		}
-		data := settings.Settings{}
+		data := settings.Settings{
+			SelectedTheme: c.App.Theme,
+			AvailableThemes: settings.Themes,
+		}
 		shared.ExecuteLayout(w, "settings", c, data, "internal/routes/settings/settings.html")
 	})
 

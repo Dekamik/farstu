@@ -1,3 +1,13 @@
 {{define "yield"}}
-<h1>Settings</h1>
+<form hx-post="/settings"
+	hx-trigger="change">
+	<fieldset class="fieldset">
+		<legend class="fieldset-legend">Theme</legend>
+		<select name="theme" class="select">
+			{{range .AvailableThemes}}
+			<option{{if eq . $.SelectedTheme}} selected{{end}}>{{.}}<option>
+				{{end}}
+		</select>
+	</fieldset>
+</form>
 {{end}}
