@@ -117,7 +117,7 @@ func main() {
 		}
 		data := index.Index{
 			Departures: slService.GetDepartures(),
-			Forecast: yrService.GetForecast(*appConfig),
+			Forecast: yrService.GetForecast(*c),
 		}
 		templates := []string{
 			"internal/routes/index/index.html",
